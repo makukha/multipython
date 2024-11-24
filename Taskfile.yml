@@ -1,0 +1,25 @@
+version: '3'
+
+vars:
+  IMG: makukha/multipython
+  VER: 20241124
+
+tasks:
+
+  build:
+    desc: Build and test docker image.
+    cmds:
+      - docker build --target test .
+      - docker build -t {{.IMG}}:{{.VER}} --target default .
+
+  shell:
+    desc: Shell to testing container.
+    cmds:
+      - docker compose run --rm test /bin/bash
+
+  release:
+    desc: Push image to Docker Hub.
+    status:
+      - docker pull {{.IMG}}:{{.VER}}
+    cmds:
+      - docker push {{.IMG}}:{{.VER}}
