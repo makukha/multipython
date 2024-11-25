@@ -2,24 +2,31 @@ version: '3'
 
 vars:
   IMG: makukha/multipython
-  VER: 20241124
+  VER: 20241126
 
 tasks:
 
   build:
     desc: Build and test docker image.
     cmds:
-      - docker build --target test .
-      - docker build -t {{.IMG}}:{{.VER}} --target default .
+      - docker build -t {{.IMG}}-test:{{.VER}} --progress=plain {{.OPT}} --target test .
+      - docker build -t {{.IMG}}:{{.VER}} -t {{.IMG}}:latest --target default .
+
+  rebuild:
+    desc: Same as build but with --no-cache.
+    cmds:
+      - {task: build, vars: {OPT: --no-cache}}
 
   shell:
     desc: Shell to testing container.
     cmds:
-      - docker compose run --rm test /bin/bash
+      - docker run --rm -it {{.IMG}}-test:{{.VER}} /bin/bash
 
   release:
     desc: Push image to Docker Hub.
     status:
       - docker pull {{.IMG}}:{{.VER}}
     cmds:
+      - task: build
       - docker push {{.IMG}}:{{.VER}}
+      - docker push {{.IMG}}:latest

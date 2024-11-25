@@ -30,16 +30,15 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
 <<EOT
 apt-get update
 apt-get install -y --no-install-recommends \
-    build-essential gdb git lcov pkg-config wget \
+    build-essential curl git lcov llvm pkg-config wget \
+    lzma lzma-dev tk-dev uuid-dev xz-utils zlib1g-dev \
     libbz2-dev libffi-dev libgdbm-dev libgdbm-compat-dev liblzma-dev \
-    libncurses5-dev libreadline6-dev libsqlite3-dev libssl-dev \
-    lzma lzma-dev tk-dev uuid-dev zlib1g-dev
+    libncursesw5-dev libreadline6-dev libsqlite3-dev libssl-dev libxml2-dev libxmlsec1-dev
 wget -qO- https://github.com/pyenv/pyenv-installer/raw/${PYENV_INSTALLER_BRANCH}/bin/pyenv-installer \
     > /tmp/pyenv-installer
 echo "${PYENV_INSTALLER_SHA256} /tmp/pyenv-installer" | sha256sum --check --strict
 bash /tmp/pyenv-installer
-ln -s ${PYENV_ROOT}/bin/pyenv /usr/local/bin/pyenv
-pyenv update
+${PYENV_ROOT}/bin/pyenv update
 rm -rf /tmp/* /var/tmp/*
 EOT
 
@@ -50,43 +49,47 @@ CMD /bin/bash
 
 FROM base AS py27
 ARG PY27
-RUN pyenv install ${PY27}
+RUN ${PYENV_ROOT}/bin/pyenv install ${PY27}
 
 FROM base AS py35
 ARG PY35
-RUN pyenv install ${PY35}
+RUN ${PYENV_ROOT}/bin/pyenv install ${PY35}
 
 FROM base AS py36
 ARG PY36
-RUN pyenv install ${PY36}
+RUN ${PYENV_ROOT}/bin/pyenv install ${PY36}
 
 FROM base AS py37
 ARG PY37
-RUN pyenv install ${PY37}
+RUN ${PYENV_ROOT}/bin/pyenv install ${PY37}
 
 FROM base AS py38
 ARG PY38
-RUN pyenv install ${PY38}
+RUN ${PYENV_ROOT}/bin/pyenv install ${PY38}
 
 FROM base AS py39
 ARG PY39
-RUN pyenv install ${PY39}
+RUN ${PYENV_ROOT}/bin/pyenv install ${PY39}
 
 FROM base AS py310
 ARG PY310
-RUN pyenv install ${PY310}
+RUN ${PYENV_ROOT}/bin/pyenv install ${PY310}
 
 FROM base AS py311
 ARG PY311
-RUN pyenv install ${PY311}
+RUN ${PYENV_ROOT}/bin/pyenv install ${PY311}
 
 FROM base AS py312
 ARG PY312
-RUN pyenv install ${PY312}
+RUN ${PYENV_ROOT}/bin/pyenv install ${PY312}
+
+FROM base AS py313t
+ARG PY313
+RUN ${PYENV_ROOT}/bin/pyenv install ${PY313}t
 
 FROM base AS py314
 ARG PY314
-RUN pyenv install ${PY314}
+RUN ${PYENV_ROOT}/bin/pyenv install ${PY314}
 
 # final image
 
@@ -95,6 +98,8 @@ FROM base AS default
 ARG TOX_VERSION
 ARG VIRTUALENV_VERSION
 ARG PY27 PY35 PY36 PY37 PY38 PY39 PY310 PY311 PY312 PY313 PY314
+
+ENV PATH="$PYENV_ROOT/bin:$PYENV_ROOT/shims:$PATH"
 
 RUN --mount=type=cache,dst=/root/.cache/pip \
     --mount=type=bind,from=py27,src=/root/.pyenv,dst=/tmp/py27 \
@@ -106,12 +111,14 @@ RUN --mount=type=cache,dst=/root/.cache/pip \
     --mount=type=bind,from=py310,src=/root/.pyenv,dst=/tmp/py310 \
     --mount=type=bind,from=py311,src=/root/.pyenv,dst=/tmp/py311 \
     --mount=type=bind,from=py312,src=/root/.pyenv,dst=/tmp/py312 \
+    --mount=type=bind,from=py313t,src=/root/.pyenv,dst=/tmp/py313t \
     --mount=type=bind,from=py314,src=/root/.pyenv,dst=/tmp/py314 \
 <<EOT
 
 mkdir -p /root/.pyenv/versions
 cp -a /tmp/py*/versions/* /root/.pyenv/versions
-pyenv install --skip-existing $PY27 $PY35 $PY36 $PY37 $PY38 $PY39 $PY310 $PY311 $PY312 $PY314
+echo 'eval "$(pyenv init --path)"' >> /root/.bashrc
+pyenv global $PY27 $PY35 $PY36 $PY37 $PY38 $PY39 $PY310 $PY311 $PY312 system ${PY313}t $PY314
 
 ln -s ${PYENV_ROOT}/versions/$PY27/bin/python /usr/local/bin/python2.7
 ln -s ${PYENV_ROOT}/versions/$PY35/bin/python /usr/local/bin/python3.5
@@ -123,6 +130,7 @@ ln -s ${PYENV_ROOT}/versions/$PY310/bin/python /usr/local/bin/python3.10
 ln -s ${PYENV_ROOT}/versions/$PY311/bin/python /usr/local/bin/python3.11
 ln -s ${PYENV_ROOT}/versions/$PY312/bin/python /usr/local/bin/python3.12
 # python3.13 comes from base image
+ln -s ${PYENV_ROOT}/versions/${PY313}t/bin/python /usr/local/bin/python3.13t
 ln -s ${PYENV_ROOT}/versions/$PY314/bin/python /usr/local/bin/python3.14
 
 pip install --disable-pip-version-check --root-user-action=ignore \
@@ -138,7 +146,7 @@ RUN <<EOT
 mkdir /tmp/test
 cat <<EOF > /tmp/test/tox.ini
 [tox]
-env_list = py{27,35,36,37,38,39,310,311,312,313,314}
+env_list = py{27,35,36,37,38,39,310,311,312,313,313t,314}
 skip_missing_interpreters = false
 [testenv]
 allowlist_externals = bash
@@ -161,6 +169,9 @@ commands = bash -c 'test "\$({envpython} --version)" == "Python ${PY311}"'
 [testenv:py312]
 commands = bash -c 'test "\$({envpython} --version)" == "Python ${PY312}"'
 [testenv:py313]
+commands = bash -c 'test "\$({envpython} --version)" == "Python ${PY313}"'
+[testenv:py313t]
+base_python = python3.13t
 commands = bash -c 'test "\$({envpython} --version)" == "Python ${PY313}"'
 [testenv:py314]
 commands = bash -c 'test "\$({envpython} --version)" == "Python ${PY314}"'
