@@ -27,4 +27,6 @@ tasks:
     status:
       - docker pull {{.IMG}}:{{.VER}}
     cmds:
-      - docker push --all-tags {{.IMG}}:{{.VER}}
+      - task: build
+      - docker push {{.IMG}}:{{.VER}}
+      - docker push {{.IMG}}:latest
