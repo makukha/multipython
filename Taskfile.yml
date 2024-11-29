@@ -2,31 +2,48 @@ version: '3'
 
 vars:
   IMG: makukha/multipython
-  VER: 20241126
 
 tasks:
 
   build:
     desc: Build and test docker image.
     cmds:
-      - docker build -t {{.IMG}}-test:{{.VER}} --progress=plain {{.OPT}} --target test .
-      - docker build -t {{.IMG}}:{{.VER}} -t {{.IMG}}:latest --target default .
+      - docker buildx bake {{.OPT}} pyenv tox py
+      - docker buildx bake {{.OPT}} final
 
   rebuild:
     desc: Same as build but with --no-cache.
     cmds:
       - {task: build, vars: {OPT: --no-cache}}
 
-  shell:
-    desc: Shell to testing container.
+  shell:*:
+    desc: Shell to image {pyenv,tox,py*,latest}.
     cmds:
-      - docker run --rm -it {{.IMG}}-test:{{.VER}} /bin/bash
+      - docker run --rm -it {{.IMG}}:{{index .MATCH 0}} /bin/bash
+
+  test:
+    desc: Run tests.
+    cmds:
+      - docker buildx bake --no-cache tests
 
   release:
     desc: Push image to Docker Hub.
     status:
       - docker pull {{.IMG}}:{{.VER}}
     cmds:
+      - task: clean:tags
       - task: build
-      - docker push {{.IMG}}:{{.VER}}
-      - docker push {{.IMG}}:latest
+      - task: test
+#      - docker push {{.IMG}}:{{.VER}}
+#      - docker push {{.IMG}}:latest
+
+  clean:tags:
+    desc: Remove all local tags but keep images.
+    vars:
+      TAGS: {sh: 'docker image ls {{.IMG}} --format="{{`{{.Tag}}`}}" | sed -e"s/<none>//" | sort -u'}
+    cmds:
+      - cmd: docker image rm --no-prune makukha/multipython
+        ignore_error: true
+      - cmd: 'docker image rm --no-prune makukha/multipython:{{.ITEM}}'
+        for: {var: TAGS}
+        ignore_error: true
