@@ -1,14 +1,8 @@
 variable "IMG" { default = "makukha/multipython" }
 variable "RELEASE" { default = "2024.11.26" }
 
-variable "BASE" {
-  default = {
-    PYENV_VERSION = "2.4.19"
-    PYENV_SHA256 = "ce0c441c591bd9960a04bd361d25d87f909e5afc9f44ef8bb283fa67c7ad426e"
-    TOX_VERSION = "4.5.1.1"
-    VIRTUALENV_VERSION = "20.21.1"
-  }
-}
+variable "PYENV_VERSION" { default = "2.4.19" }
+variable "PYENV_SHA256" { default = "ce0c441c591bd9960a04bd361d25d87f909e5afc9f44ef8bb283fa67c7ad426e" }
 
 variable "PY" {
   default = {
@@ -31,49 +25,45 @@ variable "PY" {
 
 # targets
 
-group "base" {
-  targets = ["pyenv", "tox"]
+target "base" {
+  args = {
+    PYENV_VERSION = PYENV_VERSION
+  }
+  platforms = ["linux/amd64"]
 }
 
 target "pyenv" {
-  args = BASE
-  platforms = ["linux/amd64"]
+  inherits = ["base"]
+  args = {
+    PYENV_SHA256 = PYENV_SHA256
+    TOX_VERSION = "4.5.1.1"
+    VIRTUALENV_VERSION = "20.21.1"
+  }
   target = "pyenv"
   tags = [
     "${IMG}:pyenv",
-    "${IMG}:pyenv-${BASE["PYENV_VERSION"]}",
-    "${IMG}:pyenv-${RELEASE}",
-  ]
-}
-
-target "tox" {
-  inherits = ["pyenv"]
-  target = "tox"
-  tags = [
-    "${IMG}:tox",
-    "${IMG}:tox-${BASE["TOX_VERSION"]}",
-    "${IMG}:tox-${RELEASE}",
+    "${IMG}:pyenv-${PYENV_VERSION}",
   ]
 }
 
 target "py" {
-  args = "${merge(BASE, PY)}"
+  inherits = ["base"]
+  args = PY
   matrix = {
     TAG = keys(PY)
   }
   name = TAG
-  platforms = ["linux/amd64"]
-  target = "${TAG}"
+  target = TAG
   tags = [
     "${IMG}:${TAG}",
     "${IMG}:${TAG}-${RELEASE}",
   ]
 }
 
-target "final" {
-  args = "${merge(BASE, PY)}"
-  platforms = ["linux/amd64"]
-  target = "final"
+target "multipython" {
+  inherits = ["base"]
+  args = PY
+  target = "multipython"
   tags = [
     "${IMG}:latest",
     "${IMG}:${RELEASE}",
@@ -95,4 +85,5 @@ target "tests" {
   }
   name = TGT
   output = ["type=cacheonly"]
+  target = TGT
 }

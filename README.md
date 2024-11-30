@@ -175,17 +175,15 @@ The pre-installed tox version 4.5.1.1 is dictated by [virtualenv support](https:
 | 20.27.0    | Python 3.7      | latest                      |
 | 20.22.0    | Python <=3.6    | 4.5.1.1                     |
 
-This table could be out of date, please always check [virtualenv changelog](https://virtualenv.pypa.io/en/latest/changelog.html).
+This table may eventually run out of date, please always check [virtualenv changelog](https://virtualenv.pypa.io/en/latest/changelog.html).
 
 ### With pre-installed tox
 
-Pre-installed tox is required to use all multipython's Python versions; use base image `makukha/multipython:tox`.
-
-#### Example 1
+Pre-installed tox (version 4.5.1.1) is required to use all available Python versions.
 
 ```Dockerfile
 # Dockerfile
-FROM makukha/multipython:tox
+FROM makukha/multipython:pyenv
 RUN mkdir /root/.pyenv/versions
 COPY --from=makukha/multipython:py27 /root/.pyenv/versions /root/.pyenv/versions/
 COPY --from=makukha/multipython:py35 /root/.pyenv/versions /root/.pyenv/versions/
@@ -193,13 +191,9 @@ COPY --from=makukha/multipython:py36 /root/.pyenv/versions /root/.pyenv/versions
 RUN py --install
 ```
 
-### With newer tox
+### With latest tox, Python 3.7+
 
-Latest tox can be used for recent Python versions; use base image `makukha/multipython:pyenv`.
-
-#### Example 2
-
-```Dockerfile >> readme-2.dockerfile
+```Dockerfile
 # Dockerfile
 FROM makukha/multipython:pyenv
 RUN mkdir /root/.pyenv/versions
@@ -208,12 +202,12 @@ COPY --from=makukha/multipython:py314 /root/.pyenv/versions /root/.pyenv/version
 # set global pyenv versions and create symlinks
 RUN py --install
 # pin virtualenv to support Python 3.7
-RUN pip install tox virtualenv<20.27
+RUN pip install "virtualenv<20.27" tox
 ```
 
-#### Example 3
+### With latest tox, Python 3.8+
 
-```Dockerfile >> readme-3.dockerfile
+```Dockerfile
 # Dockerfile
 FROM makukha/multipython:pyenv
 RUN mkdir /root/.pyenv/versions
@@ -240,3 +234,13 @@ RUN pip install tox
 
 * **[vicamo/pyenv](https://hub.docker.com/r/vicamo/pyenv/tags)**
     * Lacks recent versions
+
+
+# Development
+
+```shell
+$ task clean
+$ task build:pyenv  # optional
+$ task build:py
+$ task test
+```

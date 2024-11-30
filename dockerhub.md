@@ -20,30 +20,28 @@
 
 # Supported tags and respective `Dockerfile` links
 
-#### Multipython image
-
-* [`latest, 2024.11.26`](https://github.com/makukha/multipython/blob/v2024.11.26/Dockerfile)
+* [`latest, 2024.11.26`](https://github.com/makukha/multipython/blob/v2024.11.26/Dockerfile) *— all Python versions, pyenv, tox*
 
 **[Single version](https://github.com/makukha/multipython?tab=readme-ov-file#python-versions) images**
 
-* [`py314t, py314t-2024.11.26`](https://github.com/makukha/multipython/blob/v2024.11.26/Dockerfile) *(free threading build)*
-* [`py313t, py313t-2024.11.26`](https://github.com/makukha/multipython/blob/v2024.11.26/Dockerfile) *(free threading build)*
-* [`py314, py314-2024.11.26`](https://github.com/makukha/multipython/blob/v2024.11.26/Dockerfile)
-* [`py313, py313-2024.11.26`](https://github.com/makukha/multipython/blob/v2024.11.26/Dockerfile)
-* [`py312, py312-2024.11.26`](https://github.com/makukha/multipython/blob/v2024.11.26/Dockerfile)
-* [`py311, py311-2024.11.26`](https://github.com/makukha/multipython/blob/v2024.11.26/Dockerfile)
-* [`py310, py310-2024.11.26`](https://github.com/makukha/multipython/blob/v2024.11.26/Dockerfile)
-* [`py39, py39-2024.11.26`](https://github.com/makukha/multipython/blob/v2024.11.26/Dockerfile)
-* [`py38, py38-2024.11.26`](https://github.com/makukha/multipython/blob/v2024.11.26/Dockerfile)
-* [`py37, py37-2024.11.26`](https://github.com/makukha/multipython/blob/v2024.11.26/Dockerfile)
-* [`py36, py36-2024.11.26`](https://github.com/makukha/multipython/blob/v2024.11.26/Dockerfile)
-* [`py35, py35-2024.11.26`](https://github.com/makukha/multipython/blob/v2024.11.26/Dockerfile)
-* [`py27, py27-2024.11.26`](https://github.co-m/makukha/multipython/blob/v2024.11.26/Dockerfile)
+* [`py314t, py314t-2024.11.26`](https://github.com/makukha/multipython/blob/v2024.11.26/Dockerfile) *— CPython 3.14.a2 free-threaded*
+* [`py313t, py313t-2024.11.26`](https://github.com/makukha/multipython/blob/v2024.11.26/Dockerfile) *— CPython 3.13.0 free-threaded*
+* [`py314, py314-2024.11.26`](https://github.com/makukha/multipython/blob/v2024.11.26/Dockerfile) *— CPython 3.14.a2*
+* [`py313, py313-2024.11.26`](https://github.com/makukha/multipython/blob/v2024.11.26/Dockerfile) *— CPython 3.13.0*
+* [`py312, py312-2024.11.26`](https://github.com/makukha/multipython/blob/v2024.11.26/Dockerfile) *— CPython 3.12.7*
+* [`py311, py311-2024.11.26`](https://github.com/makukha/multipython/blob/v2024.11.26/Dockerfile) *— CPython 3.11.10*
+* [`py310, py310-2024.11.26`](https://github.com/makukha/multipython/blob/v2024.11.26/Dockerfile) *— CPython 3.10.15*
+* [`py39, py39-2024.11.26`](https://github.com/makukha/multipython/blob/v2024.11.26/Dockerfile) *— CPython 3.9.20*
+* [`py38, py38-2024.11.26`](https://github.com/makukha/multipython/blob/v2024.11.26/Dockerfile) *— CPython 3.8.20*
+* [`py37, py37-2024.11.26`](https://github.com/makukha/multipython/blob/v2024.11.26/Dockerfile) *— CPython 3.7.17*
+* [`py36, py36-2024.11.26`](https://github.com/makukha/multipython/blob/v2024.11.26/Dockerfile) *— CPython 3.6.15*
+* [`py35, py35-2024.11.26`](https://github.com/makukha/multipython/blob/v2024.11.26/Dockerfile) *— CPython 3.5.10*
+* [`py27, py27-2024.11.26`](https://github.co-m/makukha/multipython/blob/v2024.11.26/Dockerfile) *— CPython 2.7.18*
 
-**Base images**
+**Base image**
 
-* [`pyenv, pyenv-2.4.19, pyenv-2024.11.26`](https://github.com/makukha/multipython/blob/v2024.11.26/Dockerfile)
-* [`tox, tox-4.5.1.1, tox-2024.11.26`](https://github.com/makukha/multipython/blob/v2024.11.26/Dockerfile)
+* [`pyenv, pyenv-2.4.19`](https://github.com/makukha/multipython/blob/v2024.11.26/Dockerfile) *— pyenv 2.4.19, tox 4.5.1.1*
+
 
 Outdated releases remain in [Docker Registry](https://hub.docker.com/r/makukha/multipython/tags).
 
@@ -170,6 +168,8 @@ Other options:
 
 ## Build your own environment
 
+## Build your own environment
+
 To build custom image with subset of Python versions, use single version images.
 
 The pre-installed tox version 4.5.1.1 is dictated by [virtualenv support](https://virtualenv.pypa.io/en/latest/changelog.html) of Python versions.
@@ -181,17 +181,15 @@ The pre-installed tox version 4.5.1.1 is dictated by [virtualenv support](https:
 | 20.27.0    | Python 3.7      | latest                      |
 | 20.22.0    | Python <=3.6    | 4.5.1.1                     |
 
-This table could be out of date, please always check [virtualenv changelog](https://virtualenv.pypa.io/en/latest/changelog.html).
+This table may eventually run out of date, please always check [virtualenv changelog](https://virtualenv.pypa.io/en/latest/changelog.html).
 
 ### With pre-installed tox
 
-Pre-installed tox is required to use all multipython's Python versions; use base image `makukha/multipython:tox`.
-
-#### Example 1
+Pre-installed tox (version 4.5.1.1) is required to use all available Python versions.
 
 ```Dockerfile
 # Dockerfile
-FROM makukha/multipython:tox
+FROM makukha/multipython:pyenv
 RUN mkdir /root/.pyenv/versions
 COPY --from=makukha/multipython:py27 /root/.pyenv/versions /root/.pyenv/versions/
 COPY --from=makukha/multipython:py35 /root/.pyenv/versions /root/.pyenv/versions/
@@ -199,13 +197,9 @@ COPY --from=makukha/multipython:py36 /root/.pyenv/versions /root/.pyenv/versions
 RUN py --install
 ```
 
-### With newer tox
+### With latest tox, Python 3.7+
 
-Latest tox can be used for recent Python versions; use base image `makukha/multipython:pyenv`.
-
-#### Example 2
-
-```Dockerfile >> readme-2.dockerfile
+```Dockerfile
 # Dockerfile
 FROM makukha/multipython:pyenv
 RUN mkdir /root/.pyenv/versions
@@ -214,12 +208,12 @@ COPY --from=makukha/multipython:py314 /root/.pyenv/versions /root/.pyenv/version
 # set global pyenv versions and create symlinks
 RUN py --install
 # pin virtualenv to support Python 3.7
-RUN pip install tox virtualenv<20.27
+RUN pip install "virtualenv<20.27" tox
 ```
 
-#### Example 3
+### With latest tox, Python 3.8+
 
-```Dockerfile >> readme-3.dockerfile
+```Dockerfile
 # Dockerfile
 FROM makukha/multipython:pyenv
 RUN mkdir /root/.pyenv/versions

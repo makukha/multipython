@@ -3,7 +3,7 @@
 # versions
 
 py_pyenv () {
-  find ${PYENV_ROOT}/versions -mindepth 1 -maxdepth 1 -type d -printf "%f\n"
+  find ${PYENV_ROOT}/versions -mindepth 1 -maxdepth 1 -type d -printf "%f\n" 2> /dev/null
 }
 py_sys () {
   python --version | sed -e's/Python //'
@@ -29,17 +29,17 @@ py_sort () {
 
 to_minor () {
   if [ -n "$1" ]; then
-    echo "use string: $1"
+    echo "$1" | py_minor
   else
-    echo "use stdin"
+    py_minor
   fi
 }
 
 to_tag () {
   if [ -n "$1" ]; then
-    echo "use string: $1"
+    echo "$1" | py_tag
   else
-    echo "use stdin"
+    py_tag
   fi
 }
 
@@ -78,16 +78,16 @@ main () {
 
   case $1 in
     # main options
-    --list)   py_versions | py_sort;;
-    --minor)  py_versions | py_sort | py_minor;;
-    --tags)   py_versions | py_sort | py_tag;;
-    --pyenv)  py_pyenv | py_sort;;
-    --sys)    py_sys;;
-    --help)   py_usage;;
+    --list)  py_versions | py_sort ;;
+    --minor) py_versions | py_sort | py_minor ;;
+    --tags)  py_versions | py_sort | py_tag ;;
+    --pyenv) py_pyenv | py_sort ;;
+    --sys) py_sys ;;
+    --help) py_usage ;;
     # other options
-    --install)  py_install;;
-    --to-minor) to_minor "$1";;
-    --to-tag)   to_tag "$1";;
+    --install) py_install ;;
+    --to-minor) to_minor "$2" ;;
+    --to-tag) to_tag "$2" ;;
     *)
       echo "Unknown option:" $1
       exit 1
