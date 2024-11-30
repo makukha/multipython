@@ -1,47 +1,54 @@
 # multipython 🐳<sup>🐍</sup>
 
 > Docker image with latest pyenv Python 2.7 to 3.14 for multi-version testing.
+> 
+> [![GitHub Tag](https://img.shields.io/github/v/tag/makukha/multipython?label=GitHub%20Tag)](https://github.com/makukha/multipython)
 
-[![Docker Pulls](https://img.shields.io/docker/pulls/makukha/multipython)](https://hub.docker.com/r/makukha/multipython)
-
-
-# Features
-
-* `makukha/multipython` — [tox](https://tox.wiki) and most [pyenv](https://github.com/pyenv/pyenv) CPython versions
-* `makukha/multipython:pyXY` — single version images
-* [Build your own environment](#build-your-own-environment) with single version images
-* Based on official `python3.13:slim-bookworm`✅
-
-## Python versions
-
-| implementation                | executable    | single version tag |
-|-------------------------------|---------------|--------------------|
-| CPython 3.14.a2 free-threaded | `python3.14t` | `py314t`           |
-| CPython 3.13.0 free-threaded  | `python3.13t` | `py313t`           |
-| CPython 3.14.a2               | `python3.14`  | `py314`            |
-| CPython 3.13.0 ✅             | `python3.13`  | `py313`            |
-| CPython 3.12.7                | `python3.12`  | `py312`            |
-| CPython 3.11.10               | `python3.11`  | `py311`            |
-| CPython 3.10.15               | `python3.10`  | `py310`            |
-| CPython 3.9.20                | `python3.9`   | `py39`             |
-| CPython 3.8.20                | `python3.8`   | `py38`             |
-| CPython 3.7.17                | `python3.7`   | `py37`             |
-| CPython 3.6.15                | `python3.6`   | `py36`             |
-| CPython 3.5.10                | `python3.5`   | `py35`             |
-| CPython 2.7.18                | `python2.7`   | `py27`             |
-
-✅ Latest stable executable is not installed by pyenv. It comes from base [official Python image](https://hub.docker.com/_/python).
-
-All executables above are symlinks from `/usr/local/bin/pythonX.Y` to respective pyenv managed versions.
-
-## Other versions
-
-* [pyenv](https://github.com/pyenv/pyenv) 2.4.19 — latest as of image release date
-* [tox](https://tox.wiki) 4.5.1.1 — the last version that supports virtualenv 20.21.1
-* [virtualenv](https://virtualenv.pypa.io/en/latest/) 20.21.1 — the last version that supports Python versions below 3.6
+* `makukha/multipython` — [tox](https://tox.wiki) and most [pyenv](https://github.com/pyenv/pyenv) CPython versions.
+* `makukha/multipython:pyXY` — single version images.
+* [Build your own environment](https://github.com/makukha/multipython?tab=readme-ov-file#build-your-own-environment) with single version images.
+* Based on official `python3.13:slim-bookworm`
 
 
-# Basic usage
+# Quick reference
+
+* **Maintained by:** [Michael Makukha](https://github.com/makukha)
+* **Where to get help:** [GitHub repository](https://github.com/makukha/multipython)
+* **Where to file issues:** [GitHub issues](https://github.com/makukha/multipython/issues)
+* **Supported architectures:** `amd64`
+
+
+# Supported tags and respective `Dockerfile` links
+
+#### Multipython image
+
+* [`latest, 2024.11.26`](https://github.com/makukha/multipython/blob/v2024.11.26/Dockerfile)
+
+**[Single version](https://github.com/makukha/multipython?tab=readme-ov-file#python-versions) images**
+
+* [`py314t, py314t-2024.11.26`](https://github.com/makukha/multipython/blob/v2024.11.26/Dockerfile) *(free threading build)*
+* [`py313t, py313t-2024.11.26`](https://github.com/makukha/multipython/blob/v2024.11.26/Dockerfile) *(free threading build)*
+* [`py314, py314-2024.11.26`](https://github.com/makukha/multipython/blob/v2024.11.26/Dockerfile)
+* [`py313, py313-2024.11.26`](https://github.com/makukha/multipython/blob/v2024.11.26/Dockerfile)
+* [`py312, py312-2024.11.26`](https://github.com/makukha/multipython/blob/v2024.11.26/Dockerfile)
+* [`py311, py311-2024.11.26`](https://github.com/makukha/multipython/blob/v2024.11.26/Dockerfile)
+* [`py310, py310-2024.11.26`](https://github.com/makukha/multipython/blob/v2024.11.26/Dockerfile)
+* [`py39, py39-2024.11.26`](https://github.com/makukha/multipython/blob/v2024.11.26/Dockerfile)
+* [`py38, py38-2024.11.26`](https://github.com/makukha/multipython/blob/v2024.11.26/Dockerfile)
+* [`py37, py37-2024.11.26`](https://github.com/makukha/multipython/blob/v2024.11.26/Dockerfile)
+* [`py36, py36-2024.11.26`](https://github.com/makukha/multipython/blob/v2024.11.26/Dockerfile)
+* [`py35, py35-2024.11.26`](https://github.com/makukha/multipython/blob/v2024.11.26/Dockerfile)
+* [`py27, py27-2024.11.26`](https://github.co-m/makukha/multipython/blob/v2024.11.26/Dockerfile)
+
+**Base images**
+
+* [`pyenv, pyenv-2.4.19, pyenv-2024.11.26`](https://github.com/makukha/multipython/blob/v2024.11.26/Dockerfile)
+* [`tox, tox-4.5.1.1, tox-2024.11.26`](https://github.com/makukha/multipython/blob/v2024.11.26/Dockerfile)
+
+Outdated releases remain in [Docker Registry](https://hub.docker.com/r/makukha/multipython/tags).
+
+
+# How to use this image
 
 ```shell
 docker pull makukha/multipython@latest
@@ -63,7 +70,6 @@ base_python = python3.14t
 ```shell
 docker run --rm -v .:/app makukha/multipython tox run --root /app
 ```
-
 
 # Advanced usage
 
@@ -225,18 +231,3 @@ RUN py --install
 # use latest
 RUN pip install tox
 ```
-
-
-# Alternatives
-
-* **GitHub Action [setup-python](https://github.com/actions/setup-python)**
-    * Supports all patch versions but [does not support Python 2.7](https://github.com/actions/setup-python/issues/672) and does not support free threaded 3.13 [at the moment](https://github.com/actions/setup-python/issues/771).
-
-* **[divio/multi-python](https://github.com/divio/multi-python)**
-    * Apt CPython 3.7 to 3.12 from deadsnakes PPA.
-
-* **[dhermes/python-multi](https://github.com/dhermes/python-multi)**
-    * pyenv CPython 3.8 to 3.12, PyPy 3.10.
-
-* **[vicamo/pyenv](https://hub.docker.com/r/vicamo/pyenv/tags)**
-    * Lacks recent versions

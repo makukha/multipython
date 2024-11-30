@@ -8,8 +8,8 @@ tasks:
   build:
     desc: Build and test docker image.
     cmds:
-      - docker buildx bake {{.OPT}} pyenv tox py
-      - docker buildx bake {{.OPT}} final
+      - docker buildx bake {{.OPT}} pyenv tox #py
+#      - docker buildx bake {{.OPT}} final
 
   rebuild:
     desc: Same as build but with --no-cache.
@@ -25,6 +25,23 @@ tasks:
     desc: Run tests.
     cmds:
       - docker buildx bake --no-cache tests
+
+  version:show:
+    desc: Show version bump tree.
+    cmds:
+      - bump-my-version show-bump
+
+  version:bump:
+    desc: Bump release version.
+    cmds:
+      - bump-my-version bump --dry-run --verbose release
+      - task: version:bump:do
+
+  version:bump:do:
+    internal: true
+    prompt: The version will be bumped as above. Continue?
+    cmds:
+      - bump-my-version bump release
 
   release:
     desc: Push image to Docker Hub.

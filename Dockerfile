@@ -39,7 +39,7 @@ RUN --mount=type=cache,dst=/root/.cache/pip \
         virtualenv==${VIRTUALENV_VERSION} \
         tox==${TOX_VERSION}
 
-# partial
+# single versions
 
 FROM pyenv AS py27
 ARG py27

@@ -1,5 +1,5 @@
 variable "IMG" { default = "makukha/multipython" }
-variable "RELEASE" { default = "20241129-dev" }
+variable "RELEASE" { default = "2024.11.26" }
 
 variable "BASE" {
   default = {
@@ -40,8 +40,9 @@ target "pyenv" {
   platforms = ["linux/amd64"]
   target = "pyenv"
   tags = [
-    "${IMG}:pyenv-${BASE["PYENV_VERSION"]}",
     "${IMG}:pyenv",
+    "${IMG}:pyenv-${BASE["PYENV_VERSION"]}",
+    "${IMG}:pyenv-${RELEASE}",
   ]
 }
 
@@ -49,8 +50,9 @@ target "tox" {
   inherits = ["pyenv"]
   target = "tox"
   tags = [
-    "${IMG}:tox-${BASE["TOX_VERSION"]}",
     "${IMG}:tox",
+    "${IMG}:tox-${BASE["TOX_VERSION"]}",
+    "${IMG}:tox-${RELEASE}",
   ]
 }
 
@@ -63,8 +65,8 @@ target "py" {
   platforms = ["linux/amd64"]
   target = "${TAG}"
   tags = [
-    "${IMG}:${TAG}-${RELEASE}",
     "${IMG}:${TAG}",
+    "${IMG}:${TAG}-${RELEASE}",
   ]
 }
 
@@ -73,8 +75,8 @@ target "final" {
   platforms = ["linux/amd64"]
   target = "final"
   tags = [
-    "${IMG}:${RELEASE}",
     "${IMG}:latest",
+    "${IMG}:${RELEASE}",
   ]
 }
 
