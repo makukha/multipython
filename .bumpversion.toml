@@ -1,0 +1,17 @@
+[tool.bumpversion]
+current_version = "2024.11.30"
+allow_dirty = true
+parse = """(?x)
+  (?P<release>                   # release (mandatory)
+    (?:[1-9][0-9]{3})\\.         # YYYY.
+    (?:1[0-2]|[1-9])\\.          # MM.
+    (?:3[0-1]|[1-2][0-9]|[1-9])  # DD
+  )
+  (?:\\.(?P<patch>\\d+))?        # .patch (optional)
+"""
+parts = { release = { calver_format = "{YYYY}.{MM}.{DD}" } }
+serialize = ["{release}.{patch}", "{release}"]
+files = [
+  {filename = "docker-bake.hcl"},
+  {filename = "dockerhub.md"},
+]

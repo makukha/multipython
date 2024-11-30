@@ -2,31 +2,62 @@ version: '3'
 
 vars:
   IMG: makukha/multipython
-  VER: 20241126
+  RELEASE: {sh: yq -oy '.tool.bumpversion.current_version' .bumpversion.toml}
 
 tasks:
 
-  build:
-    desc: Build and test docker image.
+  build:pyenv:
+    desc: Build base docker images.
     cmds:
-      - docker build -t {{.IMG}}-test:{{.VER}} --progress=plain {{.OPT}} --target test .
-      - docker build -t {{.IMG}}:{{.VER}} -t {{.IMG}}:latest --target default .
+      - docker buildx bake --no-cache pyenv
 
-  rebuild:
-    desc: Same as build but with --no-cache.
+  build:py:
+    desc: Build single versions and multipython image.
     cmds:
-      - {task: build, vars: {OPT: --no-cache}}
+      - docker buildx bake --no-cache py multipython
 
-  shell:
-    desc: Shell to testing container.
+  shell:*:
+    desc: Shell to image {pyenv,tox,py*,latest}.
     cmds:
-      - docker run --rm -it {{.IMG}}-test:{{.VER}} /bin/bash
+      - docker run --rm -it {{.IMG}}:{{index .MATCH 0}} /bin/bash
+
+  test:
+    desc: Run tests.
+    cmds:
+      - docker buildx bake --no-cache tests
+
+  version:show:
+    desc: Show version bump tree.
+    cmds:
+      - bump-my-version show-bump
+
+  version:bump:
+    desc: Bump release version.
+    cmds:
+      - bump-my-version bump --dry-run --verbose release
+      - task: version:bump:do
+
+  version:bump:do:
+    internal: true
+    prompt: The version will be bumped as above. Continue?
+    cmds:
+      - bump-my-version bump release
 
   release:
-    desc: Push image to Docker Hub.
-    status:
-      - docker pull {{.IMG}}:{{.VER}}
+    desc: Push base images to Docker Registry.
+    prompt: Releasing pyenv, single version, and multipython images. Continue?
+    status:  # guard against overwriting
+      - docker pull {{.IMG}}:{{.RELEASE}}
     cmds:
-      - task: build
-      - docker push {{.IMG}}:{{.VER}}
-      - docker push {{.IMG}}:latest
+      - docker buildx bake --push pyenv py multipython
+
+  clean:
+    desc: Prune local tags, images, and build cache.
+    cmds:
+      - cmd: docker image rm --no-prune makukha/multipython
+        ignore_error: true
+      - cmd: 'docker image rm --no-prune makukha/multipython:{{.ITEM}}'
+        for: { var: TAGS }
+        ignore_error: true
+      - docker image prune
+      - docker builder prune
