@@ -3,14 +3,15 @@
 > Docker image with latest pyenv Python 2.7 to 3.14 for multi-version testing.
 
 [![Docker Pulls](https://img.shields.io/docker/pulls/makukha/multipython)](https://hub.docker.com/r/makukha/multipython)
+[![OpenSSF Best Practices](https://www.bestpractices.dev/projects/9755/badge)](https://www.bestpractices.dev/projects/9755)
 
 
 # Features
 
+* Based on official `python3.13:slim-bookworm`✅
 * `makukha/multipython` — [tox](https://tox.wiki) and most [pyenv](https://github.com/pyenv/pyenv) CPython versions
 * `makukha/multipython:pyXY` — single version images
 * [Build your own environment](#build-your-own-environment) with single version images
-* Based on official `python3.13:slim-bookworm`✅
 
 ## Python versions
 
@@ -236,11 +237,8 @@ RUN pip install tox
     * Lacks recent versions
 
 
-# Development
+# Feedback and contributing
 
-```shell
-$ task clean
-$ task build:pyenv  # optional
-$ task build:py
-$ task test
-```
+* To file bug report or feature request, please [create an issue](https://github.com/makukha/multipython/issues).
+* To report security vulnerability, please use [GitHub Security Advisories](https://github.com/makukha/multipython/security/advisories).
+* Want to contribute? Check [Contribution Guidelines](https://github.com/makukha/multipython/blob/main/.github/CONTRIBUTING.md).

@@ -13,5 +13,5 @@ parts = { release = { calver_format = "{YYYY}.{MM}.{DD}" } }
 serialize = ["{release}.{patch}", "{release}"]
 files = [
   {filename = "docker-bake.hcl"},
-  {filename = "dockerhub.md"},
+  {filename = "docs/dockerhub.md"},
 ]

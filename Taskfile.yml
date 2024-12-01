@@ -6,15 +6,28 @@ vars:
 
 tasks:
 
-  build:pyenv:
+  lint:
+    desc: Run linters.
+    cmds:
+      - hadolint Dockerfile tests.dockerfile
+      - shellcheck *.sh
+
+  build:
     desc: Build base docker images.
     cmds:
       - docker buildx bake --no-cache pyenv
-
-  build:py:
-    desc: Build single versions and multipython image.
-    cmds:
       - docker buildx bake --no-cache py multipython
+
+  clean:
+    desc: Prune local tags, images, and build cache.
+    cmds:
+      - cmd: docker image rm --no-prune makukha/multipython
+        ignore_error: true
+      - cmd: 'docker image rm --no-prune makukha/multipython:{{.ITEM}}'
+        for: { var: TAGS }
+        ignore_error: true
+      - docker image prune
+      - docker builder prune
 
   shell:*:
     desc: Shell to image {pyenv,tox,py*,latest}.
@@ -26,18 +39,13 @@ tasks:
     cmds:
       - docker buildx bake --no-cache tests
 
-  version:show:
-    desc: Show version bump tree.
-    cmds:
-      - bump-my-version show-bump
-
-  version:bump:
+  version:
     desc: Bump release version.
     cmds:
       - bump-my-version bump --dry-run --verbose release
-      - task: version:bump:do
+      - task: version:bump
 
-  version:bump:do:
+  version:bump:
     internal: true
     prompt: The version will be bumped as above. Continue?
     cmds:
@@ -50,14 +58,3 @@ tasks:
       - docker pull {{.IMG}}:{{.RELEASE}}
     cmds:
       - docker buildx bake --push pyenv py multipython
-
-  clean:
-    desc: Prune local tags, images, and build cache.
-    cmds:
-      - cmd: docker image rm --no-prune makukha/multipython
-        ignore_error: true
-      - cmd: 'docker image rm --no-prune makukha/multipython:{{.ITEM}}'
-        for: { var: TAGS }
-        ignore_error: true
-      - docker image prune
-      - docker builder prune

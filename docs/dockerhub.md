@@ -1,13 +1,11 @@
-# multipython 🐳<sup>🐍</sup>
+[![GitHub Tag](https://img.shields.io/github/v/tag/makukha/multipython?label=GitHub%20Tag)](https://github.com/makukha/multipython)
 
-> Docker image with latest pyenv Python 2.7 to 3.14 for multi-version testing.
-> 
-> [![GitHub Tag](https://img.shields.io/github/v/tag/makukha/multipython?label=GitHub%20Tag)](https://github.com/makukha/multipython)
+[![OpenSSF Best Practices](https://www.bestpractices.dev/projects/9755/badge)](https://www.bestpractices.dev/projects/9755)
 
-* `makukha/multipython` — [tox](https://tox.wiki) and most [pyenv](https://github.com/pyenv/pyenv) CPython versions.
-* `makukha/multipython:pyXY` — single version images.
-* [Build your own environment](https://github.com/makukha/multipython?tab=readme-ov-file#build-your-own-environment) with single version images.
 * Based on official `python3.13:slim-bookworm`
+* `makukha/multipython` — [tox](https://tox.wiki) and most [pyenv](https://github.com/pyenv/pyenv) CPython versions
+* `makukha/multipython:pyXY` — single version images
+* [Build your own environment](https://github.com/makukha/multipython?tab=readme-ov-file#build-your-own-environment) with single version images
 
 
 # Quick reference
@@ -20,27 +18,21 @@
 
 # Supported tags and respective `Dockerfile` links
 
-* [`latest, 2024.11.30`](https://github.com/makukha/multipython/blob/v2024.11.30/Dockerfile) *— all Python versions, pyenv, tox*
-
-**[Single version](https://github.com/makukha/multipython?tab=readme-ov-file#python-versions) images**
-
-* [`py314t, py314t-2024.11.30`](https://github.com/makukha/multipython/blob/v2024.11.30/Dockerfile) *— CPython 3.14.a2 free-threaded*
-* [`py313t, py313t-2024.11.30`](https://github.com/makukha/multipython/blob/v2024.11.30/Dockerfile) *— CPython 3.13.0 free-threaded*
-* [`py314, py314-2024.11.30`](https://github.com/makukha/multipython/blob/v2024.11.30/Dockerfile) *— CPython 3.14.a2*
-* [`py313, py313-2024.11.30`](https://github.com/makukha/multipython/blob/v2024.11.30/Dockerfile) *— CPython 3.13.0*
-* [`py312, py312-2024.11.30`](https://github.com/makukha/multipython/blob/v2024.11.30/Dockerfile) *— CPython 3.12.7*
-* [`py311, py311-2024.11.30`](https://github.com/makukha/multipython/blob/v2024.11.30/Dockerfile) *— CPython 3.11.10*
-* [`py310, py310-2024.11.30`](https://github.com/makukha/multipython/blob/v2024.11.30/Dockerfile) *— CPython 3.10.15*
-* [`py39, py39-2024.11.30`](https://github.com/makukha/multipython/blob/v2024.11.30/Dockerfile) *— CPython 3.9.20*
-* [`py38, py38-2024.11.30`](https://github.com/makukha/multipython/blob/v2024.11.30/Dockerfile) *— CPython 3.8.20*
-* [`py37, py37-2024.11.30`](https://github.com/makukha/multipython/blob/v2024.11.30/Dockerfile) *— CPython 3.7.17*
-* [`py36, py36-2024.11.30`](https://github.com/makukha/multipython/blob/v2024.11.30/Dockerfile) *— CPython 3.6.15*
-* [`py35, py35-2024.11.30`](https://github.com/makukha/multipython/blob/v2024.11.30/Dockerfile) *— CPython 3.5.10*
-* [`py27, py27-2024.11.30`](https://github.co-m/makukha/multipython/blob/v2024.11.30/Dockerfile) *— CPython 2.7.18*
-
-**Base image**
-
-* [`pyenv, pyenv-2.4.19`](https://github.com/makukha/multipython/blob/v2024.11.30/Dockerfile) *— pyenv 2.4.19, tox 4.5.1.1*
+* [`latest, 2024.11.30`](https://github.com/makukha/multipython/blob/v2024.11.30/Dockerfile) — *all Python versions, pyenv, tox*
+* [`pyenv, pyenv-2.4.19`](https://github.com/makukha/multipython/blob/v2024.11.30/Dockerfile) — *pyenv 2.4.19, tox 4.5.1.1*
+* [`py314t, py314t-2024.11.30`](https://github.com/makukha/multipython/blob/v2024.11.30/Dockerfile) — *CPython 3.14.a2 free-threaded*
+* [`py313t, py313t-2024.11.30`](https://github.com/makukha/multipython/blob/v2024.11.30/Dockerfile) — *CPython 3.13.0 free-threaded*
+* [`py314, py314-2024.11.30`](https://github.com/makukha/multipython/blob/v2024.11.30/Dockerfile) — *CPython 3.14.a2*
+* [`py313, py313-2024.11.30`](https://github.com/makukha/multipython/blob/v2024.11.30/Dockerfile) — *CPython 3.13.0*
+* [`py312, py312-2024.11.30`](https://github.com/makukha/multipython/blob/v2024.11.30/Dockerfile) — *CPython 3.12.7*
+* [`py311, py311-2024.11.30`](https://github.com/makukha/multipython/blob/v2024.11.30/Dockerfile) — *CPython 3.11.10*
+* [`py310, py310-2024.11.30`](https://github.com/makukha/multipython/blob/v2024.11.30/Dockerfile) — *CPython 3.10.15*
+* [`py39, py39-2024.11.30`](https://github.com/makukha/multipython/blob/v2024.11.30/Dockerfile) — *CPython 3.9.20*
+* [`py38, py38-2024.11.30`](https://github.com/makukha/multipython/blob/v2024.11.30/Dockerfile) — *CPython 3.8.20*
+* [`py37, py37-2024.11.30`](https://github.com/makukha/multipython/blob/v2024.11.30/Dockerfile) — *CPython 3.7.17*
+* [`py36, py36-2024.11.30`](https://github.com/makukha/multipython/blob/v2024.11.30/Dockerfile) — *CPython 3.6.15*
+* [`py35, py35-2024.11.30`](https://github.com/makukha/multipython/blob/v2024.11.30/Dockerfile) — *CPython 3.5.10*
+* [`py27, py27-2024.11.30`](https://github.co-m/makukha/multipython/blob/v2024.11.30/Dockerfile) — *CPython 2.7.18*
 
 
 Outdated releases remain in [Docker Registry](https://hub.docker.com/r/makukha/multipython/tags).
@@ -75,7 +67,6 @@ docker run --rm -v .:/app makukha/multipython tox run --root /app
 
 ```shell
 $ docker run --rm -it makukha/multipython
-# in container
 $ py --sys
 3.13.0
 ```
@@ -85,7 +76,6 @@ $ py --sys
 <td>
 
 ```shell
-# in container
 $ py --list
 2.7.18
 3.5.10
@@ -105,7 +95,6 @@ $ py --list
 <td>
 
 ```shell
-# in container
 $ py --minor
 2.7
 3.5
@@ -125,7 +114,6 @@ $ py --minor
 <td>
 
 ```shell
-# in container
 $ py --tags
 py27
 py35
@@ -146,7 +134,6 @@ py314t
 </table>
 
 ```shell
-# in container
 $ py --help
 Usage: py <option>
 
@@ -165,8 +152,6 @@ Other options:
   --to-minor  Convert full version from stdin/arg to minor format
   --to-tag    Convert full version from stdin/arg to tag format
 ```
-
-## Build your own environment
 
 ## Build your own environment
 
