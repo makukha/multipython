@@ -1,8 +1,9 @@
 # multipython 🐳<sup>🐍</sup>
 
+[![GitHub Tag](https://img.shields.io/github/v/tag/makukha/multipython?label=GitHub%20Tag)](https://github.com/makukha/multipython)
+[![OpenSSF Best Practices](https://www.bestpractices.dev/projects/9755/badge)](https://www.bestpractices.dev/projects/9755)
+
 > Docker image with latest pyenv Python 2.7 to 3.14 for multi-version testing.
-> 
-> [![GitHub Tag](https://img.shields.io/github/v/tag/makukha/multipython?label=GitHub%20Tag)](https://github.com/makukha/multipython)
 
 * `makukha/multipython` — [tox](https://tox.wiki) and most [pyenv](https://github.com/pyenv/pyenv) CPython versions.
 * `makukha/multipython:pyXY` — single version images.

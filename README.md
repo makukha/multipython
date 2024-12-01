@@ -3,6 +3,7 @@
 > Docker image with latest pyenv Python 2.7 to 3.14 for multi-version testing.
 
 [![Docker Pulls](https://img.shields.io/docker/pulls/makukha/multipython)](https://hub.docker.com/r/makukha/multipython)
+[![OpenSSF Best Practices](https://www.bestpractices.dev/projects/9755/badge)](https://www.bestpractices.dev/projects/9755)
 
 
 # Features
@@ -236,11 +237,8 @@ RUN pip install tox
     * Lacks recent versions
 
 
-# Development
+# Feedback and contributing
 
-```shell
-$ task clean
-$ task build:pyenv  # optional
-$ task build:py
-$ task test
-```
+* To file bug report or feature request, please [create an issue](https://github.com/makukha/multipython/issues).
+* To report security vulnerability, please use [GitHub Security Advisories](https://github.com/makukha/multipython/security/advisories).
+* Want to contribute? Check [Contribution Guidelines](https://github.com/makukha/multipython/blob/main/.github/CONTRIBUTING.md).
