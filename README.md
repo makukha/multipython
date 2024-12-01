@@ -8,10 +8,10 @@
 
 # Features
 
+* Based on official `python3.13:slim-bookworm`✅
 * `makukha/multipython` — [tox](https://tox.wiki) and most [pyenv](https://github.com/pyenv/pyenv) CPython versions
 * `makukha/multipython:pyXY` — single version images
 * [Build your own environment](#build-your-own-environment) with single version images
-* Based on official `python3.13:slim-bookworm`✅
 
 ## Python versions
 
