@@ -1,5 +1,10 @@
+# hadolint global ignore=DL4006
+# DL4006 => -o pipefail is already set globally
+
 FROM scratch AS toxfile
+
 ARG py27 py35 py36 py37 py38 py39 py310 py311 py312 py313 py314 py313t py314t
+
 COPY <<EOT /tox.ini
 [tox]
 env_list = py{27,35,36,37,38,39,310,311,312,313,314,313t,314t}
@@ -40,11 +45,35 @@ commands =
   bash -c '[[ "\$(python\$(py --to-minor "{env:V}") -c "import sys; print(sys.version)")" == "{env:P}"* ]] || exit 1'
 EOT
 
-# final
 
-FROM makukha/multipython:latest AS test_final
-SHELL ["/bin/sh", "-eux", "-c"]
+# --- final
+
+# test
+
+FROM makukha/multipython:2024.11.30 AS test_final
+
 ARG py27 py35 py36 py37 py38 py39 py310 py311 py312 py313 py314 py313t py314t
+COPY --from=toxfile /tox.ini /tmp/
+
+COPY <<EOT /tmp/usage.txt
+Usage: py <option>
+
+  Multipython helper utility.
+
+Options:
+  --list   Show all versions installed
+  --minor  Show minor versions installed
+  --tags   Show tags of versions installed
+  --pyenv  Show versions managed by pyenv
+  --sys    Show version of system python
+  --help   Show this help and exit
+
+Other options:
+  --install   Set pyenv globals and symlink (use in Dockerfile only)
+  --to-minor  Convert full version from stdin/arg to minor format
+  --to-tag    Convert full version from stdin/arg to tag format
+EOT
+
 COPY <<EOT /tmp/versions.txt
 ${py27}
 ${py35}
@@ -60,6 +89,7 @@ ${py313t}
 ${py314}
 ${py314t}
 EOT
+
 COPY <<EOT /tmp/minor.txt
 2.7
 3.5
@@ -75,6 +105,7 @@ COPY <<EOT /tmp/minor.txt
 3.14
 3.14t
 EOT
+
 COPY <<EOT /tmp/tags.txt
 py27
 py35
@@ -90,16 +121,20 @@ py313t
 py314
 py314t
 EOT
-COPY --from=toxfile /tox.ini /tmp/
+
+WORKDIR /tmp
 RUN <<-EOT
-  cd /tmp
+  py --help | diff usage.txt -
   py --list | diff versions.txt -
   py --minor | diff minor.txt -
   py --tags | diff tags.txt -
   tox run -e py27 -e py35 -e py36 -e py37 -e py38 -e py39 -e py310 -e py311 -e py312 -e py313 -e py314 -e py313t -e py314t
 EOT
 
-# readme example 1
+
+# --- readme example 1
+
+# setup
 
 FROM makukha/multipython:pyenv AS readme_example_1
 RUN mkdir /root/.pyenv/versions
@@ -108,49 +143,63 @@ COPY --from=makukha/multipython:py35 /root/.pyenv/versions /root/.pyenv/versions
 COPY --from=makukha/multipython:py36 /root/.pyenv/versions /root/.pyenv/versions/
 RUN py --install
 
+# test
+
 FROM readme_example_1 AS test_readme_example_1
-SHELL ["/bin/sh", "-eux", "-c"]
+
 ARG py27 py35 py36 py313
+COPY --from=toxfile /tox.ini /tmp/
+
 COPY <<EOT /tmp/versions.txt
 ${py27}
 ${py35}
 ${py36}
 ${py313}
 EOT
-COPY --from=toxfile /tox.ini /tmp/
+
+WORKDIR /tmp
 RUN <<-EOT
-  cd /tmp
   py --list | diff versions.txt -
   tox run -e py27 -e py35 -e py36
 EOT
 
-# readme example 2
+
+# --- readme example 2
+
+# setup
 
 FROM makukha/multipython:pyenv AS readme_example_2
 RUN mkdir /root/.pyenv/versions
 COPY --from=makukha/multipython:py37 /root/.pyenv/versions /root/.pyenv/versions/
 COPY --from=makukha/multipython:py314 /root/.pyenv/versions /root/.pyenv/versions/
 # set global pyenv versions and create symlinks
-RUN py --install
 # pin virtualenv to support Python 3.7
-RUN pip install "virtualenv<20.27" tox
+RUN py --install \
+    pip install "virtualenv<20.27" tox
+
+# test
 
 FROM readme_example_2 AS test_readme_example_2
-SHELL ["/bin/sh", "-eux", "-c"]
+
 ARG py37 py313 py314
+COPY --from=toxfile /tox.ini /tmp/
+
 COPY <<EOT /tmp/versions.txt
 ${py37}
 ${py313}
 ${py314}
 EOT
-COPY --from=toxfile /tox.ini /tmp/
+
+WORKDIR /tmp
 RUN <<-EOT
-  cd /tmp
   py --list | diff versions.txt -
   tox run -e py37 -e py314
 EOT
 
-# readme example 3
+
+# --- readme example 3
+
+# setup
 
 FROM makukha/multipython:pyenv AS readme_example_3
 RUN mkdir /root/.pyenv/versions
@@ -158,21 +207,25 @@ COPY --from=makukha/multipython:py312 /root/.pyenv/versions /root/.pyenv/version
 COPY --from=makukha/multipython:py313 /root/.pyenv/versions /root/.pyenv/versions/
 COPY --from=makukha/multipython:py314 /root/.pyenv/versions /root/.pyenv/versions/
 # set global pyenv versions and create symlinks
-RUN py --install
-# use latest
-RUN pip install tox
+# use latest tox and virtualenv
+RUN py --install \
+    pip install tox
+
+# test
 
 FROM readme_example_3 AS test_readme_example_3
-SHELL ["/bin/sh", "-eux", "-c"]
+
 ARG py312 py313 py314
+COPY --from=toxfile /tox.ini /tmp/
+
 COPY <<EOT /tmp/versions.txt
 ${py312}
 ${py313}
 ${py314}
 EOT
-COPY --from=toxfile /tox.ini /tmp/
+
+WORKDIR /tmp
 RUN <<-EOT
-  cd /tmp
   py --list | diff versions.txt -
   tox run -e py312 -e py313 -e py314
 EOT
