@@ -54,6 +54,7 @@ py_install () {
 
 py_usage () {
   echo "Usage: py <option>"
+  echo
   echo "  Multipython helper utility."
   echo
   echo "Options:"

@@ -7,7 +7,7 @@ ARG PYENV_VERSION=__REQUIRED__
 # pyenv
 
 FROM python:3.13.0-slim-bookworm AS pyenv
-SHELL ["/bin/sh", "-eux", "-o", "pipefail", "-c"]
+SHELL ["/bin/bash", "-eux", "-o", "pipefail", "-c"]
 
 ARG PYENV_VERSION
 ARG PYENV_SHA256
