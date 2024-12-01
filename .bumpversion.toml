@@ -1,5 +1,5 @@
 [tool.bumpversion]
-current_version = "2024.11.30"
+current_version = "2024.12.1"
 allow_dirty = true
 parse = """(?x)
   (?P<release>                   # release (mandatory)

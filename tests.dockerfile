@@ -50,7 +50,7 @@ EOT
 
 # test
 
-FROM makukha/multipython:2024.11.30 AS test_final
+FROM makukha/multipython:2024.12.1 AS test_final
 
 ARG py27 py35 py36 py37 py38 py39 py310 py311 py312 py313 py314 py313t py314t
 COPY --from=toxfile /tox.ini /tmp/
