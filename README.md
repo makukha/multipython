@@ -1,7 +1,8 @@
 # multipython 🐳<sup>🐍</sup>
 
-> Docker image with latest pyenv Python 2.7 to 3.14 for multi-version testing.
+> Docker image of Python 2.7 to 3.14 for multi-version testing.
 
+[![release](https://img.shields.io/github/v/tag/makukha/multipython?label=tag)](https://github.com/makukha/multipython)
 [![Docker Pulls](https://img.shields.io/docker/pulls/makukha/multipython)](https://hub.docker.com/r/makukha/multipython)
 [![OpenSSF Best Practices](https://www.bestpractices.dev/projects/9755/badge)](https://www.bestpractices.dev/projects/9755)
 
@@ -201,9 +202,9 @@ RUN mkdir /root/.pyenv/versions
 COPY --from=makukha/multipython:py37 /root/.pyenv/versions /root/.pyenv/versions/
 COPY --from=makukha/multipython:py314 /root/.pyenv/versions /root/.pyenv/versions/
 # set global pyenv versions and create symlinks
-RUN py --install
 # pin virtualenv to support Python 3.7
-RUN pip install "virtualenv<20.27" tox
+RUN py --install \
+    pip install "virtualenv<20.27" tox
 ```
 
 ### With latest tox, Python 3.8+
@@ -216,9 +217,9 @@ COPY --from=makukha/multipython:py312 /root/.pyenv/versions /root/.pyenv/version
 COPY --from=makukha/multipython:py313 /root/.pyenv/versions /root/.pyenv/versions/
 COPY --from=makukha/multipython:py314 /root/.pyenv/versions /root/.pyenv/versions/
 # set global pyenv versions and create symlinks
-RUN py --install
-# use latest
-RUN pip install tox
+# use latest tox and virtualenv
+RUN py --install \
+    pip install tox
 ```
 
 

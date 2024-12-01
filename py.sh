@@ -3,7 +3,7 @@
 # versions
 
 py_pyenv () {
-  find ${PYENV_ROOT}/versions -mindepth 1 -maxdepth 1 -type d -printf "%f\n" 2> /dev/null
+  find "${PYENV_ROOT}"/versions -mindepth 1 -maxdepth 1 -type d -printf "%f\n" 2> /dev/null
 }
 py_sys () {
   python --version | sed -e's/Python //'
@@ -48,21 +48,24 @@ to_tag () {
 py_install () {
   py_pyenv | xargs pyenv global system
   for v in $(py_pyenv); do
-    ln -s "${PYENV_ROOT}/versions/$v/bin/python" "/usr/local/bin/python$(echo $v | py_minor)"
+    ln -s "${PYENV_ROOT}/versions/$v/bin/python" "/usr/local/bin/python$(echo "$v" | py_minor)"
   done
 }
 
 py_usage () {
-  echo "Usage: py <option>\n"
+  echo "Usage: py <option>"
+  echo
   echo "  Multipython helper utility."
-  echo "\nOptions:"
+  echo
+  echo "Options:"
   echo "  --list   Show all versions installed"
   echo "  --minor  Show minor versions installed"
   echo "  --tags   Show tags of versions installed"
   echo "  --pyenv  Show versions managed by pyenv"
   echo "  --sys    Show version of system python"
   echo "  --help   Show this help and exit"
-  echo "\nOther options:"
+  echo
+  echo "Other options:"
   echo "  --install   Set pyenv globals and symlink (use in Dockerfile only)"
   echo "  --to-minor  Convert full version from stdin/arg to minor format"
   echo "  --to-tag    Convert full version from stdin/arg to tag format"
@@ -89,7 +92,7 @@ main () {
     --to-minor) to_minor "$2" ;;
     --to-tag) to_tag "$2" ;;
     *)
-      echo "Unknown option:" $1
+      echo "Unknown option: $1"
       exit 1
       ;;
   esac

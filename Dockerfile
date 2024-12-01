@@ -1,13 +1,19 @@
+# hadolint global ignore=DL3008,DL4006
+# DL3008 => apt pakage versions are not locked in this project
+# DL4006 => -o pipefail is already set globally
+
 ARG PYENV_VERSION=__REQUIRED__
 
 # pyenv
 
 FROM python:3.13.0-slim-bookworm AS pyenv
-SHELL ["/bin/sh", "-eux", "-c"]
+SHELL ["/bin/bash", "-eux", "-o", "pipefail", "-c"]
+
 ARG PYENV_VERSION
 ARG PYENV_SHA256
 ARG TOX_VERSION
 ARG VIRTUALENV_VERSION
+
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     --mount=type=cache,target=/var/lib/apt,sharing=locked \
 <<-EOT
@@ -19,23 +25,28 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
         libncursesw5-dev libreadline6-dev libsqlite3-dev libssl-dev libxml2-dev libxmlsec1-dev
     rm -rf /tmp/* /var/tmp/*
 EOT
-RUN --mount=type=cache,dst=/root/.cache/pip \
-    pip install --disable-pip-version-check --root-user-action=ignore \
+
+RUN pip install --disable-pip-version-check --root-user-action=ignore --no-cache-dir \
         virtualenv==${VIRTUALENV_VERSION} \
         tox==${TOX_VERSION}
+
 ENV PYENV_ROOT=/root/.pyenv
 ENV PATH="$PYENV_ROOT/bin:$PATH"
+
+# hadolint ignore=DL3003
 RUN <<-EOT
-    wget -q https://github.com/pyenv/pyenv/archive/refs/tags/v${PYENV_VERSION}.tar.gz -O tmp/pyenv.tar.gz
+    wget -q https://github.com/pyenv/pyenv/archive/refs/tags/v${PYENV_VERSION}.tar.gz -O /tmp/pyenv.tar.gz
     echo "${PYENV_SHA256} /tmp/pyenv.tar.gz" | sha256sum --check --strict
     mkdir -p ${PYENV_ROOT}
     tar -xzf /tmp/pyenv.tar.gz -C ${PYENV_ROOT} --strip-components=1
     cd ${PYENV_ROOT} && src/configure && make -C src
     rm -rf /tmp/* /var/tmp/*
 EOT
+
 COPY --chmod=755 py.sh /usr/local/bin/py
+
 ENTRYPOINT []
-CMD /bin/bash
+CMD ["/bin/bash"]
 
 # single versions
 
