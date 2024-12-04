@@ -1,8 +1,15 @@
 variable "IMG" { default = "makukha/multipython" }
 variable "RELEASE" { default = "2024.12.1" }
 
+# base image
+variable "BASE_IMAGE_DIGEST" {
+  default = "sha256:undefined"
+}
+
 variable "PYENV_VERSION" { default = "2.4.19" }
-variable "PYENV_SHA256" { default = "ce0c441c591bd9960a04bd361d25d87f909e5afc9f44ef8bb283fa67c7ad426e" }
+variable "PYENV_SHA256" {
+  default = "ce0c441c591bd9960a04bd361d25d87f909e5afc9f44ef8bb283fa67c7ad426e"
+}
 
 variable "PY" {
   default = {
@@ -27,7 +34,9 @@ variable "PY" {
 
 target "base" {
   args = {
+    BASE_IMAGE_DIGEST = BASE_IMAGE_DIGEST
     PYENV_VERSION = PYENV_VERSION
+    PYENV_SHA256 = PYENV_SHA256
   }
   platforms = ["linux/amd64"]
 }
@@ -35,7 +44,6 @@ target "base" {
 target "pyenv" {
   inherits = ["base"]
   args = {
-    PYENV_SHA256 = PYENV_SHA256
     TOX_VERSION = "4.5.1.1"
     VIRTUALENV_VERSION = "20.21.1"
   }
@@ -86,4 +94,12 @@ target "tests" {
   name = TGT
   output = ["type=cacheonly"]
   target = TGT
+}
+
+# check for updates
+
+target "checkupd" {
+  inherits = ["base"]
+  target = "checkupd"
+  tags = ["${IMG}:checkupd"]
 }
