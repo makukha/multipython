@@ -1,16 +1,14 @@
 #!/bin/sh
 
+MULTIPYTHON_ROOT=/root/.multipython
+
 # versions
 
-py_pyenv () {
-  find "${PYENV_ROOT}"/versions -mindepth 1 -maxdepth 1 -type d -printf "%f\n" 2> /dev/null
+py_list () {
+  find "$(pyenv root)"/versions -mindepth 1 -maxdepth 1 -type d -printf "%f\n" 2> /dev/null
 }
 py_sys () {
-  python --version | sed -e's/Python //'
-}
-py_versions () {
-  py_pyenv
-  py_sys
+  python --version | cut -d' ' -f2
 }
 
 # version conversions
@@ -24,31 +22,41 @@ py_tag () {
 }
 
 py_sort () {
-  sed -e 's/\.\([0-9][^0-9]\)/\.0\1/g' | sort | sed -e 's/\.0\([0-9]\)/\.\1/g'
+  sed -e 's/$/-/; s/\.\([0-9][^0-9]\)/\.0\1/g' | sort | sed -e 's/-$//; s/\.0\([0-9]\)/\.\1/g'
 }
 
 to_minor () {
-  if [ -n "$1" ]; then
-    echo "$1" | py_minor
-  else
+  if [ "$1" = "-" ]; then
     py_minor
+  else
+    echo "$1" | py_minor
   fi
 }
 
 to_tag () {
-  if [ -n "$1" ]; then
-    echo "$1" | py_tag
-  else
+  if [ "$1" = "-" ]; then
     py_tag
+  else
+    echo "$1" | py_tag
   fi
 }
 
 # commands
 
-py_install () {
-  py_pyenv | xargs pyenv global system
-  for v in $(py_pyenv); do
-    ln -s "${PYENV_ROOT}/versions/$v/bin/python" "/usr/local/bin/python$(echo "$v" | py_minor)"
+py_link_pyenv () {
+  PYENV_ROOT=$(pyenv root)
+  for v in $(py_list); do
+    ln -s "$PYENV_ROOT/versions/$v/bin/python" "/usr/local/bin/python$(to_minor "$v")"
+  done
+}
+py_link_sys () {
+  PYENV_ROOT=$(pyenv root)
+  MULTIPYTHON_ROOT=$(py --root)
+  for v in $(py_list); do
+    if [ "$(py --to-tag "$v")" = "$1" ]; then
+      test -h "$MULTIPYTHON_ROOT/sys" && unlink "$MULTIPYTHON_ROOT/sys"
+      ln -s "$PYENV_ROOT/versions/$v/bin" "$MULTIPYTHON_ROOT/sys"
+    fi
   done
 }
 
@@ -61,14 +69,15 @@ py_usage () {
   echo "  --list   Show all versions installed"
   echo "  --minor  Show minor versions installed"
   echo "  --tags   Show tags of versions installed"
-  echo "  --pyenv  Show versions managed by pyenv"
   echo "  --sys    Show version of system python"
   echo "  --help   Show this help and exit"
   echo
-  echo "Other options:"
-  echo "  --install   Set pyenv globals and symlink (use in Dockerfile only)"
-  echo "  --to-minor  Convert full version from stdin/arg to minor format"
-  echo "  --to-tag    Convert full version from stdin/arg to tag format"
+  echo "Advanced options:"
+  echo "  --link-pyenv      Symlink all python versions (use in Dockerfile only)"
+  echo "  --link-sys VER    Symlink system python (use in Dockerfile only)"
+  echo "  --root            Show path to multipython root directory"
+  echo "  --to-minor -|VER  Convert full version from stdin or value to minor format"
+  echo "  --to-tag -|VER    Convert full version from stdin or value to tag format"
 }
 
 # main
@@ -81,14 +90,15 @@ main () {
 
   case $1 in
     # main options
-    --list)  py_versions | py_sort ;;
-    --minor) py_versions | py_sort | py_minor ;;
-    --tags)  py_versions | py_sort | py_tag ;;
-    --pyenv) py_pyenv | py_sort ;;
+    --list)  py_list | py_sort ;;
+    --minor) py_list | py_sort | py_minor ;;
+    --tags)  py_list | py_sort | py_tag ;;
     --sys) py_sys ;;
     --help) py_usage ;;
-    # other options
-    --install) py_install ;;
+    # advanced options
+    --link-pyenv) py_link_pyenv ;;
+    --link-sys) py_link_sys "$2" ;;
+    --root) echo "$MULTIPYTHON_ROOT" ;;
     --to-minor) to_minor "$2" ;;
     --to-tag) to_tag "$2" ;;
     *)

@@ -1,4 +1,5 @@
-# hadolint global ignore=DL4006
+# hadolint global ignore=DL3013,DL4006
+# DL3042 => pip install without version is fine for README docs
 # DL4006 => -o pipefail is already set globally
 
 FROM scratch AS toxfile
@@ -64,14 +65,15 @@ Options:
   --list   Show all versions installed
   --minor  Show minor versions installed
   --tags   Show tags of versions installed
-  --pyenv  Show versions managed by pyenv
   --sys    Show version of system python
   --help   Show this help and exit
 
-Other options:
-  --install   Set pyenv globals and symlink (use in Dockerfile only)
-  --to-minor  Convert full version from stdin/arg to minor format
-  --to-tag    Convert full version from stdin/arg to tag format
+Advanced options:
+  --link-pyenv      Symlink all python versions (use in Dockerfile only)
+  --link-sys VER    Symlink system python (use in Dockerfile only)
+  --root            Show path to multipython root directory
+  --to-minor -|VER  Convert full version from stdin or value to minor format
+  --to-tag -|VER    Convert full version from stdin or value to tag format
 EOT
 
 COPY <<EOT /tmp/versions.txt
@@ -141,7 +143,7 @@ RUN mkdir /root/.pyenv/versions
 COPY --from=makukha/multipython:py27 /root/.pyenv/versions /root/.pyenv/versions/
 COPY --from=makukha/multipython:py35 /root/.pyenv/versions /root/.pyenv/versions/
 COPY --from=makukha/multipython:py36 /root/.pyenv/versions /root/.pyenv/versions/
-RUN py --install
+RUN py --link-pyenv; py --link-sys py36
 
 # test
 
@@ -154,7 +156,6 @@ COPY <<EOT /tmp/versions.txt
 ${py27}
 ${py35}
 ${py36}
-${py313}
 EOT
 
 WORKDIR /tmp
@@ -174,8 +175,9 @@ COPY --from=makukha/multipython:py37 /root/.pyenv/versions /root/.pyenv/versions
 COPY --from=makukha/multipython:py314 /root/.pyenv/versions /root/.pyenv/versions/
 # set global pyenv versions and create symlinks
 # pin virtualenv to support Python 3.7
-RUN py --install \
-    pip install "virtualenv<20.27" tox
+RUN py --link-pyenv; \
+    py --link-sys py314; \
+    pip install --no-cache-dir "virtualenv<20.27" tox
 
 # test
 
@@ -186,7 +188,6 @@ COPY --from=toxfile /tox.ini /tmp/
 
 COPY <<EOT /tmp/versions.txt
 ${py37}
-${py313}
 ${py314}
 EOT
 
@@ -208,8 +209,9 @@ COPY --from=makukha/multipython:py313 /root/.pyenv/versions /root/.pyenv/version
 COPY --from=makukha/multipython:py314 /root/.pyenv/versions /root/.pyenv/versions/
 # set global pyenv versions and create symlinks
 # use latest tox and virtualenv
-RUN py --install \
-    pip install tox
+RUN py --link-pyenv; \
+    py --link-sys py314; \
+    pip install --no-cache-dir tox
 
 # test
 

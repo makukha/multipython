@@ -10,8 +10,7 @@ tasks:
     desc: Check for version updates.
     cmds:
       - docker buildx bake pyenv
-      - docker buildx bake checkupd
-      - docker run --rm -t makukha/multipython:checkupd
+      - docker run --rm -t makukha/multipython:pyenv py_checkupd
 
   lint:
     desc: Run linters.

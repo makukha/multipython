@@ -1,15 +1,11 @@
 variable "IMG" { default = "makukha/multipython" }
 variable "RELEASE" { default = "2024.12.1" }
 
-# base image
-variable "BASE_IMAGE_DIGEST" {
-  default = "sha256:undefined"
-}
-
-variable "PYENV_VERSION" { default = "2.4.19" }
-variable "PYENV_SHA256" {
-  default = "ce0c441c591bd9960a04bd361d25d87f909e5afc9f44ef8bb283fa67c7ad426e"
-}
+variable "BASE_DIGEST" { default = "sha256:4d63ef53faef7bd35c92fbefb1e9e2e7b6777e3cbec6c34f640e96b925e430eb" }
+variable "PYENV_VERSION" { default = "2.4.20" }
+variable "PYENV_SHA256" { default = "a1d6b1bdd92fcfa8fcd98a426545832b00e8e44312ffec76526d89f4c8e3a2a3" }
+variable "TOX_VERSION" { default = "4.5.1.1" }
+variable "VIRTUALENV_VERSION" { default = "20.21.1" }
 
 variable "PY" {
   default = {
@@ -18,14 +14,14 @@ variable "PY" {
     py36 = "3.6.15"
     py37 = "3.7.17"
     py38 = "3.8.20"
-    py39 = "3.9.20"
-    py310 = "3.10.15"
-    py311 = "3.11.10"
-    py312 = "3.12.7"
-    py313 = "3.13.0"
+    py39 = "3.9.21"
+    py310 = "3.10.16"
+    py311 = "3.11.11"
+    py312 = "3.12.8"
+    py313 = "3.13.1"
     py314 = "3.14.0a2"
     # free threaded
-    py313t = "3.13.0t"
+    py313t = "3.13.1t"
     py314t = "3.14.0a2t"
   }
 }
@@ -34,19 +30,17 @@ variable "PY" {
 
 target "base" {
   args = {
-    BASE_IMAGE_DIGEST = BASE_IMAGE_DIGEST
+    BASE_DIGEST = BASE_DIGEST
     PYENV_VERSION = PYENV_VERSION
     PYENV_SHA256 = PYENV_SHA256
+    TOX_VERSION = TOX_VERSION
+    VIRTUALENV_VERSION = VIRTUALENV_VERSION
   }
   platforms = ["linux/amd64"]
 }
 
 target "pyenv" {
   inherits = ["base"]
-  args = {
-    TOX_VERSION = "4.5.1.1"
-    VIRTUALENV_VERSION = "20.21.1"
-  }
   target = "pyenv"
   tags = [
     "${IMG}:pyenv",
@@ -94,12 +88,4 @@ target "tests" {
   name = TGT
   output = ["type=cacheonly"]
   target = TGT
-}
-
-# check for updates
-
-target "checkupd" {
-  inherits = ["base"]
-  target = "checkupd"
-  tags = ["${IMG}:checkupd"]
 }
