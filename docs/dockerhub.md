@@ -21,19 +21,18 @@
 * [`latest, 2024.12.1`](https://github.com/makukha/multipython/blob/v2024.12.1/Dockerfile) — *all Python versions, pyenv, tox*
 * [`pyenv, pyenv-2.4.19`](https://github.com/makukha/multipython/blob/v2024.12.1/Dockerfile) — *pyenv 2.4.19, tox 4.5.1.1*
 * [`py314t, py314t-2024.12.1`](https://github.com/makukha/multipython/blob/v2024.12.1/Dockerfile) — *CPython 3.14.a2 free-threaded*
-* [`py313t, py313t-2024.12.1`](https://github.com/makukha/multipython/blob/v2024.12.1/Dockerfile) — *CPython 3.13.0 free-threaded*
+* [`py313t, py313t-2024.12.1`](https://github.com/makukha/multipython/blob/v2024.12.1/Dockerfile) — *CPython 3.13.1 free-threaded*
 * [`py314, py314-2024.12.1`](https://github.com/makukha/multipython/blob/v2024.12.1/Dockerfile) — *CPython 3.14.a2*
-* [`py313, py313-2024.12.1`](https://github.com/makukha/multipython/blob/v2024.12.1/Dockerfile) — *CPython 3.13.0*
-* [`py312, py312-2024.12.1`](https://github.com/makukha/multipython/blob/v2024.12.1/Dockerfile) — *CPython 3.12.7*
-* [`py311, py311-2024.12.1`](https://github.com/makukha/multipython/blob/v2024.12.1/Dockerfile) — *CPython 3.11.10*
-* [`py310, py310-2024.12.1`](https://github.com/makukha/multipython/blob/v2024.12.1/Dockerfile) — *CPython 3.10.15*
-* [`py39, py39-2024.12.1`](https://github.com/makukha/multipython/blob/v2024.12.1/Dockerfile) — *CPython 3.9.20*
+* [`py313, py313-2024.12.1`](https://github.com/makukha/multipython/blob/v2024.12.1/Dockerfile) — *CPython 3.13.1*
+* [`py312, py312-2024.12.1`](https://github.com/makukha/multipython/blob/v2024.12.1/Dockerfile) — *CPython 3.12.8*
+* [`py311, py311-2024.12.1`](https://github.com/makukha/multipython/blob/v2024.12.1/Dockerfile) — *CPython 3.11.11*
+* [`py310, py310-2024.12.1`](https://github.com/makukha/multipython/blob/v2024.12.1/Dockerfile) — *CPython 3.10.16*
+* [`py39, py39-2024.12.1`](https://github.com/makukha/multipython/blob/v2024.12.1/Dockerfile) — *CPython 3.9.21*
 * [`py38, py38-2024.12.1`](https://github.com/makukha/multipython/blob/v2024.12.1/Dockerfile) — *CPython 3.8.20*
 * [`py37, py37-2024.12.1`](https://github.com/makukha/multipython/blob/v2024.12.1/Dockerfile) — *CPython 3.7.17*
 * [`py36, py36-2024.12.1`](https://github.com/makukha/multipython/blob/v2024.12.1/Dockerfile) — *CPython 3.6.15*
 * [`py35, py35-2024.12.1`](https://github.com/makukha/multipython/blob/v2024.12.1/Dockerfile) — *CPython 3.5.10*
 * [`py27, py27-2024.12.1`](https://github.co-m/makukha/multipython/blob/v2024.12.1/Dockerfile) — *CPython 2.7.18*
-
 
 Outdated releases remain in [Docker Registry](https://hub.docker.com/r/makukha/multipython/tags).
 
@@ -82,12 +81,12 @@ $ py --list
 3.6.15
 3.7.17
 3.8.20
-3.9.20
-3.10.15
-3.11.10
-3.12.7
-3.13.0
-3.13.0t
+3.9.21
+3.10.16
+3.11.11
+3.12.8
+3.13.1
+3.13.1t
 3.14.0a2
 3.14.0a2t
 ```
@@ -143,14 +142,15 @@ Options:
   --list   Show all versions installed
   --minor  Show minor versions installed
   --tags   Show tags of versions installed
-  --pyenv  Show versions managed by pyenv
   --sys    Show version of system python
   --help   Show this help and exit
 
-Other options:
-  --install   Set pyenv globals and symlink (use in Dockerfile only)
-  --to-minor  Convert full version from stdin/arg to minor format
-  --to-tag    Convert full version from stdin/arg to tag format
+Advanced options:
+  --link-pyenv      Symlink all python versions (use in Dockerfile only)
+  --link-sys VER    Symlink system python (use in Dockerfile only)
+  --root            Show path to multipython root directory
+  --to-minor -|VER  Convert full version from stdin or value to minor format
+  --to-tag -|VER    Convert full version from stdin or value to tag format
 ```
 
 ## Build your own environment
@@ -179,7 +179,7 @@ RUN mkdir /root/.pyenv/versions
 COPY --from=makukha/multipython:py27 /root/.pyenv/versions /root/.pyenv/versions/
 COPY --from=makukha/multipython:py35 /root/.pyenv/versions /root/.pyenv/versions/
 COPY --from=makukha/multipython:py36 /root/.pyenv/versions /root/.pyenv/versions/
-RUN py --install
+RUN py --link-pyenv; py --link-sys py36
 ```
 
 ### With latest tox, Python 3.7+
@@ -191,9 +191,10 @@ RUN mkdir /root/.pyenv/versions
 COPY --from=makukha/multipython:py37 /root/.pyenv/versions /root/.pyenv/versions/
 COPY --from=makukha/multipython:py314 /root/.pyenv/versions /root/.pyenv/versions/
 # set global pyenv versions and create symlinks
-RUN py --install
 # pin virtualenv to support Python 3.7
-RUN pip install "virtualenv<20.27" tox
+RUN py --link-pyenv; \
+    py --link-sys py314; \
+    pip install --no-cache-dir "virtualenv<20.27" tox
 ```
 
 ### With latest tox, Python 3.8+
@@ -206,7 +207,8 @@ COPY --from=makukha/multipython:py312 /root/.pyenv/versions /root/.pyenv/version
 COPY --from=makukha/multipython:py313 /root/.pyenv/versions /root/.pyenv/versions/
 COPY --from=makukha/multipython:py314 /root/.pyenv/versions /root/.pyenv/versions/
 # set global pyenv versions and create symlinks
-RUN py --install
-# use latest
-RUN pip install tox
+# use latest tox and virtualenv
+RUN py --link-pyenv; \
+    py --link-sys py314; \
+    pip install --no-cache-dir tox
 ```

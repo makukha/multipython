@@ -9,7 +9,7 @@
 
 # Features
 
-* Based on official `python3.13:slim-bookworm`✅
+* Based on `debian:stable-slim`
 * `makukha/multipython` — [tox](https://tox.wiki) and most [pyenv](https://github.com/pyenv/pyenv) CPython versions
 * `makukha/multipython:pyXY` — single version images
 * [Build your own environment](#build-your-own-environment) with single version images
@@ -19,22 +19,22 @@
 | implementation                | executable    | single version tag |
 |-------------------------------|---------------|--------------------|
 | CPython 3.14.a2 free-threaded | `python3.14t` | `py314t`           |
-| CPython 3.13.0 free-threaded  | `python3.13t` | `py313t`           |
+| CPython 3.13.1 free-threaded  | `python3.13t` | `py313t`           |
 | CPython 3.14.a2               | `python3.14`  | `py314`            |
-| CPython 3.13.0 ✅             | `python3.13`  | `py313`            |
-| CPython 3.12.7                | `python3.12`  | `py312`            |
-| CPython 3.11.10               | `python3.11`  | `py311`            |
-| CPython 3.10.15               | `python3.10`  | `py310`            |
-| CPython 3.9.20                | `python3.9`   | `py39`             |
+| CPython 3.13.1 ✅              | `python3.13`  | `py313`            |
+| CPython 3.12.8                | `python3.12`  | `py312`            |
+| CPython 3.11.11               | `python3.11`  | `py311`            |
+| CPython 3.10.16               | `python3.10`  | `py310`            |
+| CPython 3.9.21                | `python3.9`   | `py39`             |
 | CPython 3.8.20                | `python3.8`   | `py38`             |
 | CPython 3.7.17                | `python3.7`   | `py37`             |
 | CPython 3.6.15                | `python3.6`   | `py36`             |
 | CPython 3.5.10                | `python3.5`   | `py35`             |
 | CPython 2.7.18                | `python2.7`   | `py27`             |
 
-✅ Latest stable executable is not installed by pyenv. It comes from base [official Python image](https://hub.docker.com/_/python).
+✅ Latest stable executable is symlinked as system `python`.
 
-All executables above are symlinks from `/usr/local/bin/pythonX.Y` to respective pyenv managed versions.
+All executables above are available on `PATH` as symlinks to respective pyenv managed versions.
 
 ## Other versions
 
@@ -90,12 +90,12 @@ $ py --list
 3.6.15
 3.7.17
 3.8.20
-3.9.20
-3.10.15
-3.11.10
-3.12.7
-3.13.0
-3.13.0t
+3.9.21
+3.10.16
+3.11.11
+3.12.8
+3.13.1
+3.13.1t
 3.14.0a2
 3.14.0a2t
 ```
@@ -154,14 +154,15 @@ Options:
   --list   Show all versions installed
   --minor  Show minor versions installed
   --tags   Show tags of versions installed
-  --pyenv  Show versions managed by pyenv
   --sys    Show version of system python
   --help   Show this help and exit
 
-Other options:
-  --install   Set pyenv globals and symlink (use in Dockerfile only)
-  --to-minor  Convert full version from stdin/arg to minor format
-  --to-tag    Convert full version from stdin/arg to tag format
+Advanced options:
+  --link-pyenv      Symlink all python versions (use in Dockerfile only)
+  --link-sys VER    Symlink system python (use in Dockerfile only)
+  --root            Show path to multipython root directory
+  --to-minor -|VER  Convert full version from stdin or value to minor format
+  --to-tag -|VER    Convert full version from stdin or value to tag format
 ```
 
 ## Build your own environment
@@ -190,7 +191,7 @@ RUN mkdir /root/.pyenv/versions
 COPY --from=makukha/multipython:py27 /root/.pyenv/versions /root/.pyenv/versions/
 COPY --from=makukha/multipython:py35 /root/.pyenv/versions /root/.pyenv/versions/
 COPY --from=makukha/multipython:py36 /root/.pyenv/versions /root/.pyenv/versions/
-RUN py --install
+RUN py --link-pyenv; py --link-sys py36
 ```
 
 ### With latest tox, Python 3.7+
@@ -203,8 +204,9 @@ COPY --from=makukha/multipython:py37 /root/.pyenv/versions /root/.pyenv/versions
 COPY --from=makukha/multipython:py314 /root/.pyenv/versions /root/.pyenv/versions/
 # set global pyenv versions and create symlinks
 # pin virtualenv to support Python 3.7
-RUN py --install \
-    pip install "virtualenv<20.27" tox
+RUN py --link-pyenv; \
+    py --link-sys py314; \
+    pip install --no-cache-dir "virtualenv<20.27" tox
 ```
 
 ### With latest tox, Python 3.8+
@@ -218,8 +220,9 @@ COPY --from=makukha/multipython:py313 /root/.pyenv/versions /root/.pyenv/version
 COPY --from=makukha/multipython:py314 /root/.pyenv/versions /root/.pyenv/versions/
 # set global pyenv versions and create symlinks
 # use latest tox and virtualenv
-RUN py --install \
-    pip install tox
+RUN py --link-pyenv; \
+    py --link-sys py314; \
+    pip install --no-cache-dir tox
 ```
 
 
