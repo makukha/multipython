@@ -1,8 +1,9 @@
 #! /bin/bash
 
-. /root/.multipython
+# shellcheck disable=SC1091
+. "$(py --root)/deps"
 
-IMAGE_CURRENT="$MULTIPYTHON_BASE_IMAGE_DIGEST"
+IMAGE_CURRENT="$MULTIPYTHON_BASE_DIGEST"
 IMAGE_LATEST=$(curl -s https://hub.docker.com/v2/namespaces/library/repositories/debian/tags/stable-slim | jq -r .digest)
 IMAGE_STATUS=$([[ "$IMAGE_CURRENT" == "$IMAGE_LATEST" ]] && echo latest || echo changed)
 
@@ -29,7 +30,7 @@ printf "IMAGE_DIGEST   %s\n" "$(row "$IMAGE_STATUS" "$IMAGE_CURRENT" "$IMAGE_LAT
 printf "PYENV_VERSION  %s\n" "$(row "$PYENV_STATUS" "$PYENV_CURRENT" "$PYENV_LATEST")"
 
 if [ "$PYENV_STATUS" == "changed" ]; then
-wget -q https://github.com/pyenv/pyenv/archive/refs/tags/v${PYENV_VERSION}.tar.gz -O /tmp/pyenv.tar.gz
+wget -q "https://github.com/pyenv/pyenv/archive/refs/tags/v${PYENV_LATEST}.tar.gz" -O /tmp/pyenv.tar.gz
 printf "PYENV_SHA256   %s\n" "$(row "$PYENV_STATUS" "?" "$(sha256sum /tmp/pyenv.tar.gz | cut -d' ' -f1)")"
 fi
 
@@ -38,5 +39,6 @@ if [ "$IMAGE_STATUS $PYENV_STATUS" = "latest latest" ]; then
   exit 0
 else
   echo "Dependencies changed, update required."
+  echo 'Run "pyenv install --list" to get latest Python versions.'
   exit 1
 fi
