@@ -1,6 +1,6 @@
 # multipython 🐳<sup>🐍</sup>
 
-> Pyevv-based Docker image of Python 2.7 to 3.14 (with optional free threading) for multi-distribution testing.
+> Pyenv-based Docker image of Python 2.7 to 3.14 (with optional free threading) for multi-distribution testing.
 
 [![release](https://img.shields.io/github/v/tag/makukha/multipython?label=tag)](https://github.com/makukha/multipython)
 [![Docker Pulls](https://img.shields.io/docker/pulls/makukha/multipython)](https://hub.docker.com/r/makukha/multipython)
