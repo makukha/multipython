@@ -17,6 +17,7 @@ ARG PYSYS_TAG
 ARG PYMAX_LONG
 COPY --from=makukha/multipython:py313 /root/.pyenv/versions /root/.pyenv/versions/
 COPY files/ /tmp/files
+COPY test_py.sh /tmp/
 WORKDIR /tmp
 # hadolint ignore=SC2016
 RUN <<EOT
@@ -27,7 +28,7 @@ RUN <<EOT
       chmod a+x "$BASE/$v/bin/python"
     done
     py install --sys ${PYSYS_TAG} --tox
-    bash files/test_py.sh "${PYMIN_LONG}" "${PYSYS_LONG}" "${PYMAX_LONG}"
+    bash test_py.sh "${PYMIN_LONG}" "${PYSYS_LONG}" "${PYMAX_LONG}"
 EOT
 
 
@@ -38,8 +39,9 @@ ARG PYMIN_LONG
 ARG PYSYS_LONG
 ARG PYMAX_LONG
 COPY files/ /tmp/files
+COPY test_py.sh /tmp/
 WORKDIR /tmp
-RUN bash files/test_py.sh "${PYMIN_LONG}" "${PYSYS_LONG}" "${PYMAX_LONG}"
+RUN bash test_py.sh "${PYMIN_LONG}" "${PYSYS_LONG}" "${PYMAX_LONG}"
 
 
 # --- readme basic
@@ -94,9 +96,7 @@ COPY --from=makukha/multipython:py313 /root/.pyenv/versions /root/.pyenv/version
 RUN py install --sys py313 --tox
 # test
 COPY --from=util /checkver.py /tmp/
-# hadolint ignore=DL3013
 RUN <<EOT
-    pip install --no-cache-dir packaging
     python /tmp/checkver.py "$(python -m virtualenv --version | cut -d' ' -f2)" "<20.22"
     python /tmp/checkver.py "$(tox -q --version | cut -d' ' -f1)" "<4.6"
 EOT
@@ -108,9 +108,7 @@ COPY --from=makukha/multipython:py313 /root/.pyenv/versions /root/.pyenv/version
 RUN py install --sys py313 --tox
 # test
 COPY --from=util /checkver.py /tmp/
-# hadolint ignore=DL3013
 RUN <<EOT
-    pip install --no-cache-dir packaging
     python /tmp/checkver.py "$(python -m virtualenv --version | cut -d' ' -f2)" ">20.26,<20.27"
     python /tmp/checkver.py "$(tox -q --version | cut -d' ' -f1)" ">4.6"
 EOT
@@ -122,9 +120,7 @@ COPY --from=makukha/multipython:py313 /root/.pyenv/versions /root/.pyenv/version
 RUN py install --sys py313 --tox
 # test
 COPY --from=util /checkver.py /tmp/
-# hadolint ignore=DL3013
 RUN <<EOT
-    pip install --no-cache-dir packaging
     python /tmp/checkver.py "$(python -m virtualenv --version | cut -d' ' -f2)" ">20.27"
     python /tmp/checkver.py "$(tox -q --version | cut -d' ' -f1)" ">4.6"
 EOT
