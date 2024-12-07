@@ -1,11 +1,11 @@
-#! /bin/bash
+#!/bin/bash
 
 # shellcheck disable=SC1091
-. "$(py --root)/deps"
+. "$(py root)/deps"
 
-IMAGE_CURRENT="$MULTIPYTHON_BASE_DIGEST"
-IMAGE_LATEST=$(curl -s https://hub.docker.com/v2/namespaces/library/repositories/debian/tags/stable-slim | jq -r .digest)
-IMAGE_STATUS=$([[ "$IMAGE_CURRENT" == "$IMAGE_LATEST" ]] && echo latest || echo changed)
+DEBIAN_CURRENT="$DEBIAN_DIGEST"
+DEBIAN_LATEST=$(curl -s https://hub.docker.com/v2/namespaces/library/repositories/debian/tags/stable-slim | jq -r .digest)
+DEBIAN_STATUS=$([[ "$DEBIAN_CURRENT" == "$DEBIAN_LATEST" ]] && echo latest || echo changed)
 
 PYENV_CURRENT=$(pyenv --version | cut -d' ' -f2)
 PYENV_LATEST=$(curl -s https://api.github.com/repos/pyenv/pyenv/releases | jq -r .[0].name | sed -e's/^v//')
@@ -26,7 +26,7 @@ row () {
   fi
 }
 
-printf "IMAGE_DIGEST   %s\n" "$(row "$IMAGE_STATUS" "$IMAGE_CURRENT" "$IMAGE_LATEST")"
+printf "DEBIAN_DIGEST  %s\n" "$(row "$DEBIAN_STATUS" "$DEBIAN_CURRENT" "$DEBIAN_LATEST")"
 printf "PYENV_VERSION  %s\n" "$(row "$PYENV_STATUS" "$PYENV_CURRENT" "$PYENV_LATEST")"
 
 if [ "$PYENV_STATUS" == "changed" ]; then
@@ -34,11 +34,11 @@ wget -q "https://github.com/pyenv/pyenv/archive/refs/tags/v${PYENV_LATEST}.tar.g
 printf "PYENV_SHA256   %s\n" "$(row "$PYENV_STATUS" "?" "$(sha256sum /tmp/pyenv.tar.gz | cut -d' ' -f1)")"
 fi
 
-if [ "$IMAGE_STATUS $PYENV_STATUS" = "latest latest" ]; then
+if [ "$DEBIAN_STATUS $PYENV_STATUS" = "latest latest" ]; then
   echo "All dependencies are up to date!"
   exit 0
 else
-  echo "Dependencies changed, update required."
+  echo "Dependencies changed, project update required."
   echo 'Run "pyenv install --list" to get latest Python versions.'
   exit 1
 fi

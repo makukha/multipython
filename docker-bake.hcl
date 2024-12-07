@@ -1,11 +1,9 @@
 variable "IMG" { default = "makukha/multipython" }
-variable "RELEASE" { default = "2024.12.1" }
+variable "RELEASE" { default = "2024.12.7" }
 
-variable "BASE_DIGEST" { default = "sha256:4d63ef53faef7bd35c92fbefb1e9e2e7b6777e3cbec6c34f640e96b925e430eb" }
-variable "PYENV_VERSION" { default = "2.4.20" }
-variable "PYENV_SHA256" { default = "a1d6b1bdd92fcfa8fcd98a426545832b00e8e44312ffec76526d89f4c8e3a2a3" }
-variable "TOX_VERSION" { default = "4.5.1.1" }
-variable "VIRTUALENV_VERSION" { default = "20.21.1" }
+variable "DEBIAN_DIGEST" { default = "sha256:4d63ef53faef7bd35c92fbefb1e9e2e7b6777e3cbec6c34f640e96b925e430eb" }
+variable "PYENV_VERSION" { default = "2.4.21" }
+variable "PYENV_SHA256" { default = "0aea2e748d7dd4b92f8addf859b16852db5a46e809c4941861b7f05aeaf61bfd" }
 
 variable "PY" {
   default = {
@@ -26,15 +24,18 @@ variable "PY" {
   }
 }
 
-# targets
+
+# --- build
+
+group "default" {
+  targets = ["pyenv", "py", "final"]
+}
 
 target "base" {
   args = {
-    BASE_DIGEST = BASE_DIGEST
+    DEBIAN_DIGEST = DEBIAN_DIGEST
     PYENV_VERSION = PYENV_VERSION
     PYENV_SHA256 = PYENV_SHA256
-    TOX_VERSION = TOX_VERSION
-    VIRTUALENV_VERSION = VIRTUALENV_VERSION
   }
   platforms = ["linux/amd64"]
 }
@@ -44,7 +45,7 @@ target "pyenv" {
   target = "pyenv"
   tags = [
     "${IMG}:pyenv",
-    "${IMG}:pyenv-${PYENV_VERSION}",
+    "${IMG}:pyenv-${RELEASE}",
   ]
 }
 
@@ -62,30 +63,67 @@ target "py" {
   ]
 }
 
-target "multipython" {
+target "final" {
   inherits = ["base"]
   args = PY
-  target = "multipython"
+  target = "final"
   tags = [
     "${IMG}:latest",
     "${IMG}:${RELEASE}",
   ]
 }
 
-# tests
 
-target "tests" {
-  args = PY
-  dockerfile = "tests.dockerfile"
+# --- test
+
+group "test" {
+  targets = [
+    "test-base",
+    "test-final",
+    "test-readme",
+    "test-tox",
+  ]
+}
+
+target "test-base" {
+  target = "test-base"
+  args = { RELEASE = RELEASE }
+  context = "tests"
+  output = ["type=cacheonly"]
+}
+
+target "test-final" {
+  target = "test-final"
+  args = { RELEASE = RELEASE }
+  context = "tests"
+  output = ["type=cacheonly"]
+}
+
+target "test-readme" {
+  args = { RELEASE = RELEASE }
+  context = "tests"
   matrix = {
-    TGT = [
-      "test_final",
-      "test_readme_example_1",
-      "test_readme_example_2",
-      "test_readme_example_3",
+    TARGET = [
+      "test-readme-basic",
+      "test-readme-advanced",
     ]
   }
-  name = TGT
+  name = TARGET
   output = ["type=cacheonly"]
-  target = TGT
+  target = TARGET
+}
+
+target "test-tox" {
+  args = { RELEASE = RELEASE }
+  context = "tests"
+  matrix = {
+    TARGET = [
+      "test-tox-36",
+      "test-tox-37",
+      "test-tox-38",
+    ]
+  }
+  name = TARGET
+  output = ["type=cacheonly"]
+  target = TARGET
 }
