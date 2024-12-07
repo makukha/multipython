@@ -50,7 +50,7 @@ cat <<EOF > tox.ini
 [tox]
 env_list = py{27,35,36,37,38,39,310,311,312,313,314,313t,314t}
 [testenv]
-command = {envpython} --version
+command = python --version
 [testenv:py313t]
 base_python = python3.13t
 [testenv:py314t]

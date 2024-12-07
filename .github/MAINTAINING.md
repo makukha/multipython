@@ -14,14 +14,6 @@ Images are expected to be updated in these cases:
 
 In all these cases, all images are rebuilt from ground up.
 
-## Update Python versions
-
-### Patch
-
-* `docker-bake.hcl`
-* `README.md`
-* `dockerhub.md`
-
 
 ## Build
 
@@ -36,5 +28,6 @@ $ task version
 ## Release
 
 ```shell
+$ task lint clean build test checkupd
 $ task release
 ```
