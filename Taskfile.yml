@@ -6,24 +6,32 @@ vars:
 
 tasks:
 
+  checkupd:
+    desc: Check for version updates.
+    cmds:
+      - docker buildx bake pyenv
+      - docker run --rm -t {{.IMG}}:pyenv py_checkupd
+
   lint:
     desc: Run linters.
     cmds:
-      - hadolint Dockerfile tests.dockerfile
-      - shellcheck *.sh
+      - hadolint Dockerfile tests/Dockerfile
+      - shellcheck *.sh tests/*.sh
 
   build:
     desc: Build base docker images.
     cmds:
-      - docker buildx bake --no-cache pyenv
-      - docker buildx bake --no-cache py multipython
+      - docker buildx bake
 
   clean:
     desc: Prune local tags, images, and build cache.
+    vars:
+      TAGS:
+        sh: docker image ls --format json | jq -r '. | select(.Repository == "{{.IMG}}") | .Tag'
     cmds:
-      - cmd: docker image rm --no-prune makukha/multipython
+      - cmd: docker image rm {{.IMG}}
         ignore_error: true
-      - cmd: 'docker image rm --no-prune makukha/multipython:{{.ITEM}}'
+      - cmd: 'docker image rm {{.IMG}}:{{.ITEM}}'
         for: { var: TAGS }
         ignore_error: true
       - docker image prune
@@ -36,8 +44,10 @@ tasks:
 
   test:
     desc: Run tests.
+    env:
+      BUILDKIT_PROGRESS: plain
     cmds:
-      - docker buildx bake --no-cache tests
+      - docker buildx bake --no-cache test
 
   version:
     desc: Bump release version.
@@ -53,8 +63,8 @@ tasks:
 
   release:
     desc: Push base images to Docker Registry.
-    prompt: Releasing pyenv, single version, and multipython images. Continue?
+    prompt: Release all images. Continue?
     status:  # guard against overwriting
       - docker pull {{.IMG}}:{{.RELEASE}}
     cmds:
-      - docker buildx bake --push pyenv py multipython
+      - docker buildx bake --push
