@@ -99,7 +99,7 @@ The default tox version 4.5.1.1 is dictated by [virtualenv support](https://virt
 ```shell
 $ docker run --rm -it makukha/multipython
 $ py version --sys
-3.13.0
+3.13.1
 ```
 
 <table>
@@ -126,7 +126,7 @@ $ py ls
 <td>
 
 ```shell
-$ py ls --short
+$ py ls -s
 2.7
 3.5
 3.6
@@ -145,7 +145,7 @@ $ py ls --short
 <td>
 
 ```shell
-$ py ls --nodot
+$ py ls -n
 27
 35
 36
@@ -164,7 +164,7 @@ $ py ls --nodot
 <td>
 
 ```shell
-$ py ls --tag
+$ py ls -t
 py27
 py35
 py36
