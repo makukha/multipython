@@ -20,9 +20,9 @@
 
 | distribution     | build details | tag      | executable    |
 |------------------|---------------|----------|---------------|
-| CPython 3.14.a2  | free-threaded | `py314t` | `python3.14t` |
+| CPython 3.14.0a3 | free-threaded | `py314t` | `python3.14t` |
 | CPython 3.13.1   | free-threaded | `py313t` | `python3.13t` |
-| CPython 3.14.a2  |               | `py314`  | `python3.14`  |
+| CPython 3.14.0a3 |               | `py314`  | `python3.14`  |
 | CPython 3.13.1 ✅ |               | `py313`  | `python3.13`  |
 | CPython 3.12.8   |               | `py312`  | `python3.12`  |
 | CPython 3.11.11  |               | `py311`  | `python3.11`  |
@@ -40,7 +40,7 @@ All executables are on `PATH` as symlinks to respective pyenv distributions.
 
 ## Versions
 
-* [pyenv](https://github.com/pyenv/pyenv) 2.4.22 — latest
+* [pyenv](https://github.com/pyenv/pyenv) 2.4.23 — latest
 * [tox](https://tox.wiki) 4.5.1.1 — the last version that supports virtualenv 20.21.1
 * [virtualenv](https://virtualenv.pypa.io/en/latest/) 20.21.1 — the last version that supports Python versions below 3.6
 
@@ -124,8 +124,8 @@ $ py ls
 3.12.8
 3.13.1
 3.13.1t
-3.14.0a2
-3.14.0a2t
+3.14.0a3
+3.14.0a3t
 ```
 </td>
 <td>
