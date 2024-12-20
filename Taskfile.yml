@@ -9,8 +9,8 @@ tasks:
   checkupd:
     desc: Check for version updates.
     cmds:
-      - docker buildx bake pyenv
-      - docker run --rm -t {{.IMG}}:pyenv py_checkupd
+      - docker buildx bake base
+      - docker run --rm -t {{.IMG}}:base py_checkupd
 
   lint:
     desc: Run linters.
@@ -38,7 +38,7 @@ tasks:
       - docker builder prune
 
   shell:*:
-    desc: Shell to image {pyenv,tox,py*,latest}.
+    desc: Shell to image {base,tox,py*,latest}.
     cmds:
       - docker run --rm -it {{.IMG}}:{{index .MATCH 0}} /bin/bash
 

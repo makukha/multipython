@@ -79,7 +79,7 @@ Combine single version images to use a subset of Python distributions.
 
 ```Dockerfile
 # Dockerfile
-FROM makukha/multipython:pyenv
+FROM makukha/multipython:base
 RUN mkdir /root/.pyenv/versions
 COPY --from=makukha/multipython:py27 /root/.pyenv/versions /root/.pyenv/versions/
 COPY --from=makukha/multipython:py35 /root/.pyenv/versions /root/.pyenv/versions/

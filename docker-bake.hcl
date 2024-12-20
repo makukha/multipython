@@ -28,10 +28,10 @@ variable "PY" {
 # --- build
 
 group "default" {
-  targets = ["pyenv", "py", "final"]
+  targets = ["base", "py", "final"]
 }
 
-target "base" {
+target "base_versions" {
   args = {
     DEBIAN_DIGEST = DEBIAN_DIGEST
     PYENV_VERSION = PYENV_VERSION
@@ -40,17 +40,17 @@ target "base" {
   platforms = ["linux/amd64"]
 }
 
-target "pyenv" {
-  inherits = ["base"]
-  target = "pyenv"
+target "base" {
+  inherits = ["base_versions"]
+  target = "base"
   tags = [
-    "${IMG}:pyenv",
-    "${IMG}:pyenv-${RELEASE}",
+    "${IMG}:base",
+    "${IMG}:base-${RELEASE}",
   ]
 }
 
 target "py" {
-  inherits = ["base"]
+  inherits = ["base_versions"]
   args = PY
   matrix = {
     TAG = keys(PY)
@@ -64,7 +64,7 @@ target "py" {
 }
 
 target "final" {
-  inherits = ["base"]
+  inherits = ["base_versions"]
   args = PY
   target = "final"
   tags = [

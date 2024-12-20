@@ -5,9 +5,9 @@
 ARG PYENV_ROOT=/root/.pyenv
 ARG MULTIPYTHON_ROOT=/root/.multipython
 
-# pyenv
+# base
 
-FROM debian:stable-slim AS pyenv
+FROM debian:stable-slim AS base
 SHELL ["/bin/bash", "-eux", "-o", "pipefail", "-c"]
 
 RUN <<EOT
@@ -70,79 +70,79 @@ CMD ["/bin/bash"]
 
 # single versions
 
-FROM pyenv AS py27
+FROM base AS py27
 ARG py27
 RUN pyenv install ${py27}
 # hadolint ignore=DL3059
 RUN py install --sys py27
 
-FROM pyenv AS py35
+FROM base AS py35
 ARG py35
 RUN pyenv install ${py35}
 # hadolint ignore=DL3059
 RUN py install --sys py35
 
-FROM pyenv AS py36
+FROM base AS py36
 ARG py36
 RUN pyenv install ${py36}
 # hadolint ignore=DL3059
 RUN py install --sys py36
 
-FROM pyenv AS py37
+FROM base AS py37
 ARG py37
 RUN pyenv install ${py37}
 # hadolint ignore=DL3059
 RUN py install --sys py37
 
-FROM pyenv AS py38
+FROM base AS py38
 ARG py38
 RUN pyenv install ${py38}
 # hadolint ignore=DL3059
 RUN py install --sys py38
 
-FROM pyenv AS py39
+FROM base AS py39
 ARG py39
 RUN pyenv install ${py39}
 # hadolint ignore=DL3059
 RUN py install --sys py39
 
-FROM pyenv AS py310
+FROM base AS py310
 ARG py310
 RUN pyenv install ${py310}
 # hadolint ignore=DL3059
 RUN py install --sys py310
 
-FROM pyenv AS py311
+FROM base AS py311
 ARG py311
 RUN pyenv install ${py311}
 # hadolint ignore=DL3059
 RUN py install --sys py311
 
-FROM pyenv AS py312
+FROM base AS py312
 ARG py312
 RUN pyenv install ${py312}
 # hadolint ignore=DL3059
 RUN py install --sys py312
 
-FROM pyenv AS py313
+FROM base AS py313
 ARG py313
 RUN pyenv install ${py313}
 # hadolint ignore=DL3059
 RUN py install --sys py313
 
-FROM pyenv AS py314
+FROM base AS py314
 ARG py314
 RUN pyenv install ${py314}
 # hadolint ignore=DL3059
 RUN py install --sys py314
 
-FROM pyenv AS py313t
+FROM base AS py313t
 ARG py313t
 RUN pyenv install ${py313t}
 # hadolint ignore=DL3059
 RUN py install --sys py313t
 
-FROM pyenv AS py314t
+FROM base AS py314t
 ARG py314t
 RUN pyenv install ${py314t}
 # hadolint ignore=DL3059
@@ -151,7 +151,7 @@ RUN py install --sys py314t
 
 # final
 
-FROM pyenv AS final
+FROM base AS final
 RUN mkdir /root/.pyenv/versions
 COPY --from=py27 /root/.pyenv/versions /root/.pyenv/versions/
 COPY --from=py35 /root/.pyenv/versions /root/.pyenv/versions/
