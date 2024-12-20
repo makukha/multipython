@@ -119,10 +119,10 @@ py_install () {
 }
 
 py_usage () {
-  echo "usage: py ls [ -l | -s | -n | -t ]"
-  echo "       py version < --min | --max | --stable | --sys > [ -l | -s | -n ]"
-  echo "       py binary < --name | --path > <TAG>"
-  echo "       py install --sys <TAG> [--tox]"
+  echo "usage: py ls [--long|--short|--nodot|--tag]"
+  echo "       py version (--min|--max|--stable|--sys) [--long|--short|--nodot]"
+  echo "       py binary (--name|--path) <tag>"
+  echo "       py install --sys <tag> [--tox]"
   echo "       py root"
   echo "       py --help"
   echo
@@ -134,14 +134,14 @@ py_usage () {
   echo "  version  Show specific python version"
   echo
   echo "version options:"
-  echo "  -l, --long   Full version without prefix, e.g. 3.3.3a1"
-  echo "  -s, --short  Short version without prefix, e.g. 3.3"
-  echo "  -n, --nodot  Short version without prefix and dots, e.g. 33"
-  echo "  -t, --tag    Python tag, e.g. py33, pp19"
-  echo "  --min        Lowest installed version"
-  echo "  --max        Highest installed version"
-  echo "  --stable     Highest release version"
-  echo "  --sys        System python version"
+  echo "  -l --long   Full version without prefix, e.g. 3.3.3a1"
+  echo "  -s --short  Short version without prefix, e.g. 3.3"
+  echo "  -n --nodot  Short version without prefix and dots, e.g. 33"
+  echo "  -t --tag    Python tag, e.g. py33, pp19"
+  echo "  --min       Lowest installed version"
+  echo "  --max       Highest installed version"
+  echo "  --stable    Highest release version"
+  echo "  --sys       System python version"
   echo
   echo "other options:"
   echo "  --tox   Install tox"

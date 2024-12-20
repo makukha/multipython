@@ -185,10 +185,10 @@ py314t
 
 ```shell
 $ py --help
-usage: py ls [ -l | -s | -n | -t ]
-       py version < --min | --max | --stable | --sys > [ -l | -s | -n ]
-       py binary < --name | --path > <TAG>
-       py install --sys <TAG> [--tox]
+usage: py ls [--long|--short|--nodot|--tag]
+       py version (--min|--max|--stable|--sys) [--long|--short|--nodot]
+       py binary (--name|--path) <tag>
+       py install --sys <tag> [--tox]
        py root
        py --help
 
@@ -200,14 +200,14 @@ commands:
   version  Show specific python version
 
 version options:
-  -l, --long   Full version without prefix, e.g. 3.3.3a1
-  -s, --short  Short version without prefix, e.g. 3.3
-  -n, --nodot  Short version without prefix and dots, e.g. 33
-  -t, --tag    Python tag, e.g. py33, pp19
-  --min        Lowest installed version
-  --max        Highest installed version
-  --stable     Highest release version
-  --sys        System python version
+  -l --long   Full version without prefix, e.g. 3.3.3a1
+  -s --short  Short version without prefix, e.g. 3.3
+  -n --nodot  Short version without prefix and dots, e.g. 33
+  -t --tag    Python tag, e.g. py33, pp19
+  --min       Lowest installed version
+  --max       Highest installed version
+  --stable    Highest release version
+  --sys       System python version
 
 other options:
   --tox   Install tox
