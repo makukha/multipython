@@ -54,6 +54,15 @@ RUN <<EOT
     rm -rf /tmp/* /var/tmp/*
 EOT
 
+ARG UV_VERSION
+ARG UV_SHA256
+RUN <<EOT
+    wget -q "https://github.com/astral-sh/uv/releases/download/${UV_VERSION}/uv-x86_64-unknown-linux-gnu.tar.gz" -O /tmp/uv.tar.gz
+    echo "${UV_SHA256} /tmp/uv.tar.gz" | sha256sum --check --strict
+    tar -xzf /tmp/uv.tar.gz -C /usr/local/bin --strip-components=1
+    rm -rf /tmp/* /var/tmp/*
+EOT
+
 COPY --chmod=755 py.sh /usr/local/bin/py
 COPY --chmod=755 py_checkupd.sh /usr/local/bin/py_checkupd
 

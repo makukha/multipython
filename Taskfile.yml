@@ -19,9 +19,14 @@ tasks:
       - shellcheck *.sh tests/*.sh
 
   build:
-    desc: Build base docker images.
+    desc: Build all docker images.
     cmds:
       - docker buildx bake
+
+  build:base:
+    desc: Build base docker image.
+    cmds:
+      - docker buildx bake base
 
   clean:
     desc: Prune local tags, images, and build cache.
