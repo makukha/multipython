@@ -1,5 +1,5 @@
 variable "IMG" { default = "makukha/multipython" }
-variable "RELEASE" { default = "2024.12.19" }
+variable "RELEASE" { default = "2024.12.26" }
 
 variable "PYENV_VERSION" { default = "2.5.0" }
 variable "PYENV_SHA256" { default = "12c42bdaf3741895ad710a957d44dc2b0c5260f95f857318a6681981fe1b1c0b" }

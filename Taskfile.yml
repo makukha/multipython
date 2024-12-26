@@ -57,14 +57,14 @@ tasks:
   version:
     desc: Bump release version.
     cmds:
-      - bump-my-version bump --dry-run --verbose release
+      - uvx bump-my-version bump --dry-run --verbose release
       - task: version:bump
 
   version:bump:
     internal: true
     prompt: The version will be bumped as above. Continue?
     cmds:
-      - bump-my-version bump release
+      - uvx bump-my-version bump release
 
   release:
     desc: Push base images to Docker Registry.

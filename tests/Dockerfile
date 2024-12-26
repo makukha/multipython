@@ -101,7 +101,7 @@ RUN <<EOT
     python /tmp/checkver.py "$(tox -q --version | cut -d' ' -f1)" "<4.6"
 EOT
 
-FROM makukha/multipython:pyenv-${RELEASE} AS test-tox-37
+FROM makukha/multipython:base-${RELEASE} AS test-tox-37
 RUN mkdir /root/.pyenv/versions
 COPY --from=makukha/multipython:py37 /root/.pyenv/versions /root/.pyenv/versions/
 COPY --from=makukha/multipython:py313 /root/.pyenv/versions /root/.pyenv/versions/
@@ -113,7 +113,7 @@ RUN <<EOT
     python /tmp/checkver.py "$(tox -q --version | cut -d' ' -f1)" ">4.6"
 EOT
 
-FROM makukha/multipython:pyenv-${RELEASE} AS test-tox-38
+FROM makukha/multipython:base-${RELEASE} AS test-tox-38
 RUN mkdir /root/.pyenv/versions
 COPY --from=makukha/multipython:py38 /root/.pyenv/versions /root/.pyenv/versions/
 COPY --from=makukha/multipython:py313 /root/.pyenv/versions /root/.pyenv/versions/

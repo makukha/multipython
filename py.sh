@@ -137,7 +137,7 @@ py_usage () {
   echo "  -l --long   Full version without prefix, e.g. 3.9.12"
   echo "  -s --short  Short version without prefix, e.g. 3.9"
   echo "  -n --nodot  Short version without prefix and dots, e.g. 39"
-  echo "  -t --tag    Python tag, e.g. py33, pp19"
+  echo "  -t --tag    Python tag, e.g. py39, pp19"
   echo "  --min       Lowest installed version"
   echo "  --max       Highest installed version"
   echo "  --stable    Highest release version"
