@@ -35,19 +35,19 @@ printf "PYENV_VERSION  %s\n" "$(row "$PYENV_STATUS" "$PYENV_CURRENT" "$PYENV_LAT
 printf "UV_VERSION     %s\n" "$(row "$UV_STATUS" "$UV_CURRENT" "$UV_LATEST")"
 
 if [ "$PYENV_STATUS" == "changed" ]; then
-wget -q "https://github.com/pyenv/pyenv/archive/refs/tags/v${PYENV_LATEST}.tar.gz" -O /tmp/pyenv.tar.gz
-printf "PYENV_SHA256   %s\n" "$(row "$PYENV_STATUS" "?" "$(sha256sum /tmp/pyenv.tar.gz | cut -d' ' -f1)")"
+  wget -q "https://github.com/pyenv/pyenv/archive/refs/tags/v${PYENV_LATEST}.tar.gz" -O /tmp/pyenv.tar.gz
+  printf "PYENV_SHA256   %s\n" "$(row "$PYENV_STATUS" "?" "$(sha256sum /tmp/pyenv.tar.gz | cut -d' ' -f1)")"
 fi
 
 if [ "$UV_STATUS" == "changed" ]; then
-wget -q "https://github.com/astral-sh/uv/releases/download/${UV_LATEST}/uv-x86_64-unknown-linux-gnu.tar.gz" -O /tmp/uv.tar.gz
-UV_TAR_SHA256="$(sha256sum /tmp/uv.tar.gz | cut -d' ' -f1)"
-UV_GITHUB_SHA256="$(wget -q -O- https://github.com/astral-sh/uv/releases/download/${UV_LATEST}/uv-x86_64-unknown-linux-gnu.tar.gz.sha256 | cut -d' ' -f1)"
-if [ ! "$UV_TAR_SHA256" == "$UV_GITHUB_SHA256" ]; then
-  echo "uv sha256 do not match!"
-  exit 1
-fi
-printf "UV_SHA256      %s\n" "$(row "$UV_STATUS" "?" "$UV_GITHUB_SHA256")"
+  wget -q "https://github.com/astral-sh/uv/releases/download/${UV_LATEST}/uv-x86_64-unknown-linux-gnu.tar.gz" -O /tmp/uv.tar.gz
+  UV_TAR_SHA256="$(sha256sum /tmp/uv.tar.gz | cut -d' ' -f1)"
+  UV_GITHUB_SHA256="$(wget -q -O- "https://github.com/astral-sh/uv/releases/download/${UV_LATEST}/uv-x86_64-unknown-linux-gnu.tar.gz.sha256" | cut -d' ' -f1)"
+  if [ ! "$UV_TAR_SHA256" == "$UV_GITHUB_SHA256" ]; then
+    echo "uv sha256 do not match!"
+    exit 1
+  fi
+  printf "UV_SHA256      %s\n" "$(row "$UV_STATUS" "?" "$UV_GITHUB_SHA256")"
 fi
 
 if [ "$DEBIAN_STATUS $PYENV_STATUS" = "latest latest" ]; then
