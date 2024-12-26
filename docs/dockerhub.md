@@ -200,9 +200,9 @@ commands:
   version  Show specific python version
 
 version options:
-  -l --long   Full version without prefix, e.g. 3.3.3a1
-  -s --short  Short version without prefix, e.g. 3.3
-  -n --nodot  Short version without prefix and dots, e.g. 33
+  -l --long   Full version without prefix, e.g. 3.9.12
+  -s --short  Short version without prefix, e.g. 3.9
+  -n --nodot  Short version without prefix and dots, e.g. 39
   -t --tag    Python tag, e.g. py33, pp19
   --min       Lowest installed version
   --max       Highest installed version
