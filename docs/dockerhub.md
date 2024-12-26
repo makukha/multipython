@@ -203,7 +203,7 @@ version options:
   -l --long   Full version without prefix, e.g. 3.9.12
   -s --short  Short version without prefix, e.g. 3.9
   -n --nodot  Short version without prefix and dots, e.g. 39
-  -t --tag    Python tag, e.g. py33, pp19
+  -t --tag    Python tag, e.g. py39, pp19
   --min       Lowest installed version
   --max       Highest installed version
   --stable    Highest release version
