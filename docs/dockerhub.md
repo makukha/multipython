@@ -22,7 +22,7 @@
 # Supported tags and respective `Dockerfile` links
 
 * [`latest, 2024.12.19`](https://github.com/makukha/multipython/blob/v2024.12.19/Dockerfile) — *all Python versions, pyenv, tox*
-* [`base, base-2024.12.19`](https://github.com/makukha/multipython/blob/v2024.12.19/Dockerfile) — *pyenv 2.4.23, tox 4.5.1.1*
+* [`base, base-2024.12.19`](https://github.com/makukha/multipython/blob/v2024.12.19/Dockerfile) — *pyenv 2.5.0, tox 4.5.1.1*
 * [`py314t, py314t-2024.12.19`](https://github.com/makukha/multipython/blob/v2024.12.19/Dockerfile) — *CPython 3.14.0a3 free-threaded*
 * [`py313t, py313t-2024.12.19`](https://github.com/makukha/multipython/blob/v2024.12.19/Dockerfile) — *CPython 3.13.1 free-threaded*
 * [`py314, py314-2024.12.19`](https://github.com/makukha/multipython/blob/v2024.12.19/Dockerfile) — *CPython 3.14.0a3*
