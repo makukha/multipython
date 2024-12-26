@@ -2,12 +2,13 @@
 # DL3008 => apt pakage versions are not locked in this project
 # DL4006 => -o pipefail is already set globally
 
+ARG DEBIAN_DIGEST
 ARG PYENV_ROOT=/root/.pyenv
 ARG MULTIPYTHON_ROOT=/root/.multipython
 
 # base
 
-FROM debian:stable-slim AS base
+FROM debian@${DEBIAN_DIGEST} AS base
 SHELL ["/bin/bash", "-eux", "-o", "pipefail", "-c"]
 
 RUN <<EOT
