@@ -39,7 +39,7 @@ All executables are on `PATH` as symlinks to respective pyenv distributions.
 
 ## Versions
 
-* [pyenv](https://github.com/pyenv/pyenv) 2.4.23 — latest
+* [pyenv](https://github.com/pyenv/pyenv) 2.5.0 — latest
 * [tox](https://tox.wiki) 4.5.1.1 — the last version that supports virtualenv 20.21.1 (needed for Python <3.6)
 * [uv](https://docs.astral.sh/uv) 0.5.12 — latest
 * [virtualenv](https://virtualenv.pypa.io/en/latest/) 20.21.1 — the last version that supports Python versions below 3.6

@@ -2,8 +2,8 @@ variable "IMG" { default = "makukha/multipython" }
 variable "RELEASE" { default = "2024.12.19" }
 
 variable "DEBIAN_DIGEST" { default = "sha256:4d63ef53faef7bd35c92fbefb1e9e2e7b6777e3cbec6c34f640e96b925e430eb" }
-variable "PYENV_VERSION" { default = "2.4.23" }
-variable "PYENV_SHA256" { default = "6578cd1aaea1750632ebeec74c0102919c887a77f7e957e1ed41fab3556e1b4b" }
+variable "PYENV_VERSION" { default = "2.5.0" }
+variable "PYENV_SHA256" { default = "12c42bdaf3741895ad710a957d44dc2b0c5260f95f857318a6681981fe1b1c0b" }
 variable "UV_VERSION" { default = "0.5.12" }
 variable "UV_SHA256" { default = "65b8dcf3f3e592887fae0daf1b3a9e3aad1262f74bb21cf80d1700c7caba7f23" }
 
