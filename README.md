@@ -9,9 +9,8 @@
 
 # Features
 
-* `makukha/multipython` — [pyenv](https://github.com/pyenv/pyenv), [tox](https://tox.wiki), CPython distributions
+* `makukha/multipython` — [pyenv](https://github.com/pyenv/pyenv), [tox](https://tox.wiki), [uv](https://docs.astral.sh/uv), CPython distributions
 * `makukha/multipython:pyXY` — single distribution images
-* Dynamically linked
 * [Build your own environment](#build-your-own-environment) with single version images
 * Based on `debian:stable-slim`
 * Single platform `linux/amd64`
@@ -41,7 +40,8 @@ All executables are on `PATH` as symlinks to respective pyenv distributions.
 ## Versions
 
 * [pyenv](https://github.com/pyenv/pyenv) 2.4.23 — latest
-* [tox](https://tox.wiki) 4.5.1.1 — the last version that supports virtualenv 20.21.1
+* [tox](https://tox.wiki) 4.5.1.1 — the last version that supports virtualenv 20.21.1 (needed for Python <3.6)
+* [uv](https://docs.astral.sh/uv) 0.5.12 — latest
 * [virtualenv](https://virtualenv.pypa.io/en/latest/) 20.21.1 — the last version that supports Python versions below 3.6
 
 
@@ -79,7 +79,7 @@ Combine single version images to use a subset of Python distributions.
 
 ```Dockerfile
 # Dockerfile
-FROM makukha/multipython:pyenv
+FROM makukha/multipython:base
 RUN mkdir /root/.pyenv/versions
 COPY --from=makukha/multipython:py27 /root/.pyenv/versions /root/.pyenv/versions/
 COPY --from=makukha/multipython:py35 /root/.pyenv/versions /root/.pyenv/versions/
@@ -205,9 +205,9 @@ commands:
   version  Show specific python version
 
 version options:
-  -l --long   Full version without prefix, e.g. 3.3.3a1
-  -s --short  Short version without prefix, e.g. 3.3
-  -n --nodot  Short version without prefix and dots, e.g. 33
+  -l --long   Full version without prefix, e.g. 3.9.12
+  -s --short  Short version without prefix, e.g. 3.9
+  -n --nodot  Short version without prefix and dots, e.g. 39
   -t --tag    Python tag, e.g. py33, pp19
   --min       Lowest installed version
   --max       Highest installed version

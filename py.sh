@@ -134,9 +134,9 @@ py_usage () {
   echo "  version  Show specific python version"
   echo
   echo "version options:"
-  echo "  -l --long   Full version without prefix, e.g. 3.3.3a1"
-  echo "  -s --short  Short version without prefix, e.g. 3.3"
-  echo "  -n --nodot  Short version without prefix and dots, e.g. 33"
+  echo "  -l --long   Full version without prefix, e.g. 3.9.12"
+  echo "  -s --short  Short version without prefix, e.g. 3.9"
+  echo "  -n --nodot  Short version without prefix and dots, e.g. 39"
   echo "  -t --tag    Python tag, e.g. py33, pp19"
   echo "  --min       Lowest installed version"
   echo "  --max       Highest installed version"

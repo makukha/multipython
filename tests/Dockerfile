@@ -10,7 +10,7 @@ ARG PYMAX_LONG=3.14.0a3
 
 # --- base
 
-FROM makukha/multipython:pyenv-${RELEASE} AS test-base
+FROM makukha/multipython:base-${RELEASE} AS test-base
 ARG PYMIN_LONG
 ARG PYSYS_LONG
 ARG PYSYS_TAG
@@ -64,7 +64,7 @@ EOT
 
 # --- readme advanced
 
-FROM makukha/multipython:pyenv-${RELEASE} AS test-readme-advanced
+FROM makukha/multipython:base-${RELEASE} AS test-readme-advanced
 RUN mkdir /root/.pyenv/versions
 COPY --from=makukha/multipython:py27 /root/.pyenv/versions /root/.pyenv/versions/
 COPY --from=makukha/multipython:py35 /root/.pyenv/versions /root/.pyenv/versions/
@@ -89,7 +89,7 @@ match = Version(sys.argv[1]) in SpecifierSet(sys.argv[2])
 sys.exit(int(not match))
 EOF
 
-FROM makukha/multipython:pyenv-${RELEASE} AS test-tox-36
+FROM makukha/multipython:base-${RELEASE} AS test-tox-36
 RUN mkdir /root/.pyenv/versions
 COPY --from=makukha/multipython:py36 /root/.pyenv/versions /root/.pyenv/versions/
 COPY --from=makukha/multipython:py313 /root/.pyenv/versions /root/.pyenv/versions/

@@ -4,6 +4,8 @@ variable "RELEASE" { default = "2024.12.19" }
 variable "DEBIAN_DIGEST" { default = "sha256:4d63ef53faef7bd35c92fbefb1e9e2e7b6777e3cbec6c34f640e96b925e430eb" }
 variable "PYENV_VERSION" { default = "2.4.23" }
 variable "PYENV_SHA256" { default = "6578cd1aaea1750632ebeec74c0102919c887a77f7e957e1ed41fab3556e1b4b" }
+variable "UV_VERSION" { default = "0.5.12" }
+variable "UV_SHA256" { default = "65b8dcf3f3e592887fae0daf1b3a9e3aad1262f74bb21cf80d1700c7caba7f23" }
 
 variable "PY" {
   default = {
@@ -28,29 +30,31 @@ variable "PY" {
 # --- build
 
 group "default" {
-  targets = ["pyenv", "py", "final"]
+  targets = ["base", "py", "final"]
 }
 
-target "base" {
+target "base_versions" {
   args = {
     DEBIAN_DIGEST = DEBIAN_DIGEST
     PYENV_VERSION = PYENV_VERSION
     PYENV_SHA256 = PYENV_SHA256
+    UV_VERSION = UV_VERSION
+    UV_SHA256 = UV_SHA256
   }
   platforms = ["linux/amd64"]
 }
 
-target "pyenv" {
-  inherits = ["base"]
-  target = "pyenv"
+target "base" {
+  inherits = ["base_versions"]
+  target = "base"
   tags = [
-    "${IMG}:pyenv",
-    "${IMG}:pyenv-${RELEASE}",
+    "${IMG}:base",
+    "${IMG}:base-${RELEASE}",
   ]
 }
 
 target "py" {
-  inherits = ["base"]
+  inherits = ["base_versions"]
   args = PY
   matrix = {
     TAG = keys(PY)
@@ -64,7 +68,7 @@ target "py" {
 }
 
 target "final" {
-  inherits = ["base"]
+  inherits = ["base_versions"]
   args = PY
   target = "final"
   tags = [
