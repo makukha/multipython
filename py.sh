@@ -1,7 +1,7 @@
 #!/bin/bash
 
 MULTIPYTHON_ROOT=/root/.multipython
-MULTIPYTHON_VERSION=2024.12.26
+MULTIPYTHON_VERSION=2024.12.27
 
 
 # helpers
