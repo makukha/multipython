@@ -3,10 +3,13 @@ usage: py ls [--long|--short|--nodot|--tag]
        py binary (--name|--path) <tag>
        py install --sys <tag> [--tox]
        py root
+       py info [--cached]
+       py --version
        py --help
 
 commands:
   binary   Show path to Python binary
+  info     Extended details in JSON format
   install  Install optional packages and create symlinks
   ls       List all distributions
   root     Show multipython root path
@@ -23,5 +26,7 @@ version options:
   --sys       System python version
 
 other options:
-  --tox   Install tox
-  --help  Show this help and exit
+  -c --cached  Show cached results
+  --tox        Install tox
+  --version    Show multipython distribution version
+  --help       Show this help and exit

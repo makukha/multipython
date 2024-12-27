@@ -1,6 +1,7 @@
 #!/bin/bash
 
 MULTIPYTHON_ROOT=/root/.multipython
+MULTIPYTHON_VERSION=2024.12.26
 
 
 # helpers
@@ -24,6 +25,11 @@ py_tag () {
   py_short | sed 's/^/py/; s/\.//'
 }
 
+py_pkg_version () {
+  EXEC=$1
+  PKG=$2
+  $EXEC -c "import $PKG; print($PKG.__version__)"
+}
 
 # commands
 
@@ -38,6 +44,66 @@ py_binary () {
       exit 1
       ;;
   esac
+}
+
+py_info () {
+  if [ $# -ge 1 ]; then
+    case $1 in
+      -c | --cached)
+        cat $MULTIPYTHON_ROOT/info.json
+        exit 0
+        ;;
+      *)
+        echo "Unknown option: $1"
+        exit 1
+        ;;
+    esac
+  fi
+
+  readarray -t LONG <<<"$(py_ls_long)"
+  readarray -t TAG <<<"$(py_ls_long | py_tag)"
+  readarray -t SHORT <<<"$(py_ls_long | py_short)"
+  readarray -t NODOT <<<"$(py_ls_long | py_nodot)"
+  SYSLONG=$(py_version --sys 2>/dev/null || echo -n "")
+  PYENV_ROOT=$(pyenv root)
+  N=${#LONG[@]}
+
+  TOX_V="$((tox -q --version 2>/dev/null | cut -d' ' -f1) || echo -n "")"
+
+  echo '{'
+  echo '  "multipython": {'
+  echo '     "debian_image_digest": "'"$(cat $MULTIPYTHON_ROOT/debian_image_digest)"'",'
+  echo '     "root": "'$MULTIPYTHON_ROOT'",'
+  echo '  },'
+  echo '  "debian_image_digest": "'"$(cat $MULTIPYTHON_ROOT/debian_image_digest)"'",'
+  echo -e '  "pyenv": {\n    "version": "'"$(pyenv --version | cut -d' ' -f2)"'"\n  }'
+  if [ "$TOX_V" != "" ]; then
+    echo -e '  "tox": {\n    "version": "'"$(tox -q --version | cut -d' ' -f1)"'"\n  }'
+  fi
+  echo -e '  "uv": {\n    "version": "'"$(uv --version | cut -d' ' -f2)"'"\n  }'
+  if [ "${LONG[0]}" != "" ]; then
+    echo '  "python": ['
+    for (( i=0; i<$N; i++ )); do
+      echo '    {'
+      echo '      "version": "'${LONG[$i]}'",'
+      echo '      "manager": "pyenv",'
+      echo '      "tag": "'${TAG[$i]}'",'
+      echo '      "short": "'${SHORT[$i]}'",'
+      echo '      "nodot": "'${NODOT[$i]}'",'
+      echo '      "executable_name": "python'${SHORT[$i]}'",'
+      echo '      "executable_path": "'"$PYENV_ROOT"'/versions/'"${LONG[$i]}"'/bin/python",'
+      echo -n '      "is_system": '
+      [[ "$SYSLONG" = "${LONG[$i]}" ]] && echo true, || echo false,
+      echo '      "pkg": {'
+      echo '        "pip": "'"$(py_pkg_version python${SHORT[$i]} pip)"'",'
+      echo '        "setuptools": "'"$(py_pkg_version python${SHORT[$i]} setuptools)"'"'
+      echo '      }'
+      echo -n '    }'
+      [[ "$i" -lt "$N" ]] && echo ","
+    done
+    echo '  ]'
+  fi
+  echo '}'
 }
 
 py_ls () {
@@ -124,10 +190,13 @@ py_usage () {
   echo "       py binary (--name|--path) <tag>"
   echo "       py install --sys <tag> [--tox]"
   echo "       py root"
+  echo "       py info [--cached]"
+  echo "       py --version"
   echo "       py --help"
   echo
   echo "commands:"
   echo "  binary   Show path to Python binary"
+  echo "  info     Extended details in JSON format"
   echo "  install  Install optional packages and create symlinks"
   echo "  ls       List all distributions"
   echo "  root     Show multipython root path"
@@ -144,8 +213,10 @@ py_usage () {
   echo "  --sys       System python version"
   echo
   echo "other options:"
-  echo "  --tox   Install tox"
-  echo "  --help  Show this help and exit"
+  echo "  -c --cached  Show cached results"
+  echo "  --tox        Install tox"
+  echo "  --version    Show multipython distribution version"
+  echo "  --help       Show this help and exit"
 }
 
 # main
@@ -157,10 +228,12 @@ main () {
     # shellcheck disable=SC2086
     case $1 in
       binary) py_binary $2 $3 ;;
+      info) py_info $2 ;;
       install) py_install $2 $3 $4 ;;
       ls) py_ls $2 ;;
       root) echo "$MULTIPYTHON_ROOT" ;;
       version) py_version $2 $3 ;;
+      --version) echo "multipython $MULTIPYTHON_VERSION" ;;
       --help) py_usage ;;
       *)
         echo "Unknown option: $1"
