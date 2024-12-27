@@ -22,6 +22,7 @@ tasks:
     desc: Build all docker images.
     cmds:
       - docker buildx bake
+      - docker run --rm {{.IMG}}:latest py info -c > info.json
 
   build:base:
     desc: Build base docker image.
@@ -46,6 +47,11 @@ tasks:
     desc: Shell to image {base,tox,py*,latest}.
     cmds:
       - docker run --rm -it {{.IMG}}:{{index .MATCH 0}} /bin/bash
+
+  run:*:
+    desc: Run command in image {base,py*,latest} container.
+    cmds:
+      - docker run --rm -it {{.IMG}}:{{index .MATCH 0}} {{.CLI_ARGS}}
 
   test:
     desc: Run tests.
