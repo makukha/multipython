@@ -69,11 +69,13 @@ COPY --chmod=755 py_checkupd.sh /usr/local/bin/py_checkupd
 
 ARG DEBIAN_DIGEST
 ARG MULTIPYTHON_ROOT
-COPY <<EOF ${MULTIPYTHON_ROOT}/deps
-DEBIAN_DIGEST="${DEBIAN_DIGEST}"
-EOF
-
 ENV PATH="$MULTIPYTHON_ROOT/sys:$PYENV_ROOT/bin:$PATH"
+RUN <<EOT
+mkdir -p ${MULTIPYTHON_ROOT}
+echo "${DEBIAN_DIGEST}" > ${MULTIPYTHON_ROOT}/debian_image_digest
+py info > ${MULTIPYTHON_ROOT}/info.json
+EOT
+
 ENTRYPOINT []
 CMD ["/bin/bash"]
 
@@ -82,81 +84,107 @@ CMD ["/bin/bash"]
 
 FROM base AS py27
 ARG py27
-RUN pyenv install ${py27}
-# hadolint ignore=DL3059
-RUN py install --sys py27
+RUN <<EOT
+pyenv install ${py27}
+py install --sys py27
+python -m pip install -U pip setuptools
+EOT
 
 FROM base AS py35
 ARG py35
-RUN pyenv install ${py35}
-# hadolint ignore=DL3059
-RUN py install --sys py35
+RUN <<EOT
+pyenv install ${py35}
+py install --sys py35
+python -m pip install -U pip setuptools
+EOT
 
 FROM base AS py36
 ARG py36
-RUN pyenv install ${py36}
-# hadolint ignore=DL3059
-RUN py install --sys py36
+RUN <<EOT
+pyenv install ${py36}
+py install --sys py36
+python -m pip install -U pip setuptools
+EOT
 
 FROM base AS py37
 ARG py37
-RUN pyenv install ${py37}
-# hadolint ignore=DL3059
-RUN py install --sys py37
+RUN <<EOT
+pyenv install ${py37}
+py install --sys py37
+python -m pip install -U pip setuptools
+EOT
 
 FROM base AS py38
 ARG py38
-RUN pyenv install ${py38}
-# hadolint ignore=DL3059
-RUN py install --sys py38
+RUN <<EOT
+pyenv install ${py38}
+py install --sys py38
+python -m pip install -U pip setuptools
+EOT
 
 FROM base AS py39
 ARG py39
-RUN pyenv install ${py39}
-# hadolint ignore=DL3059
-RUN py install --sys py39
+RUN <<EOT
+pyenv install ${py39}
+py install --sys py39
+python -m pip install -U pip setuptools
+EOT
 
 FROM base AS py310
 ARG py310
-RUN pyenv install ${py310}
-# hadolint ignore=DL3059
-RUN py install --sys py310
+RUN <<EOT
+pyenv install ${py310}
+py install --sys py310
+python -m pip install -U pip setuptools
+EOT
 
 FROM base AS py311
 ARG py311
-RUN pyenv install ${py311}
-# hadolint ignore=DL3059
-RUN py install --sys py311
+RUN <<EOT
+pyenv install ${py311}
+py install --sys py311
+python -m pip install -U pip setuptools
+EOT
 
 FROM base AS py312
 ARG py312
-RUN pyenv install ${py312}
-# hadolint ignore=DL3059
-RUN py install --sys py312
+RUN <<EOT
+pyenv install ${py312}
+py install --sys py312
+python -m pip install -U pip setuptools
+EOT
 
 FROM base AS py313
 ARG py313
-RUN pyenv install ${py313}
-# hadolint ignore=DL3059
-RUN py install --sys py313
+RUN <<EOT
+pyenv install ${py313}
+py install --sys py313
+python -m pip install -U pip setuptools
+EOT
 
 FROM base AS py314
 ARG py314
-RUN pyenv install ${py314}
-# hadolint ignore=DL3059
-RUN py install --sys py314
+RUN <<EOT
+pyenv install ${py314}
+py install --sys py314
+python -m pip install -U pip setuptools
+EOT
 
 FROM base AS py313t
 ARG py313t
-RUN pyenv install ${py313t}
-# hadolint ignore=DL3059
-RUN py install --sys py313t
+RUN <<EOT
+pyenv install ${py313t}
+py install --sys py313t
+python -m pip install -U pip setuptools
+EOT
 
 FROM base AS py314t
 ARG py314t
-RUN pyenv install ${py314t}
-# hadolint ignore=DL3059
-RUN py install --sys py314t
+RUN <<EOT
+pyenv install ${py314t}
+py install --sys py314t
+python -m pip install -U pip setuptools
+EOT
 
 
 # final
