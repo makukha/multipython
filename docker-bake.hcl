@@ -3,8 +3,8 @@ variable "RELEASE" { default = "2024.12.27" }
 
 variable "PYENV_VERSION" { default = "2.5.0" }
 variable "PYENV_SHA256" { default = "12c42bdaf3741895ad710a957d44dc2b0c5260f95f857318a6681981fe1b1c0b" }
-variable "UV_VERSION" { default = "0.5.12" }
-variable "UV_SHA256" { default = "65b8dcf3f3e592887fae0daf1b3a9e3aad1262f74bb21cf80d1700c7caba7f23" }
+variable "UV_VERSION" { default = "0.5.13" }
+variable "UV_SHA256" { default = "0127da50d3c361d094545aab32921bbce856b3fcc24f1d10436a6426b3f16330" }
 
 variable "PY" {
   default = {
@@ -82,15 +82,16 @@ group "test" {
   targets = [
     "test-base",
     "test-final",
-    "test-readme",
+    "test-readme-basic",
+    "test-readme-advanced",
     "test-tox",
   ]
 }
 
 target "test-base" {
   target = "test-base"
-  args = { RELEASE = RELEASE }
   context = "tests"
+  args = { RELEASE = RELEASE }
   output = ["type=cacheonly"]
 }
 
