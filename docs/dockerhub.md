@@ -4,7 +4,8 @@
 
 
 * `makukha/multipython` — [pyenv](https://github.com/pyenv/pyenv), [tox](https://tox.wiki), CPython distributions
-* `makukha/multipython:pyXY` — single version images
+* `makukha/multipython:py...` — single version images
+* `makukha/multipython:stable` — latest stable single version image
 * [Build your own environment](https://github.com/makukha/multipython#build-your-own-environment) from single version images
 * Based on `debian:stable-slim`
 * Single platform `linux/amd64`
@@ -22,19 +23,20 @@
 
 * [`latest, 2024.12.27`](https://github.com/makukha/multipython/blob/v2024.12.27/Dockerfile) — *all Python versions, pyenv, tox, uv*
 * [`base, base-2024.12.27`](https://github.com/makukha/multipython/blob/v2024.12.27/Dockerfile) — *pyenv, tox, uv*
-* [`py314t, py314t-2024.12.27`](https://github.com/makukha/multipython/blob/v2024.12.27/Dockerfile) — *CPython 3.14.0a3 free-threaded*
-* [`py313t, py313t-2024.12.27`](https://github.com/makukha/multipython/blob/v2024.12.27/Dockerfile) — *CPython 3.13.1 free-threaded*
-* [`py314, py314-2024.12.27`](https://github.com/makukha/multipython/blob/v2024.12.27/Dockerfile) — *CPython 3.14.0a3*
-* [`py313, py313-2024.12.27`](https://github.com/makukha/multipython/blob/v2024.12.27/Dockerfile) — *CPython 3.13.1*
-* [`py312, py312-2024.12.27`](https://github.com/makukha/multipython/blob/v2024.12.27/Dockerfile) — *CPython 3.12.8*
-* [`py311, py311-2024.12.27`](https://github.com/makukha/multipython/blob/v2024.12.27/Dockerfile) — *CPython 3.11.11*
-* [`py310, py310-2024.12.27`](https://github.com/makukha/multipython/blob/v2024.12.27/Dockerfile) — *CPython 3.10.16*
-* [`py39, py39-2024.12.27`](https://github.com/makukha/multipython/blob/v2024.12.27/Dockerfile) — *CPython 3.9.21*
-* [`py38, py38-2024.12.27`](https://github.com/makukha/multipython/blob/v2024.12.27/Dockerfile) — *CPython 3.8.20*
-* [`py37, py37-2024.12.27`](https://github.com/makukha/multipython/blob/v2024.12.27/Dockerfile) — *CPython 3.7.17*
-* [`py36, py36-2024.12.27`](https://github.com/makukha/multipython/blob/v2024.12.27/Dockerfile) — *CPython 3.6.15*
-* [`py35, py35-2024.12.27`](https://github.com/makukha/multipython/blob/v2024.12.27/Dockerfile) — *CPython 3.5.10*
-* [`py27, py27-2024.12.27`](https://github.co-m/makukha/multipython/blob/v2024.12.27/Dockerfile) — *CPython 2.7.18*
+* [`stable, stable-2024.12.27`](https://github.com/makukha/multipython/blob/v2024.12.27/Dockerfile) — *base + CPython 3.13.1 (latest stable version)*
+* [`py314t, py314t-2024.12.27`](https://github.com/makukha/multipython/blob/v2024.12.27/Dockerfile) — *base + CPython 3.14.0a3 free-threaded*
+* [`py313t, py313t-2024.12.27`](https://github.com/makukha/multipython/blob/v2024.12.27/Dockerfile) — *base + CPython 3.13.1 free-threaded*
+* [`py314, py314-2024.12.27`](https://github.com/makukha/multipython/blob/v2024.12.27/Dockerfile) — *base + CPython 3.14.0a3*
+* [`py313, py313-2024.12.27`](https://github.com/makukha/multipython/blob/v2024.12.27/Dockerfile) — *base + CPython 3.13.1*
+* [`py312, py312-2024.12.27`](https://github.com/makukha/multipython/blob/v2024.12.27/Dockerfile) — *base + CPython 3.12.8*
+* [`py311, py311-2024.12.27`](https://github.com/makukha/multipython/blob/v2024.12.27/Dockerfile) — *base + CPython 3.11.11*
+* [`py310, py310-2024.12.27`](https://github.com/makukha/multipython/blob/v2024.12.27/Dockerfile) — *base + CPython 3.10.16*
+* [`py39, py39-2024.12.27`](https://github.com/makukha/multipython/blob/v2024.12.27/Dockerfile) — *base + CPython 3.9.21*
+* [`py38, py38-2024.12.27`](https://github.com/makukha/multipython/blob/v2024.12.27/Dockerfile) — *base + CPython 3.8.20*
+* [`py37, py37-2024.12.27`](https://github.com/makukha/multipython/blob/v2024.12.27/Dockerfile) — *base + CPython 3.7.17*
+* [`py36, py36-2024.12.27`](https://github.com/makukha/multipython/blob/v2024.12.27/Dockerfile) — *base + CPython 3.6.15*
+* [`py35, py35-2024.12.27`](https://github.com/makukha/multipython/blob/v2024.12.27/Dockerfile) — *base + CPython 3.5.10*
+* [`py27, py27-2024.12.27`](https://github.co-m/makukha/multipython/blob/v2024.12.27/Dockerfile) — *base + CPython 2.7.18*
 
 See [Versions](https://github.com/makukha/multipython#versions) of everything included in the `latest` image.
 

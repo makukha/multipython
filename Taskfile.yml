@@ -39,9 +39,14 @@ tasks:
       - docker run --rm {{.IMG}}:latest py info -c > info/latest.json
 
   build:base:
-    desc: Build base docker image.
+    desc: Build base image.
     cmds:
       - docker buildx bake base
+
+  build:stable:
+    desc: Build stable image.
+    cmds:
+      - docker buildx bake stable
 
   build:docs:
     desc: Build docs.

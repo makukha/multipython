@@ -11,6 +11,7 @@
 
 * `makukha/multipython` — [pip](https://pip.pypa.io), [pyenv](https://github.com/pyenv/pyenv), [tox](https://tox.wiki), [uv](https://docs.astral.sh/uv), Python distributions
 * `makukha/multipython:py...` — single version images
+* `makukha/multipython:stable` — latest stable single version image
 * [Build your own environment](#build-your-own-environment) from single version images
 * Based on `debian:stable-slim`
 * Single platform `linux/amd64`
