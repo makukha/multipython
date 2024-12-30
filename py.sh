@@ -164,10 +164,10 @@ py_version () {
     esac
   fi
   case $1 in
-    --min) py_ls_long | head -1 | sed 's/t$//' | $TRANSFORM ;;
-    --max) py_ls_long | tail -1 | sed 's/t$//' | $TRANSFORM ;;
-    --stable) py_ls_long | sed '/a\|b\|rc/d' | tail -1 | sed 's/t$//' | $TRANSFORM ;;
-    --sys) python --version | cut -d' ' -f2 | sed 's/t$//' | $TRANSFORM ;;
+    min) py_ls_long | head -1 | sed 's/t$//' | $TRANSFORM ;;
+    max) py_ls_long | tail -1 | sed 's/t$//' | $TRANSFORM ;;
+    stable) py_ls_long | sed '/a\|b\|rc/d' | tail -1 | sed 's/t$//' | $TRANSFORM ;;
+    sys) python --version | cut -d' ' -f2 | sed 's/t$//' | $TRANSFORM ;;
     *)
       echo "Unknown option: $1"
       exit 1
