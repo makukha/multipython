@@ -47,7 +47,6 @@ tasks:
     desc: Build docs.
     cmds:
 
-
   clean:
     desc: Prune local tags, images, and build cache.
     vars:
@@ -79,7 +78,9 @@ tasks:
     cmds:
       - docker buildx bake --no-cache test
 
-  version:
+  # release
+
+  release:version:
     desc: Bump release version.
     cmds:
       - uvx bump-my-version bump --dry-run --verbose release
@@ -91,7 +92,14 @@ tasks:
     cmds:
       - uvx bump-my-version bump release
 
-  release:
+  release:changelog:
+    desc: Collect changelog entries.
+    vars:
+      VERSION: {sh: uvx bump-my-version show current_version 2>/dev/null}
+    cmds:
+      - towncrier build --yes --version "{{.VERSION}}"
+
+  release:push:
     desc: Push base images to Docker Registry.
     prompt: Release all images. Continue?
     status:  # guard against overwriting
