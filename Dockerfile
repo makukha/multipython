@@ -83,8 +83,7 @@ CMD ["/bin/bash"]
 # single version images
 
 FROM base AS py27
-ARG py27
-ARG LONG=${py27}
+ARG LONG
 # hadolint ignore=DL3013
 RUN <<EOT
 pyenv install ${LONG}
@@ -93,8 +92,7 @@ py install ${LONG}
 EOT
 
 FROM base AS py35
-ARG py35
-ARG LONG=${py35}
+ARG LONG
 # hadolint ignore=DL3013
 RUN <<EOT
 pyenv install ${LONG}
@@ -103,8 +101,7 @@ py install ${LONG}
 EOT
 
 FROM base AS py36
-ARG py36
-ARG LONG=${py36}
+ARG LONG
 # hadolint ignore=DL3013
 RUN <<EOT
 pyenv install ${LONG}
@@ -113,8 +110,7 @@ py install ${LONG}
 EOT
 
 FROM base AS py37
-ARG py37
-ARG LONG=${py37}
+ARG LONG
 # hadolint ignore=DL3013
 RUN <<EOT
 pyenv install ${LONG}
@@ -123,8 +119,7 @@ py install ${LONG}
 EOT
 
 FROM base AS py38
-ARG py38
-ARG LONG=${py38}
+ARG LONG
 # hadolint ignore=DL3013
 RUN <<EOT
 pyenv install ${LONG}
@@ -133,8 +128,7 @@ py install ${LONG}
 EOT
 
 FROM base AS py39
-ARG py39
-ARG LONG=${py39}
+ARG LONG
 # hadolint ignore=DL3013
 RUN <<EOT
 pyenv install ${LONG}
@@ -143,8 +137,7 @@ py install ${LONG}
 EOT
 
 FROM base AS py310
-ARG py310
-ARG LONG=${py310}
+ARG LONG
 # hadolint ignore=DL3013
 RUN <<EOT
 pyenv install ${LONG}
@@ -153,8 +146,7 @@ py install ${LONG}
 EOT
 
 FROM base AS py311
-ARG py311
-ARG LONG=${py311}
+ARG LONG
 # hadolint ignore=DL3013
 RUN <<EOT
 pyenv install ${LONG}
@@ -163,8 +155,7 @@ py install ${LONG}
 EOT
 
 FROM base AS py312
-ARG py312
-ARG LONG=${py312}
+ARG LONG
 # hadolint ignore=DL3013
 RUN <<EOT
 pyenv install ${LONG}
@@ -173,8 +164,7 @@ py install ${LONG}
 EOT
 
 FROM base AS py313
-ARG py313
-ARG LONG=${py313}
+ARG LONG
 # hadolint ignore=DL3013
 RUN <<EOT
 pyenv install ${LONG}
@@ -183,8 +173,7 @@ py install ${LONG}
 EOT
 
 FROM base AS py314
-ARG py314
-ARG LONG=${py314}
+ARG LONG
 # hadolint ignore=DL3013
 RUN <<EOT
 pyenv install ${LONG}
@@ -193,8 +182,7 @@ py install ${LONG}
 EOT
 
 FROM base AS py313t
-ARG py313t
-ARG LONG=${py313t}
+ARG LONG
 # hadolint ignore=DL3013
 RUN <<EOT
 pyenv install ${LONG}
@@ -203,8 +191,7 @@ py install ${LONG}
 EOT
 
 FROM base AS py314t
-ARG py314t
-ARG LONG=${py314t}
+ARG LONG
 # hadolint ignore=DL3013
 RUN <<EOT
 pyenv install ${LONG}

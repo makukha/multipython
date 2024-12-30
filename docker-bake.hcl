@@ -25,11 +25,13 @@ variable "PY" {
   }
 }
 
+variable "STABLE_TARGET" { default = "py313" }
+
 
 # --- build
 
 group "default" {
-  targets = ["base", "py", "final"]
+  targets = ["base", "py", "stable", "final"]
 }
 
 target "base_versions" {
@@ -53,7 +55,7 @@ target "base" {
 
 target "py" {
   inherits = ["base_versions"]
-  args = PY
+  args = { LONG = PY[TAG] }
   matrix = {
     TAG = keys(PY)
   }
@@ -62,6 +64,16 @@ target "py" {
   tags = [
     "${IMG}:${TAG}",
     "${IMG}:${TAG}-${RELEASE}",
+  ]
+}
+
+target "stable" {
+  inherits = ["base_versions"]
+  target = STABLE_TARGET
+  args = { LONG = PY[STABLE_TARGET] }
+  tags = [
+    "${IMG}:stable",
+    "${IMG}:stable-${RELEASE}",
   ]
 }
 
