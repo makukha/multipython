@@ -1,9 +1,8 @@
 #!/bin/bash
 
-# shellcheck disable=SC1091
-. "$(py root)/deps"
+MULTIPYTHON_ROOT="$(py root)"
 
-DEBIAN_CURRENT="$DEBIAN_DIGEST"
+DEBIAN_CURRENT="$(cat "$MULTIPYTHON_ROOT/debian_image_digest")"
 DEBIAN_LATEST=$(curl -s https://hub.docker.com/v2/namespaces/library/repositories/debian/tags/stable-slim | jq -r .digest)
 DEBIAN_STATUS=$([[ "$DEBIAN_CURRENT" == "$DEBIAN_LATEST" ]] && echo latest || echo changed)
 
