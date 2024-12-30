@@ -1,32 +1,36 @@
-usage: py ls [--long|--short|--nodot|--tag]
-       py version (--min|--max|--stable|--sys) [--long|--short|--nodot]
-       py binary (--name|--path) <tag>
-       py install --sys <tag> [--tox]
+usage: py ls [--long|--short|--tag]
+       py version min|max|stable|sys [--long|--short]
+       py bin --cmd|--path <long>|<short>|<tag>
+       py install <long>|<short>|<tag>
        py root
        py info [--cached]
        py --version
        py --help
 
-commands:
-  binary   Show path to Python binary
+commands:"
+  bin      Show Python executable command or path
   info     Extended details in JSON format
   install  Install optional packages and create symlinks
   ls       List all distributions
   root     Show multipython root path
   version  Show specific python version
 
-version options:
+version formats:"
   -l --long   Full version without prefix, e.g. 3.9.12
   -s --short  Short version without prefix, e.g. 3.9
-  -n --nodot  Short version without prefix and dots, e.g. 39
   -t --tag    Python tag, e.g. py39, pp19
-  --min       Lowest installed version
-  --max       Highest installed version
-  --stable    Highest release version
-  --sys       System python version
+
+version choices:"
+  min     Lowest installed version
+  max     Highest installed version
+  stable  Highest stable release version
+  sys     System python version
+
+python executable choices:
+  --cmd   Executable command name on PATH
+  --path  Path to distribution binary
 
 other options:
   -c --cached  Show cached results
-  --tox        Install tox
   --version    Show multipython distribution version
   --help       Show this help and exit
