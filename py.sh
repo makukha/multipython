@@ -2,12 +2,14 @@
 
 MULTIPYTHON_ROOT=/root/.multipython
 MULTIPYTHON_VERSION=2024.12.27
+MULTIPYTHON_INFO="$MULTIPYTHON_ROOT/info.json"
 
+PYENV_ROOT=$(pyenv root)
 
 # helpers
 
 py_ls_long () {
-  find "$(pyenv root)"/versions -mindepth 1 -maxdepth 1 -type d -printf "%f\n" 2> /dev/null \
+  find "$PYENV_ROOT/versions" -mindepth 1 -maxdepth 1 -type d -printf "%f\n" 2> /dev/null \
     | sed 's/$/-/; s/\.\([0-9][^0-9]\)/\.0\1/g' \
     | sort \
     | sed 's/-$//; s/\.0\([0-9]\)/\.\1/g'
@@ -17,40 +19,38 @@ py_short () {
   sed 's/^\([0-9]*\)\.\([0-9]*\)[^t]*\(t\?\)$/\1.\2\3/'
 }
 
-py_nodot () {
-  py_short | sed 's/\.//'
-}
-
 py_tag () {
   py_short | sed 's/^/py/; s/\.//'
 }
 
-py_pkg_version () {
-  EXEC=$1
-  PKG=$2
-  $EXEC -c "import $PKG; print($PKG.__version__)"
+pip_pkg_version () {
+  $1 -m pip show --version "$2" 2>/dev/null | grep Version: | cut -d' ' -f2
 }
 
 # commands
 
 py_binary () {
-  LINE="$(py_ls_long | py_tag | xargs -n1 | grep -nw "$2" | cut -d: -f1)"
-  LONG=$(py_ls_long | sed -n "$LINE p")
-  case $1 in
-    --name) echo "python$(echo "$LONG" | py_short)" ;;
-    --path) echo "$(pyenv root)/versions/$LONG/bin/python" ;;
-    *)
-      echo "Unknown option: $1"
-      exit 1
-      ;;
-  esac
+  readarray LONG=<(py_ls_long)
+  readarray SHORT=<(py_short <<<"${PY_LONG[*]}")
+  readarray TAG=<(py_tag <<<"${PY_LONG[*]}")
+  for (( i=0; i<${#PY_LONG[*]}; i++ ))
+  do
+    if [[ "$1" = "${LONG[$i]}" || "$1" = "${SHORT[$i]}" || "$1" = "${TAG[$i]}" ]]
+    then
+      echo "$PYENV_ROOT/versions/${LONG[$i]}/bin/python"
+      exit 0
+    fi
+  done
+  echo "Python tag not found: $1"
+  exit 1
 }
 
 py_info () {
+
   if [ $# -ge 1 ]; then
     case $1 in
       -c | --cached)
-        cat $MULTIPYTHON_ROOT/info.json
+        cat $MULTIPYTHON_INFO
         exit 0
         ;;
       *)
@@ -60,49 +60,77 @@ py_info () {
     esac
   fi
 
-  readarray -t LONG <<<"$(py_ls_long)"
-  readarray -t TAG <<<"$(py_ls_long | py_tag)"
-  readarray -t SHORT <<<"$(py_ls_long | py_short)"
-  readarray -t NODOT <<<"$(py_ls_long | py_nodot)"
-  SYSLONG=$(py_version --sys 2>/dev/null || echo -n "")
-  PYENV_ROOT=$(pyenv root)
-  N=${#LONG[@]}
+  readarray PY_LONG <(py_ls_long)
+  readarray PY_SHORT <(py_short <<<"${PY_LONG[*]}")
+  readarray PY_TAG <(py_tag <<<"${PY_LONG[*]}")
+  PY_SYS_VER=$(py_version --sys 2>/dev/null || echo -n "")
 
-  TOX_V="$((tox -q --version 2>/dev/null | cut -d' ' -f1) || echo -n "")"
+  PYENV_VER="$(pyenv --version 2>/dev/null | cut -d' ' -f2)"
+  PYENV_PYDIR="$PYENV_ROOT/versions"
+
+  UV_VER="$(uv --version 2>/dev/null | cut -d' ' -f2)"
+  UV_PYDIR="$(uv python dir)"
+
+  TOX_VER="$( (tox -q --version 2>/dev/null | cut -d' ' -f1) || echo -n "" )"
 
   echo '{'
   echo '  "multipython": {'
-  echo '     "debian_image_digest": "'"$(cat $MULTIPYTHON_ROOT/debian_image_digest)"'",'
-  echo '     "root": "'$MULTIPYTHON_ROOT'",'
+  echo '     "version": "'$MULTIPYTHON_VERSION'",'
+  echo '     "root": "'$MULTIPYTHON_ROOT'"'
   echo '  },'
-  echo '  "debian_image_digest": "'"$(cat $MULTIPYTHON_ROOT/debian_image_digest)"'",'
-  echo -e '  "pyenv": {\n    "version": "'"$(pyenv --version | cut -d' ' -f2)"'"\n  }'
-  if [ "$TOX_V" != "" ]; then
-    echo -e '  "tox": {\n    "version": "'"$(tox -q --version | cut -d' ' -f1)"'"\n  }'
+  if [ "$PYENV_VER" != "" ]; then
+    echo '  "pyenv": {'
+    echo '    "version": "'"$PYENV_VER"'",'
+    echo '    "root": "'"$PYENV_ROOT"'",'
+    echo '    "python_versions": "'"$PYENV_PYDIR"'"'
+    echo '  },'
   fi
-  echo -e '  "uv": {\n    "version": "'"$(uv --version | cut -d' ' -f2)"'"\n  }'
-  if [ "${LONG[0]}" != "" ]; then
+  if [ "$TOX_VER" != "" ]; then
+    echo '  "tox": {'
+    echo '    "version": "'"$TOX_VER"'"'
+    echo '  },'
+  fi
+  if [ "$UV_VER" != "" ]; then
+    echo '  "uv": {'
+    echo '    "version": "'"$UV_VER"'"',
+    echo '    "python_versions": "'"$UV_PYDIR"'"'
+    echo '  },'
+  fi
+  echo '  "debian": {'
+  echo '    "docker_channel": "stable-slim",'
+  echo '    "docker_image_digest": "'"$(cat $MULTIPYTHON_ROOT/debian_image_digest)"'"'
+  echo '  },'
+
+  if [ "${PY_LONG[*]}" = "" ]; then
+    echo '  "python": []'
+  else
     echo '  "python": ['
-    for (( i=0; i<$N; i++ )); do
+    for (( i=0; i<${#PY_LONG[*]}; i++ ))
+    do
+      PIP_VER=$(pip_pkg_version "python${PY_SHORT[$i]}" pip)
+      SETUPTOOLS_VER=$(pip_pkg_version "python${PY_SHORT[$i]}" setuptools)
       echo '    {'
-      echo '      "version": "'${LONG[$i]}'",'
-      echo '      "manager": "pyenv",'
-      echo '      "tag": "'${TAG[$i]}'",'
-      echo '      "short": "'${SHORT[$i]}'",'
-      echo '      "nodot": "'${NODOT[$i]}'",'
-      echo '      "executable_name": "python'${SHORT[$i]}'",'
-      echo '      "executable_path": "'"$PYENV_ROOT"'/versions/'"${LONG[$i]}"'/bin/python",'
-      echo -n '      "is_system": '
-      [[ "$SYSLONG" = "${LONG[$i]}" ]] && echo true, || echo false,
-      echo '      "pkg": {'
-      echo '        "pip": "'"$(py_pkg_version python${SHORT[$i]} pip)"'",'
-      echo '        "setuptools": "'"$(py_pkg_version python${SHORT[$i]} setuptools)"'"'
+      echo '      "version": "'"${PY_LONG[$i]}"'",'
+      echo '      "source": "pyenv",'
+      echo '      "tag": "'"${PY_TAG[$i]}"'",'
+      echo '      "short": "'"${PY_SHORT[$i]}"'",'
+      echo '      "executable": "python'"${PY_SHORT[$i]}"'",'
+      echo '      "binary_path": "'"$(py_binary "${PY_TAG[$i]}")"','
+      if [[ "$PY_SYS_VER" = "${PY_LONG[$i]}" ]]; then
+        echo '      "is_system": true,'
+      else
+        echo '      "is_system": false,'
+      fi
+      echo '      "packages": {'
+      echo '        "pip": "'"$PIP_VER"'",'
+      echo '        "setuptools": "'"$SETUPTOOLS_VER"'"'
       echo '      }'
       echo -n '    }'
-      [[ "$i" -lt "$N" ]] && echo ","
+      if (( i = ${#PY_LONG[*]} )); then echo; else echo ","; fi
     done
     echo '  ]'
   fi
+
   echo '}'
 }
 
@@ -113,7 +141,6 @@ py_ls () {
     case $1 in
       -l | --long) py_ls_long ;;
       -s | --short) py_ls_long | py_short ;;
-      -n | --nodot) py_ls_long | py_nodot ;;
       -t | --tag) py_ls_long | py_tag ;;
       *)
         echo "Unknown option: $1"
@@ -130,7 +157,6 @@ py_version () {
     case $2 in
       -l | --long) TRANSFORM="cat" ;;
       -s | --short) TRANSFORM="py_short" ;;
-      -n | --nodot) TRANSFORM="py_nodot" ;;
       *)
         echo "Unknown option: $2"
         exit 1
@@ -150,7 +176,6 @@ py_version () {
 }
 
 py_install () {
-  PYENV_ROOT=$(pyenv root)
   # link pyenv
   for v in $(py_ls_long); do
     ln -s "$PYENV_ROOT/versions/$v/bin/python" "/usr/local/bin/python$(echo "$v" | py_short)"
@@ -182,39 +207,45 @@ py_install () {
     echo "Unknown option: $3"
     exit 1
   fi
+  # generate and validate info
+  py_info | tee "$MULTIPYTHON_INFO" | jq
 }
 
 py_usage () {
-  echo "usage: py ls [--long|--short|--nodot|--tag]"
-  echo "       py version (--min|--max|--stable|--sys) [--long|--short|--nodot]"
-  echo "       py binary (--name|--path) <tag>"
-  echo "       py install --sys <tag> [--tox]"
+  echo "usage: py ls [--long|--short|--tag]"
+  echo "       py version min|max|stable|sys [--long|--short]"
+  echo "       py bin --cmd|--path <long>|<short>|<tag>"                                 # TODO
+  echo "       py install <long>|<short>|<tag>"                                          # TODO
   echo "       py root"
   echo "       py info [--cached]"
   echo "       py --version"
   echo "       py --help"
   echo
   echo "commands:"
-  echo "  binary   Show path to Python binary"
+  echo "  bin      Show Python executable command or path"
   echo "  info     Extended details in JSON format"
   echo "  install  Install optional packages and create symlinks"
   echo "  ls       List all distributions"
   echo "  root     Show multipython root path"
   echo "  version  Show specific python version"
   echo
-  echo "version options:"
+  echo "version formats:"
   echo "  -l --long   Full version without prefix, e.g. 3.9.12"
   echo "  -s --short  Short version without prefix, e.g. 3.9"
-  echo "  -n --nodot  Short version without prefix and dots, e.g. 39"
   echo "  -t --tag    Python tag, e.g. py39, pp19"
-  echo "  --min       Lowest installed version"
-  echo "  --max       Highest installed version"
-  echo "  --stable    Highest release version"
-  echo "  --sys       System python version"
+  echo
+  echo "version choices:"
+  echo "  min     Lowest installed version"
+  echo "  max     Highest installed version"
+  echo "  stable  Highest stable release version"
+  echo "  sys     System python version"
+  echo
+  echo "python executable choices:"
+  echo "  --cmd   Executable command name on PATH"
+  echo "  --path  Path to distribution binary"
   echo
   echo "other options:"
   echo "  -c --cached  Show cached results"
-  echo "  --tox        Install tox"
   echo "  --version    Show multipython distribution version"
   echo "  --help       Show this help and exit"
 }
