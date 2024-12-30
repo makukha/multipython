@@ -193,11 +193,13 @@ py_install () {
   esac
   # install tox
   if [ "$3" == "--tox" ]; then
-    PYMIN=$(py_version --min --nodot)
+    PYMIN=$(py_version --min --short)
     # shellcheck disable=SC2071
-    if [[ "$PYMIN" < "37" ]]; then
+    if [[ "$PYMIN" == "$(echo -e "3.7\n$PYMIN" | sort -V | head -1)" ]]; then
+      # $PY_MIN < "3.7"
       spec="virtualenv<20.22"
-    elif [[ "$PYMIN" < "38" ]]; then
+    elif [[ "$PYMIN" == "$(echo -e "3.8\n$PYMIN" | sort -V | head -1)" ]]; then
+      # $PY_MIN < "3.8"
       spec="virtualenv<20.27"
     else
       spec="virtualenv"
