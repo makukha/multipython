@@ -187,36 +187,26 @@ py_install () {
   for v in $(py_ls_long); do
     ln -s "$PYENV_ROOT/versions/$v/bin/python" "/usr/local/bin/python$(echo "$v" | py_short)"
   done
-  # link sys
-  case $1 in
-    --sys)
-      test -h "$MULTIPYTHON_ROOT/sys" && unlink "$MULTIPYTHON_ROOT/sys"
-      ln -s "$(dirname "$(py_bin --path "$2")")" "$MULTIPYTHON_ROOT/sys"
-      ;;
-    *)
-      echo "Unknown option: $1"
-      exit 1
-      ;;
-  esac
+
+  # link system executable
+  test -h "$MULTIPYTHON_ROOT/sys" && unlink "$MULTIPYTHON_ROOT/sys"
+  ln -s "$(dirname "$(py_bin --path "$1")")" "$MULTIPYTHON_ROOT/sys"
+
   # install tox
-  if [ "$3" == "--tox" ]; then
-    PYMIN=$(py_version --min --short)
-    # shellcheck disable=SC2071
-    if [[ "$PYMIN" == "$(echo -e "3.7\n$PYMIN" | sort -V | head -1)" ]]; then
-      # $PY_MIN < "3.7"
-      spec="virtualenv<20.22"
-    elif [[ "$PYMIN" == "$(echo -e "3.8\n$PYMIN" | sort -V | head -1)" ]]; then
-      # $PY_MIN < "3.8"
-      spec="virtualenv<20.27"
-    else
-      spec="virtualenv"
-    fi
-    python -m pip install --disable-pip-version-check --root-user-action=ignore --no-cache-dir $spec tox
-  elif [ "$3" != "" ]; then
-    echo "Unknown option: $3"
-    exit 1
+  PYMIN=$(py_version --min --short)
+  # shellcheck disable=SC2071
+  if [[ "$PYMIN" == "$(echo -e "3.7\n$PYMIN" | sort -V | head -1)" ]]; then
+    # $PY_MIN < "3.7"
+    spec="virtualenv<20.22"
+  elif [[ "$PYMIN" == "$(echo -e "3.8\n$PYMIN" | sort -V | head -1)" ]]; then
+    # $PY_MIN < "3.8"
+    spec="virtualenv<20.27"
+  else
+    spec="virtualenv"
   fi
-  # generate and validate info
+  python -m pip install --disable-pip-version-check --root-user-action=ignore --no-cache-dir $spec tox
+
+  # generate and validate versions info
   py_info | tee "$MULTIPYTHON_INFO" | jq
 }
 
@@ -266,7 +256,7 @@ main () {
     case $1 in
       bin) py_bin $2 $3 ;;
       info) py_info $2 ;;
-      install) py_install $2 $3 $4 ;;
+      install) py_install $2 ;;
       ls) py_ls $2 ;;
       root) echo "$MULTIPYTHON_ROOT" ;;
       version) py_version $2 $3 ;;
