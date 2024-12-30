@@ -6,11 +6,25 @@ vars:
 
 tasks:
 
+  init:
+    desc: Init local dev environment.
+    cmds:
+      - cmd: uv tool install "{{.ITEM}}"
+        for: [bump-my-version, docsub, towncrier]
+
   checkupd:
     desc: Check for version updates.
     cmds:
       - docker buildx bake base
       - docker run --rm -t {{.IMG}}:base py_checkupd
+
+  changelog:*:
+    desc: Create news item {security|breaking|removed|deprecated|added|changed|fixed|docs|misc}.
+    vars:
+      ISSUE: {sh: git rev-parse --abbrev-ref HEAD | cut -d- -f1}
+      SECTION: '{{index .MATCH 0}}'
+    cmds:
+      - uvx towncrier create -c "{{.CLI_ARGS}}" "{{.ISSUE}}.{{.SECTION}}.md"
 
   lint:
     desc: Run linters.
@@ -22,12 +36,17 @@ tasks:
     desc: Build all docker images.
     cmds:
       - docker buildx bake
-      - docker run --rm {{.IMG}}:latest py info -c > info.json
+      - docker run --rm {{.IMG}}:latest py info -c > info/latest.json
 
   build:base:
     desc: Build base docker image.
     cmds:
       - docker buildx bake base
+
+  build:docs:
+    desc: Build docs.
+    cmds:
+
 
   clean:
     desc: Prune local tags, images, and build cache.
