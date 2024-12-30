@@ -16,7 +16,7 @@ tasks:
     desc: Check for version updates.
     cmds:
       - docker buildx bake base
-      - docker run --rm -t {{.IMG}}:base py_checkupd
+      - docker run --rm -t {{.IMG}}:base py checkupd
 
   changelog:*:
     desc: Create news item {security|breaking|removed|deprecated|added|changed|fixed|docs|misc}.
@@ -30,7 +30,7 @@ tasks:
     desc: Run linters.
     cmds:
       - hadolint Dockerfile tests/Dockerfile
-      - shellcheck *.sh tests/*.sh
+      - shellcheck bin/*.sh tests/shared/*.sh
 
   build:
     desc: Build all docker images.
@@ -69,7 +69,7 @@ tasks:
   shell:*:
     desc: Shell to image {base,tox,py*,latest}.
     cmds:
-      - docker run --rm -it {{.IMG}}:{{index .MATCH 0}} /bin/bash
+      - docker run --rm -it {{.CLI_ARGS}} {{.IMG}}:{{index .MATCH 0}} /bin/bash
 
   run:*:
     desc: Run command in image {base,py*,latest} container.

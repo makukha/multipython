@@ -30,32 +30,34 @@ pip_pkg_version () {
 # commands
 
 py_bin () {
-  readarray LONG=<(py_ls_long)
-  readarray SHORT=<(py_short <<<"${LONG[*]}")
-  readarray TAG=<(py_tag <<<"${LONG[*]}")
+  readarray -t LONG < <(py_ls_long)
+  readarray -t SHORT < <(py_short <<<"${LONG[*]}")
+  readarray -t TAG < <(py_tag <<<"${LONG[*]}")
 
-  for (( i=0; i<${#PY_LONG[*]}; i++ ))
+  if [ "$1" = "--path" ]; then
+    REQ="$2"
+  else
+    REQ="$1"
+  fi
+
+  for (( i=0; i<${#LONG[*]}; i++ ))
   do
-    if [[ "$1" = "${LONG[$i]}" || "$1" = "${SHORT[$i]}" || "$1" = "${TAG[$i]}" ]]
+    if [[ "$REQ" == "${LONG[$i]}" || "$1" == "${SHORT[$i]}" || "$1" == "${TAG[$i]}" ]]
     then
-      if [ "$2" = "" ]; then
-        echo "python${SHORT[$i]}"
-      elif [ "$2" = "--path" ]; then
+      if [ "$1" = "--path" ]; then
         echo "$PYENV_ROOT/versions/${LONG[$i]}/bin/python"
       else
-        echo "Unsupported option: $2"
-        exit 1
+        echo "python${SHORT[$i]}"
       fi
       exit 0
     fi
   done
 
-  echo "Python version not found: $1"
+  echo "Python version not found: $REQ"
   exit 1
 }
 
 py_info () {
-
   if [ $# -ge 1 ]; then
     case $1 in
       -c | --cached)
@@ -69,10 +71,10 @@ py_info () {
     esac
   fi
 
-  readarray PY_LONG <(py_ls_long)
-  readarray PY_SHORT <(py_short <<<"${PY_LONG[*]}")
-  readarray PY_TAG <(py_tag <<<"${PY_LONG[*]}")
-  PY_SYS_VER=$(py_version --sys 2>/dev/null || echo -n "")
+  readarray -t LONG < <(py_ls_long)
+  readarray -t SHORT < <(py_short <<<"${LONG[*]}")
+  readarray -t TAG < <(py_tag <<<"${LONG[*]}")
+  LONG_SYS=$(py_version sys 2>/dev/null || echo -n "")
 
   PYENV_VER="$(pyenv --version 2>/dev/null | cut -d' ' -f2)"
   PYENV_PYDIR="$PYENV_ROOT/versions"
@@ -110,22 +112,24 @@ py_info () {
   echo '    "docker_image_digest": "'"$(cat $MULTIPYTHON_ROOT/debian_image_digest)"'"'
   echo '  },'
 
-  if [ "${PY_LONG[*]}" = "" ]; then
+  if [ "${LONG[*]}" = "" ]; then
     echo '  "python": []'
   else
     echo '  "python": ['
-    for (( i=0; i<${#PY_LONG[*]}; i++ ))
+    for (( i=0; i<${#LONG[*]}; i++ ))
     do
-      PIP_VER=$(pip_pkg_version "python${PY_SHORT[$i]}" pip)
-      SETUPTOOLS_VER=$(pip_pkg_version "python${PY_SHORT[$i]}" setuptools)
+      PY_BIN="$(py_bin "${LONG[$i]}")"
+      PY_BIN_PATH="$(py_bin --path "${LONG[$i]}")"
+      PIP_VER=$(pip_pkg_version "$PY_BIN" pip)
+      SETUPTOOLS_VER=$(pip_pkg_version "$PY_BIN" setuptools)
       echo '    {'
-      echo '      "version": "'"${PY_LONG[$i]}"'",'
+      echo '      "version": "'"${LONG[$i]}"'",'
       echo '      "source": "pyenv",'
-      echo '      "tag": "'"${PY_TAG[$i]}"'",'
-      echo '      "short": "'"${PY_SHORT[$i]}"'",'
-      echo '      "cmd": "'"$(py_bin "${PY_TAG[$i]}")"'",'
-      echo '      "binary_path": "'"$(py_bin --path "${PY_TAG[$i]}")"','
-      if [[ "$PY_SYS_VER" = "${PY_LONG[$i]}" ]]; then
+      echo '      "tag": "'"${TAG[$i]}"'",'
+      echo '      "short": "'"${SHORT[$i]}"'",'
+      echo '      "cmd": "'"$(py_bin "${TAG[$i]}")"'",'
+      echo '      "binary_path": "'"$PY_BIN_PATH"'",'
+      if [[ "$LONG_SYS" = "${LONG[$i]}" ]]; then
         echo '      "is_system": true,'
       else
         echo '      "is_system": false,'
@@ -135,7 +139,7 @@ py_info () {
       echo '        "setuptools": "'"$SETUPTOOLS_VER"'"'
       echo '      }'
       echo -n '    }'
-      if (( i = ${#PY_LONG[*]} )); then echo; else echo ","; fi
+      if (( i = ${#LONG[*]} )); then echo; else echo ","; fi
     done
     echo '  ]'
   fi
@@ -185,8 +189,8 @@ py_version () {
 }
 
 py_install () {
-  readarray LONG=<(py_ls_long)
-  readarray SHORT=<(py_short <<<"${LONG[*]}")
+  readarray -t LONG < <(py_ls_long)
+  readarray -t SHORT < <(py_short <<<"${LONG[*]}")
 
   # link pyenv
   for (( i=0; i<${#LONG[*]}; i++ ))
@@ -198,7 +202,7 @@ py_install () {
   test -h "$MULTIPYTHON_ROOT/sys" && unlink "$MULTIPYTHON_ROOT/sys"
   ln -s "$(dirname "$(py_bin --path "$1")")" "$MULTIPYTHON_ROOT/sys"
 
-  # install tox
+  # install or update pip, setuptools, tox
   PYMIN=$(py_version --min --short)
   # shellcheck disable=SC2071
   if [[ "$PYMIN" == "$(echo -e "3.7\n$PYMIN" | sort -V | head -1)" ]]; then
@@ -210,19 +214,20 @@ py_install () {
   else
     spec="virtualenv"
   fi
-  python -m pip install --disable-pip-version-check --root-user-action=ignore --no-cache-dir $spec tox
+  pip install --disable-pip-version-check --root-user-action=ignore --no-cache-dir \
+    -U $spec pip setuptools tox
 
   # generate and validate versions info
   py_info | tee "$MULTIPYTHON_INFO" | jq
 }
 
 py_usage () {
-  echo "usage: py ls [--long|--short|--tag]"
-  echo "       py version <min|max|stable|sys> [--long|--short]"
-  echo "       py bin [--path] <long|short|tag>"
-  echo "       py install <long|short|tag>"
-  echo "       py root"
+  echo "usage: py bin [--path] <LONG|SHORT|TAG>"
   echo "       py info [--cached]"
+  echo "       py install <LONG|SHORT|TAG>"
+  echo "       py ls [--long|--short|--tag]"
+  echo "       py root"
+  echo "       py version min|max|stable|sys [--long|--short]"
   echo "       py --version"
   echo "       py --help"
   echo
@@ -261,6 +266,7 @@ main () {
     # shellcheck disable=SC2086
     case $1 in
       bin) py_bin $2 $3 ;;
+      checkupd) bash "$MULTIPYTHON_ROOT/checkupd.sh" ;;
       info) py_info $2 ;;
       install) py_install $2 ;;
       ls) py_ls $2 ;;
