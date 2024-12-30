@@ -222,9 +222,9 @@ py_install () {
 
 py_usage () {
   echo "usage: py ls [--long|--short|--tag]"
-  echo "       py version min|max|stable|sys [--long|--short]"
-  echo "       py bin [--path] <long>|<short>|<tag>"                                 # TODO
-  echo "       py install <long>|<short>|<tag>"                                          # TODO
+  echo "       py version <min|max|stable|sys> [--long|--short]"
+  echo "       py bin [--path] <long|short|tag>"
+  echo "       py install <long|short|tag>"
   echo "       py root"
   echo "       py info [--cached]"
   echo "       py --version"

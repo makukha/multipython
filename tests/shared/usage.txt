@@ -1,7 +1,7 @@
 usage: py ls [--long|--short|--tag]
-       py version min|max|stable|sys [--long|--short]
-       py bin --cmd|--path <long>|<short>|<tag>
-       py install <long>|<short>|<tag>
+       py version <min|max|stable|sys> [--long|--short]
+       py bin [--path] <long|short|tag>
+       py install <long|short|tag>
        py root
        py info [--cached]
        py --version
@@ -26,11 +26,8 @@ version choices:"
   stable  Highest stable release version
   sys     System python version
 
-python executable choices:
-  --cmd   Executable command name on PATH
-  --path  Path to distribution binary
-
 other options:
   -c --cached  Show cached results
+  --path       Path to distribution binary
   --version    Show multipython distribution version
   --help       Show this help and exit

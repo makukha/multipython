@@ -89,7 +89,7 @@ ARG LONG=${py27}
 RUN <<EOT
 pyenv install ${LONG}
 $(py bin ${LONG}) -m pip install --no-cache-dir -U pip setuptools
-py install --sys ${LONG}
+py install ${LONG}
 EOT
 
 FROM base AS py35
@@ -99,7 +99,7 @@ ARG LONG=${py35}
 RUN <<EOT
 pyenv install ${LONG}
 $(py bin ${LONG}) -m pip install --no-cache-dir -U pip setuptools
-py install --sys ${LONG}
+py install ${LONG}
 EOT
 
 FROM base AS py36
@@ -109,7 +109,7 @@ ARG LONG=${py36}
 RUN <<EOT
 pyenv install ${LONG}
 $(py bin ${LONG}) -m pip install --no-cache-dir -U pip setuptools
-py install --sys ${LONG}
+py install ${LONG}
 EOT
 
 FROM base AS py37
@@ -119,7 +119,7 @@ ARG LONG=${py37}
 RUN <<EOT
 pyenv install ${LONG}
 $(py bin ${LONG}) -m pip install --no-cache-dir -U pip setuptools
-py install --sys ${LONG}
+py install ${LONG}
 EOT
 
 FROM base AS py38
@@ -129,7 +129,7 @@ ARG LONG=${py38}
 RUN <<EOT
 pyenv install ${LONG}
 $(py bin ${LONG}) -m pip install --no-cache-dir -U pip setuptools
-py install --sys ${LONG}
+py install ${LONG}
 EOT
 
 FROM base AS py39
@@ -139,7 +139,7 @@ ARG LONG=${py39}
 RUN <<EOT
 pyenv install ${LONG}
 $(py bin ${LONG}) -m pip install --no-cache-dir -U pip setuptools
-py install --sys ${LONG}
+py install ${LONG}
 EOT
 
 FROM base AS py310
@@ -149,7 +149,7 @@ ARG LONG=${py310}
 RUN <<EOT
 pyenv install ${LONG}
 $(py bin ${LONG}) -m pip install --no-cache-dir -U pip setuptools
-py install --sys ${LONG}
+py install ${LONG}
 EOT
 
 FROM base AS py311
@@ -159,7 +159,7 @@ ARG LONG=${py311}
 RUN <<EOT
 pyenv install ${LONG}
 $(py bin ${LONG}) -m pip install --no-cache-dir -U pip setuptools
-py install --sys ${LONG}
+py install ${LONG}
 EOT
 
 FROM base AS py312
@@ -169,7 +169,7 @@ ARG LONG=${py312}
 RUN <<EOT
 pyenv install ${LONG}
 $(py bin ${LONG}) -m pip install --no-cache-dir -U pip setuptools
-py install --sys ${LONG}
+py install ${LONG}
 EOT
 
 FROM base AS py313
@@ -179,7 +179,7 @@ ARG LONG=${py313}
 RUN <<EOT
 pyenv install ${LONG}
 $(py bin ${LONG}) -m pip install --no-cache-dir -U pip setuptools
-py install --sys ${LONG}
+py install ${LONG}
 EOT
 
 FROM base AS py314
@@ -189,7 +189,7 @@ ARG LONG=${py314}
 RUN <<EOT
 pyenv install ${LONG}
 $(py bin ${LONG}) -m pip install --no-cache-dir -U pip setuptools
-py install --sys ${LONG}
+py install ${LONG}
 EOT
 
 FROM base AS py313t
@@ -199,7 +199,7 @@ ARG LONG=${py313t}
 RUN <<EOT
 pyenv install ${LONG}
 $(py bin ${LONG}) -m pip install --no-cache-dir -U pip setuptools
-py install --sys ${LONG}
+py install ${LONG}
 EOT
 
 FROM base AS py314t
@@ -209,7 +209,7 @@ ARG LONG=${py314t}
 RUN <<EOT
 pyenv install ${LONG}
 $(py bin ${LONG}) -m pip install --no-cache-dir -U pip setuptools
-py install --sys ${LONG}
+py install ${LONG}
 EOT
 
 
@@ -230,4 +230,4 @@ COPY --from=py313 /root/.pyenv/versions /root/.pyenv/versions/
 COPY --from=py314 /root/.pyenv/versions /root/.pyenv/versions/
 COPY --from=py313t /root/.pyenv/versions /root/.pyenv/versions/
 COPY --from=py314t /root/.pyenv/versions /root/.pyenv/versions/
-RUN py install --sys py313 --tox
+RUN py install py313
