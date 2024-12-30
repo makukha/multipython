@@ -29,7 +29,7 @@ pip_pkg_version () {
 
 # commands
 
-py_binary () {
+py_bin () {
   readarray LONG=<(py_ls_long)
   readarray SHORT=<(py_short <<<"${PY_LONG[*]}")
   readarray TAG=<(py_tag <<<"${PY_LONG[*]}")
@@ -37,11 +37,18 @@ py_binary () {
   do
     if [[ "$1" = "${LONG[$i]}" || "$1" = "${SHORT[$i]}" || "$1" = "${TAG[$i]}" ]]
     then
-      echo "$PYENV_ROOT/versions/${LONG[$i]}/bin/python"
+      if [ "$2" = "" ]; then
+        echo "python${SHORT[$i]}"
+      elif [ "$2" = "--path" ]; then
+        echo "$PYENV_ROOT/versions/${LONG[$i]}/bin/python"
+      else
+        echo "Unsupported option: $2"
+        exit 1
+      fi
       exit 0
     fi
   done
-  echo "Python tag not found: $1"
+  echo "Python version not found: $1"
   exit 1
 }
 
@@ -114,8 +121,8 @@ py_info () {
       echo '      "source": "pyenv",'
       echo '      "tag": "'"${PY_TAG[$i]}"'",'
       echo '      "short": "'"${PY_SHORT[$i]}"'",'
-      echo '      "executable": "python'"${PY_SHORT[$i]}"'",'
-      echo '      "binary_path": "'"$(py_binary "${PY_TAG[$i]}")"','
+      echo '      "cmd": "'"$(py_bin "${PY_TAG[$i]}")"'",'
+      echo '      "binary_path": "'"$(py_bin --path "${PY_TAG[$i]}")"','
       if [[ "$PY_SYS_VER" = "${PY_LONG[$i]}" ]]; then
         echo '      "is_system": true,'
       else
@@ -184,7 +191,7 @@ py_install () {
   case $1 in
     --sys)
       test -h "$MULTIPYTHON_ROOT/sys" && unlink "$MULTIPYTHON_ROOT/sys"
-      ln -s "$(dirname "$(py_binary --path "$2")")" "$MULTIPYTHON_ROOT/sys"
+      ln -s "$(dirname "$(py_bin --path "$2")")" "$MULTIPYTHON_ROOT/sys"
       ;;
     *)
       echo "Unknown option: $1"
@@ -216,7 +223,7 @@ py_install () {
 py_usage () {
   echo "usage: py ls [--long|--short|--tag]"
   echo "       py version min|max|stable|sys [--long|--short]"
-  echo "       py bin --cmd|--path <long>|<short>|<tag>"                                 # TODO
+  echo "       py bin [--path] <long>|<short>|<tag>"                                 # TODO
   echo "       py install <long>|<short>|<tag>"                                          # TODO
   echo "       py root"
   echo "       py info [--cached]"
@@ -242,12 +249,9 @@ py_usage () {
   echo "  stable  Highest stable release version"
   echo "  sys     System python version"
   echo
-  echo "python executable choices:"
-  echo "  --cmd   Executable command name on PATH"
-  echo "  --path  Path to distribution binary"
-  echo
   echo "other options:"
   echo "  -c --cached  Show cached results"
+  echo "  --path       Path to distribution binary"
   echo "  --version    Show multipython distribution version"
   echo "  --help       Show this help and exit"
 }
@@ -260,7 +264,7 @@ main () {
   else
     # shellcheck disable=SC2086
     case $1 in
-      binary) py_binary $2 $3 ;;
+      bin) py_bin $2 $3 ;;
       info) py_info $2 ;;
       install) py_install $2 $3 $4 ;;
       ls) py_ls $2 ;;

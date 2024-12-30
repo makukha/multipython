@@ -88,7 +88,7 @@ ARG LONG=${py27}
 # hadolint ignore=DL3013
 RUN <<EOT
 pyenv install ${LONG}
-$(py binary ${LONG}) -m pip install --no-cache-dir -U pip setuptools
+$(py bin ${LONG}) -m pip install --no-cache-dir -U pip setuptools
 py install --sys ${LONG}
 EOT
 
@@ -98,7 +98,7 @@ ARG LONG=${py35}
 # hadolint ignore=DL3013
 RUN <<EOT
 pyenv install ${LONG}
-$(py binary ${LONG}) -m pip install --no-cache-dir -U pip setuptools
+$(py bin ${LONG}) -m pip install --no-cache-dir -U pip setuptools
 py install --sys ${LONG}
 EOT
 
@@ -108,7 +108,7 @@ ARG LONG=${py36}
 # hadolint ignore=DL3013
 RUN <<EOT
 pyenv install ${LONG}
-$(py binary ${LONG}) -m pip install --no-cache-dir -U pip setuptools
+$(py bin ${LONG}) -m pip install --no-cache-dir -U pip setuptools
 py install --sys ${LONG}
 EOT
 
@@ -118,7 +118,7 @@ ARG LONG=${py37}
 # hadolint ignore=DL3013
 RUN <<EOT
 pyenv install ${LONG}
-$(py binary ${LONG}) -m pip install --no-cache-dir -U pip setuptools
+$(py bin ${LONG}) -m pip install --no-cache-dir -U pip setuptools
 py install --sys ${LONG}
 EOT
 
@@ -128,7 +128,7 @@ ARG LONG=${py38}
 # hadolint ignore=DL3013
 RUN <<EOT
 pyenv install ${LONG}
-$(py binary ${LONG}) -m pip install --no-cache-dir -U pip setuptools
+$(py bin ${LONG}) -m pip install --no-cache-dir -U pip setuptools
 py install --sys ${LONG}
 EOT
 
@@ -138,7 +138,7 @@ ARG LONG=${py39}
 # hadolint ignore=DL3013
 RUN <<EOT
 pyenv install ${LONG}
-$(py binary ${LONG}) -m pip install --no-cache-dir -U pip setuptools
+$(py bin ${LONG}) -m pip install --no-cache-dir -U pip setuptools
 py install --sys ${LONG}
 EOT
 
@@ -148,7 +148,7 @@ ARG LONG=${py310}
 # hadolint ignore=DL3013
 RUN <<EOT
 pyenv install ${LONG}
-$(py binary ${LONG}) -m pip install --no-cache-dir -U pip setuptools
+$(py bin ${LONG}) -m pip install --no-cache-dir -U pip setuptools
 py install --sys ${LONG}
 EOT
 
@@ -158,7 +158,7 @@ ARG LONG=${py311}
 # hadolint ignore=DL3013
 RUN <<EOT
 pyenv install ${LONG}
-$(py binary ${LONG}) -m pip install --no-cache-dir -U pip setuptools
+$(py bin ${LONG}) -m pip install --no-cache-dir -U pip setuptools
 py install --sys ${LONG}
 EOT
 
@@ -168,7 +168,7 @@ ARG LONG=${py312}
 # hadolint ignore=DL3013
 RUN <<EOT
 pyenv install ${LONG}
-$(py binary ${LONG}) -m pip install --no-cache-dir -U pip setuptools
+$(py bin ${LONG}) -m pip install --no-cache-dir -U pip setuptools
 py install --sys ${LONG}
 EOT
 
@@ -178,7 +178,7 @@ ARG LONG=${py313}
 # hadolint ignore=DL3013
 RUN <<EOT
 pyenv install ${LONG}
-$(py binary ${LONG}) -m pip install --no-cache-dir -U pip setuptools
+$(py bin ${LONG}) -m pip install --no-cache-dir -U pip setuptools
 py install --sys ${LONG}
 EOT
 
@@ -188,7 +188,7 @@ ARG LONG=${py314}
 # hadolint ignore=DL3013
 RUN <<EOT
 pyenv install ${LONG}
-$(py binary ${LONG}) -m pip install --no-cache-dir -U pip setuptools
+$(py bin ${LONG}) -m pip install --no-cache-dir -U pip setuptools
 py install --sys ${LONG}
 EOT
 
@@ -198,7 +198,7 @@ ARG LONG=${py313t}
 # hadolint ignore=DL3013
 RUN <<EOT
 pyenv install ${LONG}
-$(py binary ${LONG}) -m pip install --no-cache-dir -U pip setuptools
+$(py bin ${LONG}) -m pip install --no-cache-dir -U pip setuptools
 py install --sys ${LONG}
 EOT
 
@@ -208,7 +208,7 @@ ARG LONG=${py314t}
 # hadolint ignore=DL3013
 RUN <<EOT
 pyenv install ${LONG}
-$(py binary ${LONG}) -m pip install --no-cache-dir -U pip setuptools
+$(py bin ${LONG}) -m pip install --no-cache-dir -U pip setuptools
 py install --sys ${LONG}
 EOT
 
