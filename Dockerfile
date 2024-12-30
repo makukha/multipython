@@ -71,119 +71,145 @@ ARG DEBIAN_DIGEST
 ARG MULTIPYTHON_ROOT
 ENV PATH="$MULTIPYTHON_ROOT/sys:$PYENV_ROOT/bin:$PATH"
 RUN <<EOT
-mkdir -p ${MULTIPYTHON_ROOT}
-echo "${DEBIAN_DIGEST}" > ${MULTIPYTHON_ROOT}/debian_image_digest
-py info > ${MULTIPYTHON_ROOT}/info.json
+mkdir -p "${MULTIPYTHON_ROOT}"
+echo "${DEBIAN_DIGEST}" > "${MULTIPYTHON_ROOT}/debian_image_digest"
+py info | tee "${MULTIPYTHON_ROOT}/info.json" | jq
 EOT
 
 ENTRYPOINT []
 CMD ["/bin/bash"]
 
 
-# single versions
+# single version images
 
 FROM base AS py27
 ARG py27
+ARG LONG=${py27}
+# hadolint ignore=DL3013
 RUN <<EOT
-pyenv install ${py27}
-py install --sys py27
-python -m pip install -U pip setuptools
+pyenv install ${LONG}
+$(py binary ${LONG}) -m pip install --no-cache-dir -U pip setuptools
+py install --sys ${LONG}
 EOT
 
 FROM base AS py35
 ARG py35
+ARG LONG=${py35}
+# hadolint ignore=DL3013
 RUN <<EOT
-pyenv install ${py35}
-py install --sys py35
-python -m pip install -U pip setuptools
+pyenv install ${LONG}
+$(py binary ${LONG}) -m pip install --no-cache-dir -U pip setuptools
+py install --sys ${LONG}
 EOT
 
 FROM base AS py36
 ARG py36
+ARG LONG=${py36}
+# hadolint ignore=DL3013
 RUN <<EOT
-pyenv install ${py36}
-py install --sys py36
-python -m pip install -U pip setuptools
+pyenv install ${LONG}
+$(py binary ${LONG}) -m pip install --no-cache-dir -U pip setuptools
+py install --sys ${LONG}
 EOT
 
 FROM base AS py37
 ARG py37
+ARG LONG=${py37}
+# hadolint ignore=DL3013
 RUN <<EOT
-pyenv install ${py37}
-py install --sys py37
-python -m pip install -U pip setuptools
+pyenv install ${LONG}
+$(py binary ${LONG}) -m pip install --no-cache-dir -U pip setuptools
+py install --sys ${LONG}
 EOT
 
 FROM base AS py38
 ARG py38
+ARG LONG=${py38}
+# hadolint ignore=DL3013
 RUN <<EOT
-pyenv install ${py38}
-py install --sys py38
-python -m pip install -U pip setuptools
+pyenv install ${LONG}
+$(py binary ${LONG}) -m pip install --no-cache-dir -U pip setuptools
+py install --sys ${LONG}
 EOT
 
 FROM base AS py39
 ARG py39
+ARG LONG=${py39}
+# hadolint ignore=DL3013
 RUN <<EOT
-pyenv install ${py39}
-py install --sys py39
-python -m pip install -U pip setuptools
+pyenv install ${LONG}
+$(py binary ${LONG}) -m pip install --no-cache-dir -U pip setuptools
+py install --sys ${LONG}
 EOT
 
 FROM base AS py310
 ARG py310
+ARG LONG=${py310}
+# hadolint ignore=DL3013
 RUN <<EOT
-pyenv install ${py310}
-py install --sys py310
-python -m pip install -U pip setuptools
+pyenv install ${LONG}
+$(py binary ${LONG}) -m pip install --no-cache-dir -U pip setuptools
+py install --sys ${LONG}
 EOT
 
 FROM base AS py311
 ARG py311
+ARG LONG=${py311}
+# hadolint ignore=DL3013
 RUN <<EOT
-pyenv install ${py311}
-py install --sys py311
-python -m pip install -U pip setuptools
+pyenv install ${LONG}
+$(py binary ${LONG}) -m pip install --no-cache-dir -U pip setuptools
+py install --sys ${LONG}
 EOT
 
 FROM base AS py312
 ARG py312
+ARG LONG=${py312}
+# hadolint ignore=DL3013
 RUN <<EOT
-pyenv install ${py312}
-py install --sys py312
-python -m pip install -U pip setuptools
+pyenv install ${LONG}
+$(py binary ${LONG}) -m pip install --no-cache-dir -U pip setuptools
+py install --sys ${LONG}
 EOT
 
 FROM base AS py313
 ARG py313
+ARG LONG=${py313}
+# hadolint ignore=DL3013
 RUN <<EOT
-pyenv install ${py313}
-py install --sys py313
-python -m pip install -U pip setuptools
+pyenv install ${LONG}
+$(py binary ${LONG}) -m pip install --no-cache-dir -U pip setuptools
+py install --sys ${LONG}
 EOT
 
 FROM base AS py314
 ARG py314
+ARG LONG=${py314}
+# hadolint ignore=DL3013
 RUN <<EOT
-pyenv install ${py314}
-py install --sys py314
-python -m pip install -U pip setuptools
+pyenv install ${LONG}
+$(py binary ${LONG}) -m pip install --no-cache-dir -U pip setuptools
+py install --sys ${LONG}
 EOT
 
 FROM base AS py313t
 ARG py313t
+ARG LONG=${py313t}
+# hadolint ignore=DL3013
 RUN <<EOT
-pyenv install ${py313t}
-py install --sys py313t
-python -m pip install -U pip setuptools
+pyenv install ${LONG}
+$(py binary ${LONG}) -m pip install --no-cache-dir -U pip setuptools
+py install --sys ${LONG}
 EOT
 
 FROM base AS py314t
 ARG py314t
+ARG LONG=${py314t}
+# hadolint ignore=DL3013
 RUN <<EOT
-pyenv install ${py314t}
-py install --sys py314t
-python -m pip install -U pip setuptools
+pyenv install ${LONG}
+$(py binary ${LONG}) -m pip install --no-cache-dir -U pip setuptools
+py install --sys ${LONG}
 EOT
 
 
