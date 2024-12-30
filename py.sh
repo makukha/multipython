@@ -31,8 +31,9 @@ pip_pkg_version () {
 
 py_bin () {
   readarray LONG=<(py_ls_long)
-  readarray SHORT=<(py_short <<<"${PY_LONG[*]}")
-  readarray TAG=<(py_tag <<<"${PY_LONG[*]}")
+  readarray SHORT=<(py_short <<<"${LONG[*]}")
+  readarray TAG=<(py_tag <<<"${LONG[*]}")
+
   for (( i=0; i<${#PY_LONG[*]}; i++ ))
   do
     if [[ "$1" = "${LONG[$i]}" || "$1" = "${SHORT[$i]}" || "$1" = "${TAG[$i]}" ]]
@@ -48,6 +49,7 @@ py_bin () {
       exit 0
     fi
   done
+
   echo "Python version not found: $1"
   exit 1
 }
@@ -183,9 +185,13 @@ py_version () {
 }
 
 py_install () {
+  readarray LONG=<(py_ls_long)
+  readarray SHORT=<(py_short <<<"${LONG[*]}")
+
   # link pyenv
-  for v in $(py_ls_long); do
-    ln -s "$PYENV_ROOT/versions/$v/bin/python" "/usr/local/bin/python$(echo "$v" | py_short)"
+  for (( i=0; i<${#LONG[*]}; i++ ))
+  do
+    ln -s "$PYENV_ROOT/versions/${LONG[$i]}/bin/python" "/usr/local/bin/python${SHORT[$i]}"
   done
 
   # link system executable
