@@ -4,9 +4,8 @@
 
 
 * `makukha/multipython` — [pyenv](https://github.com/pyenv/pyenv), [tox](https://tox.wiki), CPython distributions
-* `makukha/multipython:pyXY` — single distribution images
-* Dynamically linked
-* [Build your own environment](#build-your-own-environment) with single version images
+* `makukha/multipython:pyXY` — single version images
+* [Build your own environment](https://github.com/makukha/multipython#build-your-own-environment) from single version images
 * Based on `debian:stable-slim`
 * Single platform `linux/amd64`
 
@@ -21,23 +20,23 @@
 
 # Supported tags and respective `Dockerfile` links
 
-* [`latest, 2024.12.26`](https://github.com/makukha/multipython/blob/v2024.12.26/Dockerfile) — *all Python versions, pyenv, tox*
-* [`base, base-2024.12.26`](https://github.com/makukha/multipython/blob/v2024.12.26/Dockerfile) — *pyenv 2.5.0, tox 4.5.1.1*
-* [`py314t, py314t-2024.12.26`](https://github.com/makukha/multipython/blob/v2024.12.26/Dockerfile) — *CPython 3.14.0a3 free-threaded*
-* [`py313t, py313t-2024.12.26`](https://github.com/makukha/multipython/blob/v2024.12.26/Dockerfile) — *CPython 3.13.1 free-threaded*
-* [`py314, py314-2024.12.26`](https://github.com/makukha/multipython/blob/v2024.12.26/Dockerfile) — *CPython 3.14.0a3*
-* [`py313, py313-2024.12.26`](https://github.com/makukha/multipython/blob/v2024.12.26/Dockerfile) — *CPython 3.13.1*
-* [`py312, py312-2024.12.26`](https://github.com/makukha/multipython/blob/v2024.12.26/Dockerfile) — *CPython 3.12.8*
-* [`py311, py311-2024.12.26`](https://github.com/makukha/multipython/blob/v2024.12.26/Dockerfile) — *CPython 3.11.11*
-* [`py310, py310-2024.12.26`](https://github.com/makukha/multipython/blob/v2024.12.26/Dockerfile) — *CPython 3.10.16*
-* [`py39, py39-2024.12.26`](https://github.com/makukha/multipython/blob/v2024.12.26/Dockerfile) — *CPython 3.9.21*
-* [`py38, py38-2024.12.26`](https://github.com/makukha/multipython/blob/v2024.12.26/Dockerfile) — *CPython 3.8.20*
-* [`py37, py37-2024.12.26`](https://github.com/makukha/multipython/blob/v2024.12.26/Dockerfile) — *CPython 3.7.17*
-* [`py36, py36-2024.12.26`](https://github.com/makukha/multipython/blob/v2024.12.26/Dockerfile) — *CPython 3.6.15*
-* [`py35, py35-2024.12.26`](https://github.com/makukha/multipython/blob/v2024.12.26/Dockerfile) — *CPython 3.5.10*
-* [`py27, py27-2024.12.26`](https://github.co-m/makukha/multipython/blob/v2024.12.26/Dockerfile) — *CPython 2.7.18*
+* [`latest, 2024.12.27`](https://github.com/makukha/multipython/blob/v2024.12.27/Dockerfile) — *all Python versions, pyenv, tox, uv*
+* [`base, base-2024.12.27`](https://github.com/makukha/multipython/blob/v2024.12.27/Dockerfile) — *pyenv, tox, uv*
+* [`py314t, py314t-2024.12.27`](https://github.com/makukha/multipython/blob/v2024.12.27/Dockerfile) — *CPython 3.14.0a3 free-threaded*
+* [`py313t, py313t-2024.12.27`](https://github.com/makukha/multipython/blob/v2024.12.27/Dockerfile) — *CPython 3.13.1 free-threaded*
+* [`py314, py314-2024.12.27`](https://github.com/makukha/multipython/blob/v2024.12.27/Dockerfile) — *CPython 3.14.0a3*
+* [`py313, py313-2024.12.27`](https://github.com/makukha/multipython/blob/v2024.12.27/Dockerfile) — *CPython 3.13.1*
+* [`py312, py312-2024.12.27`](https://github.com/makukha/multipython/blob/v2024.12.27/Dockerfile) — *CPython 3.12.8*
+* [`py311, py311-2024.12.27`](https://github.com/makukha/multipython/blob/v2024.12.27/Dockerfile) — *CPython 3.11.11*
+* [`py310, py310-2024.12.27`](https://github.com/makukha/multipython/blob/v2024.12.27/Dockerfile) — *CPython 3.10.16*
+* [`py39, py39-2024.12.27`](https://github.com/makukha/multipython/blob/v2024.12.27/Dockerfile) — *CPython 3.9.21*
+* [`py38, py38-2024.12.27`](https://github.com/makukha/multipython/blob/v2024.12.27/Dockerfile) — *CPython 3.8.20*
+* [`py37, py37-2024.12.27`](https://github.com/makukha/multipython/blob/v2024.12.27/Dockerfile) — *CPython 3.7.17*
+* [`py36, py36-2024.12.27`](https://github.com/makukha/multipython/blob/v2024.12.27/Dockerfile) — *CPython 3.6.15*
+* [`py35, py35-2024.12.27`](https://github.com/makukha/multipython/blob/v2024.12.27/Dockerfile) — *CPython 3.5.10*
+* [`py27, py27-2024.12.27`](https://github.co-m/makukha/multipython/blob/v2024.12.27/Dockerfile) — *CPython 2.7.18*
 
-Outdated releases remain in [Docker Registry](https://hub.docker.com/r/makukha/multipython/tags).
+See [Versions](https://github.com/makukha/multipython#versions) of everything included in the `latest` image.
 
 
 # How to use this image
@@ -46,19 +45,10 @@ Outdated releases remain in [Docker Registry](https://hub.docker.com/r/makukha/m
 docker pull makukha/multipython@latest
 ```
 
+<!-- docsub after line 2: cat tests/test_readme_basic/tox.ini -->
 ```ini
 # tox.ini
-[tox]
-env_list = py{27,35,36,37,38,39,310,311,312,313,314,313t,314t}
 
-[testenv]
-command = python --version
-
-[testenv:py313t]
-base_python = python3.13t
-
-[testenv:py314t]
-base_python = python3.14t
 ```
 
 ```shell
@@ -72,14 +62,8 @@ docker run --rm -v .:/app makukha/multipython tox run --root /app
 
 Combine single version images to use a subset of Python distributions.
 
+<!-- docsub: cat tests/test_readme_advanced/Dockerfile -->
 ```Dockerfile
-# Dockerfile
-FROM makukha/multipython:base
-RUN mkdir /root/.pyenv/versions
-COPY --from=makukha/multipython:py27 /root/.pyenv/versions /root/.pyenv/versions/
-COPY --from=makukha/multipython:py35 /root/.pyenv/versions /root/.pyenv/versions/
-COPY --from=makukha/multipython:py312 /root/.pyenv/versions /root/.pyenv/versions/
-RUN py install --sys py312 --tox
 ```
 ### Tox version
 
@@ -106,112 +90,31 @@ $ py version --sys
 <tr>
 <td>
 
+<!-- docsub after line 1: cat tests/shared/dist-long.txt -->
 ```shell
 $ py ls
-2.7.18
-3.5.10
-3.6.15
-3.7.17
-3.8.20
-3.9.21
-3.10.16
-3.11.11
-3.12.8
-3.13.1
-3.13.1t
-3.14.0a3
-3.14.0a3t
 ```
 </td>
 <td>
 
+<!-- docsub after line 1: cat tests/shared/dist-short.txt -->
 ```shell
 $ py ls -s
-2.7
-3.5
-3.6
-3.7
-3.8
-3.9
-3.10
-3.11
-3.12
-3.13
-3.13t
-3.14
-3.14t
 ```
 </td>
 <td>
 
-```shell
-$ py ls -n
-27
-35
-36
-37
-38
-39
-310
-311
-312
-313
-313t
-314
-314t
-```
-</td>
-<td>
-
+<!-- docsub after line 1: cat tests/shared/dist-tag.txt -->
 ```shell
 $ py ls -t
-py27
-py35
-py36
-py37
-py38
-py39
-py310
-py311
-py312
-py313
-py313t
-py314
-py314t
 ```
 </td>
 </tr>
 </table>
 
+<!-- docsub after line 1: cat tests/shared/usage.txt -->
 ```shell
 $ py --help
-usage: py ls [--long|--short|--nodot|--tag]
-       py version (--min|--max|--stable|--sys) [--long|--short|--nodot]
-       py binary (--name|--path) <tag>
-       py install --sys <tag> [--tox]
-       py root
-       py --help
-
-commands:
-  binary   Show path to Python binary
-  install  Install optional packages and create symlinks
-  ls       List all distributions
-  root     Show multipython root path
-  version  Show specific python version
-
-version options:
-  -l --long   Full version without prefix, e.g. 3.9.12
-  -s --short  Short version without prefix, e.g. 3.9
-  -n --nodot  Short version without prefix and dots, e.g. 39
-  -t --tag    Python tag, e.g. py39, pp19
-  --min       Lowest installed version
-  --max       Highest installed version
-  --stable    Highest release version
-  --sys       System python version
-
-other options:
-  --tox   Install tox
-  --help  Show this help and exit
 ```
 
 

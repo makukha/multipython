@@ -1,6 +1,6 @@
-# multipython 🐳<sup>🐍</sup>
+# multipython 🐳<sup>🐍🐍</sup>
 
-> Pyenv-based Docker image of Python 2.7 to 3.14 (with optional free threading) for multi-distribution testing.
+> Pyenv-based Docker image of Python 2.7 to 3.14 (including free threading) for multi-distribution testing.
 
 [![release](https://img.shields.io/github/v/tag/makukha/multipython?label=tag)](https://github.com/makukha/multipython)
 [![Docker Pulls](https://img.shields.io/docker/pulls/makukha/multipython)](https://hub.docker.com/r/makukha/multipython)
@@ -9,41 +9,43 @@
 
 # Features
 
-* `makukha/multipython` — [pyenv](https://github.com/pyenv/pyenv), [tox](https://tox.wiki), [uv](https://docs.astral.sh/uv), CPython distributions
-* `makukha/multipython:pyXY` — single distribution images
-* [Build your own environment](#build-your-own-environment) with single version images
+* `makukha/multipython` — [pip](https://pip.pypa.io), [pyenv](https://github.com/pyenv/pyenv), [tox](https://tox.wiki), [uv](https://docs.astral.sh/uv), Python distributions
+* `makukha/multipython:py...` — single version images
+* [Build your own environment](#build-your-own-environment) from single version images
 * Based on `debian:stable-slim`
 * Single platform `linux/amd64`
 
-## Distributions included
+## Python versions
 
-| distribution     | build details | tag      | executable    |
-|------------------|---------------|----------|---------------|
-| CPython 3.14.0a3 | free-threaded | `py314t` | `python3.14t` |
-| CPython 3.13.1   | free-threaded | `py313t` | `python3.13t` |
-| CPython 3.14.0a3 |               | `py314`  | `python3.14`  |
-| CPython 3.13.1 ✅ |               | `py313`  | `python3.13`  |
-| CPython 3.12.8   |               | `py312`  | `python3.12`  |
-| CPython 3.11.11  |               | `py311`  | `python3.11`  |
-| CPython 3.10.16  |               | `py310`  | `python3.10`  |
-| CPython 3.9.21   |               | `py39`   | `python3.9`   |
-| CPython 3.8.20   |               | `py38`   | `python3.8`   |
-| CPython 3.7.17   |               | `py37`   | `python3.7`   |
-| CPython 3.6.15   |               | `py36`   | `python3.6`   |
-| CPython 3.5.10   |               | `py35`   | `python3.5`   |
-| CPython 2.7.18   |               | `py27`   | `python2.7`   |
+| Distribution     | Note          | Tag      | Executable    | Source |
+|------------------|---------------|----------|---------------|--------|
+| CPython 3.14.0a3 | free threaded | `py314t` | `python3.14t` | pyenv  |
+| CPython 3.13.1   | free threaded | `py313t` | `python3.13t` | pyenv  |
+| CPython 3.14.0a3 |               | `py314`  | `python3.14`  | pyenv  |
+| CPython 3.13.1   | ✅ system      | `py313`  | `python3.13`  | pyenv  |
+| CPython 3.12.8   |               | `py312`  | `python3.12`  | pyenv  |
+| CPython 3.11.11  |               | `py311`  | `python3.11`  | pyenv  |
+| CPython 3.10.16  |               | `py310`  | `python3.10`  | pyenv  |
+| CPython 3.9.21   |               | `py39`   | `python3.9`   | pyenv  |
+| CPython 3.8.20   | EOL           | `py38`   | `python3.8`   | pyenv  |
+| CPython 3.7.17   | EOL           | `py37`   | `python3.7`   | pyenv  |
+| CPython 3.6.15   | EOL           | `py36`   | `python3.6`   | pyenv  |
+| CPython 3.5.10   | EOL           | `py35`   | `python3.5`   | pyenv  |
+| CPython 2.7.18   | EOL           | `py27`   | `python2.7`   | pyenv  |
 
-✅ Latest stable executable is on `PATH` as system `python`, including `pip`.
+### Executables
 
-All executables are on `PATH` as symlinks to respective pyenv distributions.
+All executables are on `PATH` as symlinks to respective distributions. ✅ System Python, that is always the latest stable version, is also available as simply `python`.
 
-## Versions
+### Versions
 
-* [pyenv](https://github.com/pyenv/pyenv) 2.5.0 — latest
-* [tox](https://tox.wiki) 4.5.1.1 — the last version that supports virtualenv 20.21.1 (needed for Python <3.6)
-* [uv](https://docs.astral.sh/uv) 0.5.12 — latest
-* [virtualenv](https://virtualenv.pypa.io/en/latest/) 20.21.1 — the last version that supports Python versions below 3.6
+Check [Versions](#versions) section for [pyenv](https://github.com/pyenv/pyenv), [tox](https://tox.wiki), [uv](https://docs.astral.sh/uv), [pip](https://pip.pypa.io), [setuptools](https://setuptools.pypa.io) versions.
 
+See [Status of Python versions](https://devguide.python.org/versions) for the list of end-of-life versions.
+
+### Distribution sources
+
+The only used source used is [pyenv](https://github.com/pyenv/pyenv). However, it is planned to use [python-build-standalone](https://github.com/astral-sh/python-build-standalone) distributions for supported Python versions to speed up image builds.
 
 # Basic usage
 
@@ -51,23 +53,14 @@ All executables are on `PATH` as symlinks to respective pyenv distributions.
 docker pull makukha/multipython@latest
 ```
 
+<!-- docsub after line 2: cat tests/test_readme_basic/tox.ini -->
 ```ini
 # tox.ini
-[tox]
-env_list = py{27,35,36,37,38,39,310,311,312,313,314,313t,314t}
 
-[testenv]
-command = python --version
-
-[testenv:py313t]
-base_python = python3.13t
-
-[testenv:py314t]
-base_python = python3.14t
 ```
 
 ```shell
-docker run --rm -v .:/app makukha/multipython tox run --root /app
+docker run --rm -v .:/test makukha/multipython tox run --root /test
 ```
 
 
@@ -77,25 +70,11 @@ docker run --rm -v .:/app makukha/multipython tox run --root /app
 
 Combine single version images to use a subset of Python distributions.
 
+<!-- docsub after line 2: cat tests/test_readme_advanced/Dockerfile -->
 ```Dockerfile
 # Dockerfile
-FROM makukha/multipython:base
-RUN mkdir /root/.pyenv/versions
-COPY --from=makukha/multipython:py27 /root/.pyenv/versions /root/.pyenv/versions/
-COPY --from=makukha/multipython:py35 /root/.pyenv/versions /root/.pyenv/versions/
-COPY --from=makukha/multipython:py312 /root/.pyenv/versions /root/.pyenv/versions/
-RUN py install --sys py312 --tox
+
 ```
-### Tox version
-
-The default tox version 4.5.1.1 is dictated by [virtualenv support](https://virtualenv.pypa.io/en/latest/changelog.html) of Python versions. Depending on minimal Python version used in custom environment, tox version will be selected automatically in `py install`:
-
-| Python  | virtualenv  | tox     |
-|---------|-------------|---------|
-| `>=2 `  | `<20.22.0`  | `<4.6`  |
-| `>=3.7` | `<20.27.0`  | `>=4.6` |
-| `>=3.8` | `>=20.27.0` | `>=4.6` |
-
 
 ## Helper utility `py`
 
@@ -111,113 +90,119 @@ $ py version --sys
 <tr>
 <td>
 
+<!-- docsub after line 1: cat tests/shared/dist-long.txt -->
 ```shell
 $ py ls
-2.7.18
-3.5.10
-3.6.15
-3.7.17
-3.8.20
-3.9.21
-3.10.16
-3.11.11
-3.12.8
-3.13.1
-3.13.1t
-3.14.0a3
-3.14.0a3t
 ```
 </td>
 <td>
 
+<!-- docsub after line 1: cat tests/shared/dist-short.txt -->
 ```shell
 $ py ls -s
-2.7
-3.5
-3.6
-3.7
-3.8
-3.9
-3.10
-3.11
-3.12
-3.13
-3.13t
-3.14
-3.14t
 ```
 </td>
 <td>
 
-```shell
-$ py ls -n
-27
-35
-36
-37
-38
-39
-310
-311
-312
-313
-313t
-314
-314t
-```
-</td>
-<td>
-
+<!-- docsub after line 1: cat tests/shared/dist-tag.txt -->
 ```shell
 $ py ls -t
-py27
-py35
-py36
-py37
-py38
-py39
-py310
-py311
-py312
-py313
-py313t
-py314
-py314t
 ```
 </td>
 </tr>
 </table>
 
+<!-- docsub after line 1: cat tests/shared/usage.txt -->
 ```shell
 $ py --help
-usage: py ls [--long|--short|--nodot|--tag]
-       py version (--min|--max|--stable|--sys) [--long|--short|--nodot]
-       py binary (--name|--path) <tag>
-       py install --sys <tag> [--tox]
-       py root
-       py --help
-
-commands:
-  binary   Show path to Python binary
-  install  Install optional packages and create symlinks
-  ls       List all distributions
-  root     Show multipython root path
-  version  Show specific python version
-
-version options:
-  -l --long   Full version without prefix, e.g. 3.9.12
-  -s --short  Short version without prefix, e.g. 3.9
-  -n --nodot  Short version without prefix and dots, e.g. 39
-  -t --tag    Python tag, e.g. py39, pp19
-  --min       Lowest installed version
-  --max       Highest installed version
-  --stable    Highest release version
-  --sys       System python version
-
-other options:
-  --tox   Install tox
-  --help  Show this help and exit
 ```
+
+# Versions
+
+## Base tools
+
+All released images share same versions of base tools, but [tox version](#tox-version) will vary depending on minimal Python version installed. The good news that it is selected automatically, even for custom images.
+
+| Image tag | pyenv  | uv      | tox       |
+|-----------|--------|---------|-----------|
+| `base`    | 2.5.0* | 0.5.13* | —         |
+| Other     | 2.5.0* | 0.5.13* | *varying* |
+
+<span>*</span> latest version, may be updated in future releases.
+
+## Python tools
+
+| Image tag | pip       | setuptools | tox, system wide |
+|-----------|-----------|------------|------------------|
+| `latest`  | *varying* | *varying*  | 4.5.1.1          |
+| `base`    | —         | —          | —                |
+| `py27`    | 20.3.4    | 44.1.1     |                  |
+| `py35`    | 9.0.1     | 28.8.0     |                  |
+| `py36`    | 21.3.1    | 59.6.0     |                  |
+| `py37`    | 24.0      | 68.0.0     |                  |
+| `py38`    | 24.3.1*   | 75.3.0     |                  |
+| `py39`    | 24.3.1*   | 75.6.1*    |                  |
+| `py310`   | 24.3.1*   | 75.6.1*    |                  |
+| `py311`   | 24.3.1*   | 75.6.1*    |                  |
+| `py312`   | 24.3.1*   | 75.6.1*    |                  |
+| `py313`   | 24.3.1*   | 75.6.1*    |                  |
+| `py313t`  | 24.3.1*   | 75.6.1*    |                  |
+| `py314`   | 24.3.1*   | 75.6.1*    |                  |
+| `py314t`  | 24.3.1*   | 75.6.1*    |                  |
+
+<span>*</span> latest version, may be updated in future releases.
+
+## tox version
+
+The default tox version 4.5.1.1 is dictated by [virtualenv support](https://virtualenv.pypa.io/en/latest/changelog.html) of Python versions. Depending on minimal Python version used in custom environment, tox version will be automatically selected by `py install`:
+
+| Python  | virtualenv  | tox     |
+|---------|-------------|---------|
+| `>=2 `  | `<20.22.0`  | `<4.6`  |
+| `>=3.7` | `<20.27.0`  | `>=4.6` |
+| `>=3.8` | `>=20.27.0` | `>=4.6` |
+
+## JSON metadata
+
+All versions included, paths to sources, and some other info is available in JSON format to be used for reference and in dev pipelines.
+
+### On Docker images
+
+On every image `makukha/multipython:latest`, `makukha/multipython:py...`, `makukha/multipython:base` at `/root/.multipython/info.json`.
+
+### On custom Docker images
+
+After running `py install` (see [instructions](#build-your-own-environment)).
+
+### On GitHub
+
+* `makukha/multipython:latest` – [makukha/multipython/info/latest.json](blob/main/latest.json)
+
+### [Helper utility](#helper-utility-py) `py info`
+
+```shell
+docker run --rm makukha/multipython:latest py info -c
+```
+
+<!-- docsub: sh task run:latest -- py info -c | sed -ne '1,/    },/p' && echo '...' -->
+```json
+```
+
+# Security
+
+1. Check [vulnerability reports](https://hub.docker.com/r/makukha/multipython/tags) provided by Docker Scout.
+2. Use specific [image digests](#image-digests) if necessary.
+3. Report security vulnerabilities via [GitHub Security Advisories](https://github.com/makukha/multipython/security/advisories).
+
+Security vulnerabilities can come from
+
+* base [Debian image](https://hub.docker.com/_/debian/tags?name=stable-slim) `debian:stable-slim`
+* Python distributions, especially [reached end-of-life](https://devguide.python.org/versions).
+* multipython itself
+
+## Image digests
+
+> TODO
 
 
 # Alternatives
@@ -240,3 +225,8 @@ other options:
 * To file bug report or feature request, please [create an issue](https://github.com/makukha/multipython/issues).
 * To report security vulnerability, please use [GitHub Security Advisories](https://github.com/makukha/multipython/security/advisories).
 * Want to contribute? Check [Contribution Guidelines](https://github.com/makukha/multipython/blob/main/.github/CONTRIBUTING.md).
+
+
+# Changelog
+
+> TODO
