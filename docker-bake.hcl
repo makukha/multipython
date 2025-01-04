@@ -156,7 +156,6 @@ target "test_readme_basic" {
 
 target "test_readme_advanced_setup" {
   dockerfile = "tests/test_readme_advanced/Dockerfile"
-  tags = ["${IMG}:test_readme_advanced_setup"]
 }
 
 target "test_readme_advanced_test" {
