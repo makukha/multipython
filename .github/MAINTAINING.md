@@ -31,13 +31,6 @@ $ task shell:* -- -v ...
 $ task run:* -- ...
 ```
 
-## Docs
-
-```shell
-$ task docs
-```
-
-
 ## Pre-release
 
 ```shell
@@ -51,4 +44,6 @@ $ task release:version
 $ task release:changelog
 $ task lint clean build test
 $ task release:push
+$ task docs:gen
+$ task docs:sub
 ```

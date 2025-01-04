@@ -40,10 +40,17 @@ tasks:
     cmds:
       - docker buildx bake stable
 
-  docs:
-    desc: Update docs.
+  docs:gen:
+    desc: Generate docs tables.
+    vars:
+      VERSION: {sh: uvx bump-my-version show current_version 2>/dev/null}
     cmds:
       - bash .dev/gen-package-versions.sh > docs/tab/package-versions.md
+      - bash .dev/gen-image-digests.sh "{{.VERSION}}" > docs/tab/image-digests.md
+
+  docs:sub:
+    desc: Update docs.
+    cmds: []
 
   clean:
     desc: Prune local tags, images, and build cache.
