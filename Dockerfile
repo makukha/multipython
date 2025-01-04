@@ -162,3 +162,16 @@ FROM base AS stable
 RUN mkdir /root/.pyenv/versions
 COPY --from=py313 /root/.pyenv/versions /root/.pyenv/versions/
 RUN py install --as stable
+
+
+# supported
+
+FROM base AS supported
+RUN mkdir /root/.pyenv/versions
+COPY --from=py39 /root/.pyenv/versions /root/.pyenv/versions/
+COPY --from=py310 /root/.pyenv/versions /root/.pyenv/versions/
+COPY --from=py311 /root/.pyenv/versions /root/.pyenv/versions/
+COPY --from=py312 /root/.pyenv/versions /root/.pyenv/versions/
+COPY --from=py313 /root/.pyenv/versions /root/.pyenv/versions/
+COPY --from=py313t /root/.pyenv/versions /root/.pyenv/versions/
+RUN py install --as supported

@@ -44,6 +44,10 @@ variable "SUBSET_ARGS" {
       SUBSET = "stable"
       RELEASE_TAG = "stable-${RELEASE}"
     }
+    supported = {
+      SUBSET = "supported"
+      RELEASE_TAG = "supported-${RELEASE}"
+    }
   }
 }
 
@@ -56,6 +60,7 @@ group "default" {
     "py",
     "latest",
     "stable",
+    "supported",
   ]
 }
 
@@ -104,6 +109,15 @@ target "stable" {
   ]
 }
 
+target "supported" {
+  inherits = ["__build__"]
+  target = "supported"
+  tags = [
+    "${IMG}:supported",
+    "${IMG}:supported-${RELEASE}",
+  ]
+}
+
 
 # --- test
 
@@ -140,6 +154,7 @@ target "test_subsets" {
     SUBSET = [
       "latest",
       "stable",
+      "supported",
     ]
   }
   name = "test_subset_${SUBSET}"
