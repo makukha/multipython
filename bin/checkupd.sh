@@ -1,9 +1,15 @@
 #!/bin/bash
 
+set -o errexit
+set -o errtrace
+set -o nounset
+set -o pipefail
+trap "exit 1" ERR
+
 # versions and statuses
 
-DEB_CHANNEL="$(py info -c | jq -r .debian.docker_channel)"
-DEB_CURRENT="$(py info -c | jq -r .debian.docker_image_digest)"
+DEB_CHANNEL="$(py info -c | jq -r .base_image.channel)"
+DEB_CURRENT="$(py info -c | jq -r .base_image.digest)"
 DEB_LATEST=$(curl -s https://hub.docker.com/v2/namespaces/library/repositories/debian/tags/$DEB_CHANNEL | jq -r .digest)
 DEB_STATUS=$([[ "$DEB_CURRENT" == "$DEB_LATEST" ]] && echo latest || echo changed)
 
@@ -17,18 +23,14 @@ UV_STATUS=$([[ "$UV_CURRENT" == "$UV_LATEST" ]] && echo latest || echo changed)
 
 # presentation helpers
 
-RED=$(tput setaf 1)
-GREEN=$(tput setaf 2)
-OFF=$(tput setaf 9)
-
 row () {
   status="$1"
   current="$2"
   latest="$3"
   if [ "$status" == "changed" ]; then
-    printf "$RED%7s  %s$OFF" "$status" "$latest"
+    printf '\033[0;31m%7s  %s\033[0m' "$status" "$latest"
   else
-    printf "$GREEN%7s  %s$OFF" "$status" "$current"
+    printf '\033[0;32m%7s  %s\033[0m' "$status" "$current"
   fi
 }
 
@@ -50,7 +52,7 @@ if [ "$UV_STATUS" == "changed" ]; then
   UV_TAR_SHA256="$(sha256sum /tmp/uv.tar.gz | cut -d' ' -f1)"
   UV_GITHUB_SHA256="$(wget -q -O- "https://github.com/astral-sh/uv/releases/download/${UV_LATEST}/uv-x86_64-unknown-linux-gnu.tar.gz.sha256" | cut -d' ' -f1)"
   if [ ! "$UV_TAR_SHA256" == "$UV_GITHUB_SHA256" ]; then
-    echo "uv sha256 do not match!"
+    echo "uv sha256 do not match!" >&2
     exit 1
   fi
   printf "UV_SHA256      %s\n" "$(row "$UV_STATUS" "?" "$UV_GITHUB_SHA256")"
@@ -58,10 +60,10 @@ fi
 
 # summary
 
-if [ "$DEBIAN_STATUS $PYENV_STATUS" = "latest latest" ]; then
+if [ "$DEB_STATUS $PYENV_STATUS $UV_STATUS" = "latest latest latest" ]; then
   echo "All dependencies are up to date!"
   exit 0
 else
-  echo "Dependencies changed, project update required."
+  echo "Dependencies changed, project update required." >&2
   exit 1
 fi
