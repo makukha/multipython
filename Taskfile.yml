@@ -23,7 +23,7 @@ tasks:
     desc: Run linters.
     cmds:
       - hadolint Dockerfile tests/Dockerfile
-      - shellcheck bin/*.sh tests/share/*.sh
+      - shellcheck bin/*.sh tests/share/*.sh .dev/*.sh
 
   build:
     desc: Build all docker images.
@@ -40,9 +40,10 @@ tasks:
     cmds:
       - docker buildx bake stable
 
-#  build:docs:
-#    desc: Build docs.
-#    cmds:
+  docs:
+    desc: Update docs.
+    cmds:
+      - bash .dev/gen-package-versions.sh > docs/tab/package-versions.md
 
   clean:
     desc: Prune local tags, images, and build cache.
@@ -83,9 +84,9 @@ tasks:
     desc: Bump release version.
     cmds:
       - uvx bump-my-version bump --dry-run --verbose release
-      - task: version:bump
+      - task: _bump
 
-  version:bump:
+  _bump:
     internal: true
     prompt: The version will be bumped as above. Continue?
     cmds:
