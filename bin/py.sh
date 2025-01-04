@@ -10,6 +10,7 @@ MULTIPYTHON_ROOT=/root/.multipython
 MULTIPYTHON_INFO="$MULTIPYTHON_ROOT/info.json"
 
 PYENV_ROOT=$(pyenv root)
+UV_ROOT=$(uv python dir)
 
 
 # helpers
@@ -28,7 +29,7 @@ _py_tag () {
   _py_short | sed 's/^/py/; s/\.//'
 }
 
-_py_sys () {
+_propose_sys_tag () {
   # first, try stable CPyton w/o free threading
   PYTHON_VER="$(_py_ls_long | sed '/[0-9]\(a\|b\|rc\)/d; /t$/d' | head -1)"
   if [ -z "$PYTHON_VER" ]; then
@@ -39,7 +40,7 @@ _py_sys () {
       PYTHON_VER="$(_py_ls_long | head -1)"
     fi
   fi
-  echo "$PYTHON_VER"
+  echo "$PYTHON_VER" | _py_tag
 }
 
 _py_ls_all () {
@@ -55,7 +56,7 @@ _py_ls_all () {
 py_bin () {
   # helpers
   _filter_tag () {
-    if [ -z "$1" ]; then
+    if [ "$1" = "" ]; then
       cat
     else
       sed -n '/^'"$1"' /p'
@@ -64,24 +65,27 @@ py_bin () {
   _to_bin () {
     case $1 in
       --cmd)  awk '{print "python"$2}' ;;
-      --dir)  awk '{print "'"$PYENV_ROOT/versions/"'"$2"/bin"}' ;;
-      --path) awk '{print "'"$PYENV_ROOT/versions/"'"$2"/bin/python"}' ;;
+      --dir)  awk '{print "'"$PYENV_ROOT/versions/"'"$3"/bin"}' ;;
+      --path) awk '{print "'"$PYENV_ROOT/versions/"'"$3"/bin/python"}' ;;
     esac
   }
-
   # parse options
-  if [ "$#" -gt 0 ]; then
-    case $1 in
-      --cmd|--dir|--path) OPTION="$1"; shift ;;
-      *) OPTION=--cmd ;;
-    esac
+  if [ "$#" = 0 ]; then
+    echo "Option required" >&2
+    exit 1
   else
-    OPTION=--cmd
+    case $1 in
+      -c|--cmd) OPTION=--cmd; shift ;;
+      -d|--dir) OPTION=--dir; shift ;;
+      -p|--path) OPTION=--path; shift ;;
+      *)
+        echo "Unknown option: $1" >&2
+        exit 1
+        ;;
+    esac
   fi
-  TAG="${1:-}"
-
   # run
-  _py_ls_all | _filter_tag "$TAG" | _to_bin "$OPTION"
+  _py_ls_all | _filter_tag "${1:-}" | _to_bin "$OPTION"
 }
 
 py_info () {
@@ -99,51 +103,38 @@ py_info () {
     esac
   fi
 
-  PYTHON_TAG="$(py_sys)"
-
-  _pip_pkg_version () {
-    $1 -m pip show --version "$2" 2>/dev/null | sed -n 's/Version: //p'
-  }
+  SYS_TAG="$(py_sys)"
 
   _python_info () {
     while IFS= read -r line || [ -n "$line" ]
     do
       IFS=' ' read -r tag short long comma <<<"$line"
-      comma="$(sed 's/comma/,//' "$comma")"
-      PYTHON="$(py_bin "$tag")"
+      PYTHON="$(py_bin -c "$tag")"
+      if [ "$tag" = "$SYS_TAG" ]; then
+        IS_SYSTEM=true
+      else
+        IS_SYSTEM=false
+      fi
       echo '    {'
-      echo '      "version": "'"$LONG"'",'
+      echo '      "version": "'"$long"'",'
       echo '      "source": "pyenv",'
-      echo '      "tag": "'"$TAG"'",'
-      echo '      "short": "'"$SHORT"'",'
+      echo '      "tag": "'"$tag"'",'
+      echo '      "short": "'"$short"'",'
       echo '      "command": "'"$PYTHON"'",'
-      echo '      "bin_dir": "'"$(py_bin --dir "$LONG")"'",'
-      echo '      "binary_path": "'"$(py_bin --path "$LONG")"'",'
-      if [ "$LONG" = "$PYTHON_VER" ]; then
-        echo '      "is_system": true,'
-      else
-        echo '      "is_system": false,'
-      fi
+      echo '      "bin_dir": "'"$(py_bin -d "$tag")"'",'
+      echo '      "binary_path": "'"$(py_bin -p "$tag")"'",'
+      echo '      "is_system": '"$IS_SYSTEM"','
       echo '      "packages": {'
-      echo '        "pip": "'"$(_pip_pkg_version "$PYTHON" pip)"'",'
-      echo -n '        "setuptools": "'"$(_pip_pkg_version "$PYTHON" setuptools)"'"'
-      TOX_VER="$(_pip_pkg_version "$PYTHON" tox || echo "")"
-      if [ -n "$TOX_VER" ]; then
-        echo ','
-        echo '        "tox": "'"$TOX_VER"'"'
-      else
-        echo
-      fi
+      "$PYTHON" -m pip freeze --all | sed 's/^/        "/; s/==/": "/; s/$/"/; $! s/$/,/'
       echo '      }'
-      echo '    }'"$COMMA"
+      echo '    }'"$comma"
     done
   }
 
   PYENV_VER="$(pyenv --version 2>/dev/null | cut -d' ' -f2)"
-  TOX_VER="$( (tox -q --version 2>/dev/null | cut -d' ' -f1) || echo -n "" )"
+  TOX_VER="$( (tox -q --version 2>/dev/null | cut -d' ' -f1) || echo "" )"
   UV_VER="$(uv --version 2>/dev/null | cut -d' ' -f2)"
-  VENV_VER="$( (virtualenv --version 2>/dev/null | cut -d' ' -f2 ) || echo -n "")"
-  VENVMPY_VER="$(_pip_pkg_version "python" virtualenv-multipython || echo -n "")"
+  VENV_VER="$( (virtualenv --version 2>/dev/null | cut -d' ' -f2) || echo "" )"
 
   echo '{'
   echo '  "multipython": {'
@@ -166,17 +157,12 @@ py_info () {
   if [ -n "$UV_VER" ]; then
     echo '  "uv": {'
     echo '    "version": "'"$UV_VER"'"',
-    echo '    "python_versions": "'"$(uv python dir)"'"'
+    echo '    "python_versions": "'"$UV_ROOT"'"'
     echo '  },'
   fi
   if [ -n "$VENV_VER" ]; then
     echo '  "virtualenv": {'
     echo '    "version": "'"$VENV_VER"'"'
-    echo '  },'
-  fi
-  if [ -n "$VENVMPY_VER" ]; then
-    echo '  "virtualenv-multipython": {'
-    echo '    "version": "'"$VENVMPY_VER"'"'
     echo '  },'
   fi
   echo '  "base_image": {'
@@ -189,7 +175,7 @@ py_info () {
     echo '  "python": []'
   else
     echo '  "python": ['
-    _py_ls_all | sed '$ ! s/$/ comma/; $ s/$/ nothing/' | _python_info
+    _py_ls_all | sed '$ ! s/$/ ,/; $ s/$/ /' | _python_info
     echo '  ]'
   fi
   echo '}'
@@ -210,42 +196,80 @@ py_install () {
     shift; shift
   fi
 
-  _pip_install () {
-    while IFS=$'\n' read -r short
+  _pip_snapshot_file () {
+    echo "$(py_bin -d "$1")/../lib/.multipython.original"
+  }
+
+  _all_pip_snapshot () {
+    while IFS=$'\n' read -r tag
     do
+      FN="$(_pip_snapshot_file "$tag")"
+      PIP="$(py_bin -p "$tag") -m pip"
+      if [ ! -f "$FN" ]; then
+        $PIP freeze --all 2>/dev/null > "$FN"
+      fi
+    done
+  }
+
+  _all_pip_rollback () {
+    while IFS=$'\n' read -r tag
+    do
+      FN="$(_pip_snapshot_file "$tag")"
+      PIP="$(py_bin -p "$tag") -m pip"
+      if [ -f "$FN" ]; then
+        $PIP freeze 2>/dev/null | xargs -r $PIP uninstall -y
+        _all_pip_install -r "$FN" <<<"$tag"
+      else
+        echo "Snapshot not available: $FN" >&2
+        exit 1
+      fi
+    done
+  }
+
+  _all_pip_ensure_original () {
+    while IFS=$'\n' read -r tag
+    do
+      FN="$(_pip_snapshot_file "$tag")"
+      if [ ! -f "$FN" ]; then
+        _all_pip_snapshot <<<"$tag"
+      else
+        _all_pip_rollback <<<"$tag"
+      fi
+    done
+  }
+
+  _all_pip_install () {
+    while IFS=$'\n' read -r tag
+    do
+      short="$(_py_ls_all | sed -n '/^'"$tag"'/p' | awk '{print $2}')"
       case $short in
         2.7) PIP_ARGS="--no-cache-dir" ;;
         3.5) PIP_ARGS="--no-cache-dir --cert=/etc/ssl/certs/ca-certificates.crt" ;;
         3.6) PIP_ARGS="--no-cache-dir" ;;
         *)   PIP_ARGS="--no-cache-dir --root-user-action=ignore" ;;
       esac
-      "python$short" -m pip install $PIP_ARGS "$@"
-    done
-  }
-
-  _pip_uninstall () {
-    while IFS=$'\n' read -r short
-    do
-      "python$short" -m pip uninstall --yes "$@"
+      "$(py_bin -p "$tag")" -m pip install $PIP_ARGS "$@"
     done
   }
 
   # link individual distributions
-  _py_ls_all | sed 's|\(\S\+\) \(\S\+\) .*|'"$PYENV_ROOT"'/versions/\1/bin/python /usr/local/bin/python\2|' \
-    | xargs -I% sh -c 'ln -s %'
+  paste -d' ' \
+    <(_py_ls_all | py_bin -p) \
+    <(_py_ls_all | awk '{print "/usr/local/bin/python"$2}') \
+  | xargs -r -I% sh -c 'ln -s %'
 
-  # install/update individual pip, tox, setuptools
-  _py_ls_long | _py_short | _pip_install -U pip setuptools
+  # install/update individual pip and setuptools
+  py_ls -t | _all_pip_install -U pip setuptools
+
+  # freeze or roll back to original state
+  py_ls -t | _all_pip_ensure_original
 
   # link system executable
-  PYTHON_VER="$(_py_sys)"
+  SYS_TAG="$(_propose_sys_tag)"
   test -h "$MULTIPYTHON_ROOT/sys" && unlink "$MULTIPYTHON_ROOT/sys"
-  ln -s "$(py_bin --dir "$PYTHON_VER")" "$MULTIPYTHON_ROOT/sys"
+  ln -s "$(py_bin -d "$SYS_TAG")" "$MULTIPYTHON_ROOT/sys"
 
-  # uninstall tox in all distributions
-  _py_ls_long | _py_short | _pip_uninstall tox
-
-  # install system tox
+  # determine min tox version
   PY_MIN="$(_py_ls_long | _py_short | sed 's/^[^0-9]\+//' | sort -V | head -1)"
   if [ "$PY_MIN" = "$(echo -e "3.6\n$PY_MIN" | sort -V | head -1)" ]; then
     # PY_MIN<=3.6
@@ -256,24 +280,24 @@ py_install () {
   else
     TOX_PIN="virtualenv"
   fi
-  echo "$PYTHON_VER" | _py_short | _pip_install "$TOX_PIN" tox
 
-  # install virtualenv-multipython if possible (except py27)
-  echo "$PYTHON_VER" | _py_short | _pip_install virtualenv-multipython || true
+  # install system tox and plugins
+  py_sys | _all_pip_install --force-reinstall "$TOX_PIN" tox virtualenv-multipython
 
   # generate and validate versions info
   py_info | tee "$MULTIPYTHON_INFO" | jq
 }
 
 py_ls () {
-  if [ $# = 0 ]; then
-    _py_ls_long
+  if [ "$#" = 0 ]; then
+    echo "Option required" >&2
+    exit 1
   else
     case $1 in
       -l|--long) _py_ls_long ;;
       -s|--short) _py_ls_long | _py_short ;;
       -t|--tag) _py_ls_long | _py_tag ;;
-      --all) _py_ls_all ;;
+      -a|--all) _py_ls_all ;;
       *)
         echo "Unknown option: $1" >&2
         exit 1
@@ -286,33 +310,15 @@ py_sys () {
   if [ -z "$(command -v python)" ]; then
     exit 0
   fi
-
-  if [ $# = 0 ]; then
-    OPT=--long
-  else
-    OPT="$1"
-  fi
-
   VERB="$(python -VV | head -1 | sed 's/ (.*/ (/')"
-  TAG="$(sed -n "s/ $VERB$//p" "$MULTIPYTHON_ROOT/verbose.txt")"
-
-  case $OPT in
-    --long) _py_ls_all | sed -n '/ '"$TAG"'$/p' | cut -d' ' -f1 ;;
-    --short) _py_ls_all | sed -n '/ '"$TAG"'$/p' | cut -d' ' -f2 ;;
-    --tag) echo "$TAG" ;;
-    --table) _py_ls_all | sed -n '/ '"$TAG"'$/p' ;;
-    *)
-      echo "Unknown option: $OPT" >&2
-      exit 1
-      ;;
-  esac
+  sed -n "s/ $VERB$//p" "$MULTIPYTHON_ROOT/verbose.txt"
 }
 
 py_usage () {
-  echo "usage: py bin [--cmd|--dir|--path] [TAG]"
+  echo "usage: py bin {--cmd|--dir|--path} [TAG]"
   echo "       py info [--cached]"
   echo "       py install"
-  echo "       py ls [--long|--short|--tag|--all]"
+  echo "       py ls {--long|--short|--tag|--all}"
   echo "       py root"
   echo "       py sys"
   echo "       py --version"
@@ -327,9 +333,9 @@ py_usage () {
   echo "  sys      Show system python tag"
   echo
   echo "binary info formats:"
-  echo "  --cmd   Command name, expected to be on PATH"
-  echo "  --dir   Path to distribution bin directory"
-  echo "  --path  Path to distribution binary"
+  echo "  -c --cmd   Command name, expected to be on PATH"
+  echo "  -d --dir   Path to distribution bin directory"
+  echo "  -p --path  Path to distribution binary"
   echo
   echo "version formats:"
   echo "  -l --long   Full version without prefix, e.g. 3.9.12"

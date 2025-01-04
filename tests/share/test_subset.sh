@@ -32,10 +32,10 @@ py --version | diff -s - <(echo "multipython $(jq -r .multipython.version < info
 
 echo -e "\n>>> Testing: $SUBSET: py bin..."
 if [ "$SUBSET" = "base" ]; then
-  py bin | [ ! -t 0 ]
   py bin --cmd | [ ! -t 0 ]
   py bin --path | [ ! -t 0 ]
   py bin --dir | [ ! -t 0 ]
+  ! py bin
 else
   _py_bin_cmds () {
     paste -d' ' "data/ls.txt" "data/bin.txt" | filter_subset | awk '{print $5}'
@@ -47,20 +47,19 @@ else
     _py_bin_paths | sed 's|/python$||'
   }
   # all versions
-  py bin | diff -s - <(_py_bin_cmds)
   py bin --cmd | diff -s - <(_py_bin_cmds)
   py bin --dir | diff -s - <(_py_bin_dirs)
   py bin --path | diff -s - <(_py_bin_paths)
   # single versions
-  py ls --tag | xargs -n1 py bin | diff -s - <(_py_bin_cmds)
   py ls --tag | xargs -n1 py bin --cmd | diff -s - <(_py_bin_cmds)
   py ls --tag | xargs -n1 py bin --dir | diff -s -  <(_py_bin_dirs)
   py ls --tag | xargs -n1 py bin --path | diff -s - <(_py_bin_paths)
   # invalid version
-  py bin 0.0.0 | [ ! -t 0 ]
   py bin --cmd 0.0.0 | [ ! -t 0 ]
   py bin --path 0.0.0 | [ ! -t 0 ]
   py bin --dir 0.0.0 | [ ! -t 0 ]
+  # option required
+  ! py bin
 fi
 
 
@@ -93,13 +92,18 @@ fi
 
 echo -e "\n>>> Testing: $SUBSET: py ls..."
 if [ "$SUBSET" = "base" ]; then
-  py ls | [ ! -t 0 ]
+  py ls --long | [ ! -t 0 ]
+  py ls --short | [ ! -t 0 ]
+  py ls --tag | [ ! -t 0 ]
+  py ls --all | [ ! -t 0 ]
+  ! py ls
 else
-  py ls | diff -s - <(cat "data/ls.txt" | filter_subset | awk '{print $3}')
   py ls --long | diff -s - <(cat "data/ls.txt" | filter_subset | awk '{print $3}')
   py ls --short | diff -s - <(cat "data/ls.txt" | filter_subset | awk '{print $2}')
   py ls --tag | diff -s - <(cat "data/ls.txt" | filter_subset | awk '{print $1}')
   py ls --all | diff -s - <(cat "data/ls.txt" | filter_subset)
+  # option required
+  ! py ls
 fi
 
 

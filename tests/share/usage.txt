@@ -1,7 +1,7 @@
-usage: py bin [--cmd|--dir|--path] [TAG]
+usage: py bin {--cmd|--dir|--path} [TAG]
        py info [--cached]
        py install
-       py ls [--long|--short|--tag|--all]
+       py ls {--long|--short|--tag|--all}
        py root
        py sys
        py --version
@@ -16,9 +16,9 @@ commands:
   sys      Show system python tag
 
 binary info formats:
-  --cmd   Command name, expected to be on PATH
-  --dir   Path to distribution bin directory
-  --path  Path to distribution binary
+  -c --cmd   Command name, expected to be on PATH
+  -d --dir   Path to distribution bin directory
+  -p --path  Path to distribution binary
 
 version formats:
   -l --long   Full version without prefix, e.g. 3.9.12
