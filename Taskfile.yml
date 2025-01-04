@@ -2,15 +2,8 @@ version: '3'
 
 vars:
   IMG: makukha/multipython
-  RELEASE: {sh: yq -oy '.tool.bumpversion.current_version' .bumpversion.toml}
 
 tasks:
-
-  init:
-    desc: Init local dev environment.
-    cmds:
-      - cmd: uv tool install "{{.ITEM}}"
-        for: [bump-my-version, docsub, towncrier]
 
   checkupd:
     desc: Check for version updates.
@@ -36,7 +29,6 @@ tasks:
     desc: Build all docker images.
     cmds:
       - docker buildx bake
-      - docker run --rm {{.IMG}}:latest py info -c > info/latest.json
 
   build:base:
     desc: Build base image.
@@ -48,9 +40,9 @@ tasks:
     cmds:
       - docker buildx bake stable
 
-  build:docs:
-    desc: Build docs.
-    cmds:
+#  build:docs:
+#    desc: Build docs.
+#    cmds:
 
   clean:
     desc: Prune local tags, images, and build cache.
@@ -68,8 +60,10 @@ tasks:
 
   shell:*:
     desc: Shell to image {base,tox,py*,latest}.
+    vars:
+      TAG: "{{index .MATCH 0}}"
     cmds:
-      - docker run --rm -it {{.CLI_ARGS}} {{.IMG}}:{{index .MATCH 0}} /bin/bash
+      - docker run --rm -it {{.CLI_ARGS}} -h {{.TAG}} {{.IMG}}:{{.TAG}} /bin/bash
 
   run:*:
     desc: Run command in image {base,py*,latest} container.
@@ -107,6 +101,8 @@ tasks:
   release:push:
     desc: Push base images to Docker Registry.
     prompt: Release all images. Continue?
+    vars:
+      RELEASE: {sh: yq -oy '.tool.bumpversion.current_version' .bumpversion.toml}
     status:  # guard against overwriting
       - docker pull {{.IMG}}:{{.RELEASE}}
     cmds:
