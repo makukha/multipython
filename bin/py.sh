@@ -310,7 +310,7 @@ py_sys () {
   if [ -z "$(command -v python)" ]; then
     exit 0
   fi
-  VERB="$(python -VV | head -1 | sed 's/ (.*/ (/')"
+  VERB="$(python -VV 2>&1 | head -1 | sed 's/ (.*/ (/')"
   sed -n "s/ $VERB$//p" "$MULTIPYTHON_ROOT/verbose.txt"
 }
 
