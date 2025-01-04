@@ -14,73 +14,78 @@ PYENV_ROOT=$(pyenv root)
 
 # helpers
 
-py_ls_long () {
+_py_ls_long () {
   if [ -d "$PYENV_ROOT/versions" ]; then
     ls -1 "$PYENV_ROOT/versions" | sed 's/\(.*t\)$/t\1/' | sort -rV | sed 's/^t//'
   fi
 }
 
-py_short () {
+_py_short () {
   sed 's/^\([0-9]*\)\.\([0-9]*\)[^t]*\(t\?\)$/\1.\2\3/'
 }
 
-py_tag () {
-  py_short | sed 's/^/py/; s/\.//'
+_py_tag () {
+  _py_short | sed 's/^/py/; s/\.//'
 }
 
 _py_sys () {
   # first, try stable CPyton w/o free threading
-  PYTHON_VER="$(py_ls_long | sed '/[0-9]\(a\|b\|rc\)/d; /t$/d' | head -1)"
+  PYTHON_VER="$(_py_ls_long | sed '/[0-9]\(a\|b\|rc\)/d; /t$/d' | head -1)"
   if [ -z "$PYTHON_VER" ]; then
     # second, try latest CPython
-    PYTHON_VER="$(py_ls_long | sed '/t$/d' | head -1)"
+    PYTHON_VER="$(_py_ls_long | sed '/t$/d' | head -1)"
     if [ -z "$PYTHON_VER" ]; then
       # third, use whatever latest CPython
-      PYTHON_VER="$(py_ls_long | head -1)"
+      PYTHON_VER="$(_py_ls_long | head -1)"
     fi
   fi
   echo "$PYTHON_VER"
 }
 
-py_ls_table () {
- paste -d' ' <(py_ls_long) <(py_ls_long | py_short) <(py_ls_long | py_tag)
+_py_ls_all () {
+  _py_ls_long | while IFS= read -r long
+  do
+    echo "$(_py_tag <<<"$long")" "$(_py_short <<<"$long")" "$long"
+  done
 }
 
 
 # commands
 
 py_bin () {
-  _filter () {
-    if [ -z "${1:-}" ]; then
+  # helpers
+  _filter_tag () {
+    if [ -z "$1" ]; then
       cat
     else
-      sed 's/\(.*\)/ \1 /' | sed -n '/ '"$1"' /p' | sed 's/^ //;s/ $//'
+      sed -n '/^'"$1"' /p'
     fi
   }
-
   _to_bin () {
     case $1 in
-      --cmd)  sed 's|^\(\S\+\) \(\S\+\) .*|python\2|' ;;
-      --dir)  sed 's|^\(\S\+\) .*|'"$PYENV_ROOT"'/versions/\1/bin|' ;;
-      --path) sed 's|^\(\S\+\) .*|'"$PYENV_ROOT"'/versions/\1/bin/python|' ;;
+      --cmd)  awk '{print "python"$2}' ;;
+      --dir)  awk '{print "'"$PYENV_ROOT/versions/"'"$2"/bin"}' ;;
+      --path) awk '{print "'"$PYENV_ROOT/versions/"'"$2"/bin/python"}' ;;
     esac
   }
 
   # parse options
-  if [ -z "${1+x}" ]; then
-    TYPE="--cmd"
-  elif [ "$1" = "--dir" ] || [ "$1" = "--path" ]; then
-    TYPE="$1"; shift
+  if [ "$#" -gt 0 ]; then
+    case $1 in
+      --cmd|--dir|--path) OPTION="$1"; shift ;;
+      *) OPTION=--cmd ;;
+    esac
   else
-    TYPE="--cmd"
+    OPTION=--cmd
   fi
-  ARG="${1:-}"
+  TAG="${1:-}"
 
   # run
-  py_ls_table | _filter "$ARG" | _to_bin "$TYPE"
+  _py_ls_all | _filter_tag "$TAG" | _to_bin "$OPTION"
 }
 
 py_info () {
+  # parse options
   if [ "$#" -gt 0 ]; then
     case $1 in
       -c|--cached)
@@ -94,22 +99,18 @@ py_info () {
     esac
   fi
 
-  PYTHON_VER="$(py_sys)"
+  PYTHON_TAG="$(py_sys)"
 
   _pip_pkg_version () {
     $1 -m pip show --version "$2" 2>/dev/null | sed -n 's/Version: //p'
   }
 
   _python_info () {
-    while IFS='' read -r line || [ -n "$line" ]
+    while IFS= read -r line || [ -n "$line" ]
     do
-      IFS=' ' read -r LONG SHORT TAG COMMA <<<"$line"
-      if [ "$COMMA" = "comma" ]; then
-        COMMA=,
-      else
-        COMMA=
-      fi
-      PYTHON="$(py_bin "$LONG")"
+      IFS=' ' read -r tag short long comma <<<"$line"
+      comma="$(sed 's/comma/,//' "$comma")"
+      PYTHON="$(py_bin "$tag")"
       echo '    {'
       echo '      "version": "'"$LONG"'",'
       echo '      "source": "pyenv",'
@@ -184,11 +185,11 @@ py_info () {
   echo '    "digest": "'"$(cat $MULTIPYTHON_ROOT/base_image_digest)"'"'
   echo '  },'
 
-  if [ "$(py_ls_long)" == "" ]; then
+  if [ "$(_py_ls_long)" == "" ]; then
     echo '  "python": []'
   else
     echo '  "python": ['
-    py_ls_table | sed '$ ! s/$/ comma/; $ s/$/ nothing/' | _python_info
+    _py_ls_all | sed '$ ! s/$/ comma/; $ s/$/ nothing/' | _python_info
     echo '  ]'
   fi
   echo '}'
@@ -196,7 +197,7 @@ py_info () {
 
 py_install () {
   # shortcut
-  if [ -z "$(py_ls_table)" ]; then
+  if [ -z "$(_py_ls_all)" ]; then
     echo No Python distributions found. >&2
     exit 1
   fi
@@ -230,11 +231,11 @@ py_install () {
   }
 
   # link individual distributions
-  py_ls_table | sed 's|\(\S\+\) \(\S\+\) .*|'"$PYENV_ROOT"'/versions/\1/bin/python /usr/local/bin/python\2|' \
+  _py_ls_all | sed 's|\(\S\+\) \(\S\+\) .*|'"$PYENV_ROOT"'/versions/\1/bin/python /usr/local/bin/python\2|' \
     | xargs -I% sh -c 'ln -s %'
 
   # install/update individual pip, tox, setuptools
-  py_ls_long | py_short | _pip_install -U pip setuptools
+  _py_ls_long | _py_short | _pip_install -U pip setuptools
 
   # link system executable
   PYTHON_VER="$(_py_sys)"
@@ -242,10 +243,10 @@ py_install () {
   ln -s "$(py_bin --dir "$PYTHON_VER")" "$MULTIPYTHON_ROOT/sys"
 
   # uninstall tox in all distributions
-  py_ls_long | py_short | _pip_uninstall tox
+  _py_ls_long | _py_short | _pip_uninstall tox
 
   # install system tox
-  PY_MIN="$(py_ls_long | py_short | sed 's/^[^0-9]\+//' | sort -V | head -1)"
+  PY_MIN="$(_py_ls_long | _py_short | sed 's/^[^0-9]\+//' | sort -V | head -1)"
   if [ "$PY_MIN" = "$(echo -e "3.6\n$PY_MIN" | sort -V | head -1)" ]; then
     # PY_MIN<=3.6
     TOX_PIN="virtualenv<20.22"
@@ -255,10 +256,10 @@ py_install () {
   else
     TOX_PIN="virtualenv"
   fi
-  echo "$PYTHON_VER" | py_short | _pip_install "$TOX_PIN" tox
+  echo "$PYTHON_VER" | _py_short | _pip_install "$TOX_PIN" tox
 
   # install virtualenv-multipython if possible (except py27)
-  echo "$PYTHON_VER" | py_short | _pip_install virtualenv-multipython || true
+  echo "$PYTHON_VER" | _py_short | _pip_install virtualenv-multipython || true
 
   # generate and validate versions info
   py_info | tee "$MULTIPYTHON_INFO" | jq
@@ -266,13 +267,13 @@ py_install () {
 
 py_ls () {
   if [ $# = 0 ]; then
-    py_ls_long
+    _py_ls_long
   else
     case $1 in
-      -l|--long) py_ls_long ;;
-      -s|--short) py_ls_long | py_short ;;
-      -t|--tag) py_ls_long | py_tag ;;
-      --table) py_ls_table ;;
+      -l|--long) _py_ls_long ;;
+      -s|--short) _py_ls_long | _py_short ;;
+      -t|--tag) _py_ls_long | _py_tag ;;
+      --all) _py_ls_all ;;
       *)
         echo "Unknown option: $1" >&2
         exit 1
@@ -296,10 +297,10 @@ py_sys () {
   TAG="$(sed -n "s/ $VERB$//p" "$MULTIPYTHON_ROOT/verbose.txt")"
 
   case $OPT in
-    --long) py_ls_table | sed -n '/ '"$TAG"'$/p' | cut -d' ' -f1 ;;
-    --short) py_ls_table | sed -n '/ '"$TAG"'$/p' | cut -d' ' -f2 ;;
+    --long) _py_ls_all | sed -n '/ '"$TAG"'$/p' | cut -d' ' -f1 ;;
+    --short) _py_ls_all | sed -n '/ '"$TAG"'$/p' | cut -d' ' -f2 ;;
     --tag) echo "$TAG" ;;
-    --table) py_ls_table | sed -n '/ '"$TAG"'$/p' ;;
+    --table) _py_ls_all | sed -n '/ '"$TAG"'$/p' ;;
     *)
       echo "Unknown option: $OPT" >&2
       exit 1
@@ -308,12 +309,12 @@ py_sys () {
 }
 
 py_usage () {
-  echo "usage: py bin [--dir|--path] <LONG|SHORT|TAG>"
+  echo "usage: py bin [--cmd|--dir|--path] [TAG]"
   echo "       py info [--cached]"
   echo "       py install"
-  echo "       py ls [--long|--short|--tag|--table]"
+  echo "       py ls [--long|--short|--tag|--all]"
   echo "       py root"
-  echo "       py sys [--long|--short|--tag|--table]"
+  echo "       py sys"
   echo "       py --version"
   echo "       py --help"
   echo
@@ -323,18 +324,21 @@ py_usage () {
   echo "  install  Install optional packages and symlinks"
   echo "  ls       List all distributions"
   echo "  root     Show multipython root path"
-  echo "  sys      Show system python version"
+  echo "  sys      Show system python tag"
+  echo
+  echo "binary info formats:"
+  echo "  --cmd   Command name, expected to be on PATH"
+  echo "  --dir   Path to distribution bin directory"
+  echo "  --path  Path to distribution binary"
   echo
   echo "version formats:"
   echo "  -l --long   Full version without prefix, e.g. 3.9.12"
   echo "  -s --short  Short version without prefix, e.g. 3.9"
   echo "  -t --tag    Python tag, e.g. py39, pp19"
-  echo "     --table  Lines 'long short tag', e.g. '3.9.3 3.9 py39'"
+  echo "  -a --all    Lines 'tag short long', e.g. 'py39 3.9 3.9.3'"
   echo
   echo "other options:"
   echo "  -c --cached  Show cached results"
-  echo "  --dir        Path to distribution bin directory"
-  echo "  --path       Path to distribution binary"
   echo "  --version    Show multipython distribution version"
   echo "  --help       Show this help and exit"
 }

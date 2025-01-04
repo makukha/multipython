@@ -10,7 +10,7 @@ if [ "$SUBSET" = "base" ]; then
 else
   TAGS="$(jq -r .python[].tag "info/$SUBSET.json" | xargs echo | sed 's/ /|/g; s/\./\\./g')"
   filter_subset () {
-    awk '$3 ~ /^('"$TAGS"')$/ {print $0}'
+    awk '$1 ~ /^('"$TAGS"')$/ {print $0}'
   }
 fi
 
@@ -31,41 +31,36 @@ py --version | diff -s - <(echo "multipython $(jq -r .multipython.version < info
 # TEST: py bin
 
 echo -e "\n>>> Testing: $SUBSET: py bin..."
-
 if [ "$SUBSET" = "base" ]; then
-
   py bin | [ ! -t 0 ]
-
+  py bin --cmd | [ ! -t 0 ]
+  py bin --path | [ ! -t 0 ]
+  py bin --dir | [ ! -t 0 ]
 else
-
   _py_bin_cmds () {
-    paste -d' ' "latest/ls-table.txt" "latest/bin.txt" | filter_subset | awk '{print $4}'
-  }
-  _py_bin_dirs () {
-    paste -d' ' "latest/ls-table.txt" "latest/bin-path.txt" | filter_subset | awk '{print $4}' | sed 's|/python$||'
+    paste -d' ' "data/ls.txt" "data/bin.txt" | filter_subset | awk '{print $5}'
   }
   _py_bin_paths () {
-    paste -d' ' "latest/ls-table.txt" "latest/bin-path.txt" | filter_subset | awk '{print $4}'
+    paste -d' ' "data/ls.txt" "data/bin.txt" | filter_subset | awk '{print $6}'
   }
-
+  _py_bin_dirs () {
+    _py_bin_paths | sed 's|/python$||'
+  }
   # all versions
   py bin | diff -s - <(_py_bin_cmds)
+  py bin --cmd | diff -s - <(_py_bin_cmds)
   py bin --dir | diff -s - <(_py_bin_dirs)
   py bin --path | diff -s - <(_py_bin_paths)
-
   # single versions
-  for variant in --long --short --tag
-  do
-    py ls "$variant" | xargs -n1 py bin | diff -s - <(_py_bin_cmds)
-    py ls "$variant" | xargs -n1 py bin --dir | diff -s -  <(_py_bin_dirs)
-    py ls "$variant" | xargs -n1 py bin --path | diff -s - <(_py_bin_paths)
-  done
-
+  py ls --tag | xargs -n1 py bin | diff -s - <(_py_bin_cmds)
+  py ls --tag | xargs -n1 py bin --cmd | diff -s - <(_py_bin_cmds)
+  py ls --tag | xargs -n1 py bin --dir | diff -s -  <(_py_bin_dirs)
+  py ls --tag | xargs -n1 py bin --path | diff -s - <(_py_bin_paths)
   # invalid version
   py bin 0.0.0 | [ ! -t 0 ]
+  py bin --cmd 0.0.0 | [ ! -t 0 ]
   py bin --path 0.0.0 | [ ! -t 0 ]
   py bin --dir 0.0.0 | [ ! -t 0 ]
-
 fi
 
 
@@ -97,18 +92,14 @@ fi
 # TEST: py ls
 
 echo -e "\n>>> Testing: $SUBSET: py ls..."
-
 if [ "$SUBSET" = "base" ]; then
-
   py ls | [ ! -t 0 ]
-
 else
-
-  py ls | diff -s - <(cat "latest/ls-table.txt" | filter_subset | awk '{print $1}')
-  py ls --long | diff -s - <(cat "latest/ls-table.txt" | filter_subset | awk '{print $1}')
-  py ls --short | diff -s - <(cat "latest/ls-table.txt" | filter_subset | awk '{print $2}')
-  py ls --tag | diff -s - <(cat "latest/ls-table.txt" | filter_subset | awk '{print $3}')
-
+  py ls | diff -s - <(cat "data/ls.txt" | filter_subset | awk '{print $3}')
+  py ls --long | diff -s - <(cat "data/ls.txt" | filter_subset | awk '{print $3}')
+  py ls --short | diff -s - <(cat "data/ls.txt" | filter_subset | awk '{print $2}')
+  py ls --tag | diff -s - <(cat "data/ls.txt" | filter_subset | awk '{print $1}')
+  py ls --all | diff -s - <(cat "data/ls.txt" | filter_subset)
 fi
 
 
@@ -121,27 +112,10 @@ echo -e "\n>>> Testing: $SUBSET: py root..."
 # TEST: py sys
 
 echo -e "\n>>> Testing: $SUBSET: py sys..."
-
 if [ "$SUBSET" = "base" ]; then
-
   py sys | [ ! -t 0 ]
-  py sys --long | [ ! -t 0 ]
-  py sys --short | [ ! -t 0 ]
-  py sys --tag | [ ! -t 0 ]
-  py sys --table | [ ! -t 0 ]
-
 else
-
-  LONG_SYS="$(jq -r '.python[] | select(.is_system==true) | .version' info/$SUBSET.json)"
-  SHORT_SYS="$(jq -r '.python[] | select(.is_system==true) | .short' info/$SUBSET.json)"
-  TAG_SYS="$(jq -r '.python[] | select(.is_system==true) | .tag' info/$SUBSET.json)"
-
-  [ "$(py sys)" = "$LONG_SYS" ]
-  [ "$(py sys --long)" = "$LONG_SYS" ]
-  [ "$(py sys --short)" = "$SHORT_SYS" ]
-  [ "$(py sys --tag)" = "$TAG_SYS" ]
-  py sys --table | diff -s - <(cat "latest/ls-table.txt" | awk '$3 ~ /^'"$TAG_SYS"'$/ {print $0}')
-
+  [ "$(py sys)" = "$(jq -r '.python[] | select(.is_system==true) | .tag' info/$SUBSET.json)" ]
 fi
 
 
