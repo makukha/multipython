@@ -124,8 +124,8 @@ target "test_base" {
   inherits = ["__test__"]
   dockerfile-inline = <<EOF
     FROM ${IMG}:base-${RELEASE}
-    COPY tests/shared /tmp/shared
-    RUN bash /tmp/shared/test_subset.sh base
+    COPY tests/share /tmp/share
+    RUN bash /tmp/share/test_subset.sh base
   EOF
 }
 
@@ -133,8 +133,8 @@ target "test_subsets" {
   inherits = ["__test__"]
   dockerfile-inline = <<EOF
     FROM ${IMG}:${SUBSET_ARGS[SUBSET]["RELEASE_TAG"]}
-    COPY tests/shared /tmp/shared
-    RUN bash /tmp/shared/test_subset.sh "${SUBSET}"
+    COPY tests/share /tmp/share
+    RUN bash /tmp/share/test_subset.sh "${SUBSET}"
   EOF
   matrix = {
     SUBSET = [
@@ -166,8 +166,8 @@ target "test_readme_advanced_test" {
   }
   dockerfile-inline = <<EOF
     FROM setup
-    COPY tests/shared /tmp/shared
-    COPY tests/test_readme_advanced/info.json /tmp/shared/test_readme_advanced/info.json
-    RUN bash /tmp/shared/test_subset.sh test_readme_advanced
+    COPY tests/share /tmp/share
+    COPY tests/test_readme_advanced/info.json /tmp/share/info/test_readme_advanced.json
+    RUN bash /tmp/share/test_subset.sh test_readme_advanced
   EOF
 }
