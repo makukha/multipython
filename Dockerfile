@@ -9,7 +9,7 @@ ARG MULTIPYTHON_ROOT=/root/.multipython
 # base
 
 FROM debian@${DEBIAN_DIGEST} AS base
-SHELL ["/bin/bash", "-eux", "-o", "pipefail", "-c"]
+SHELL ["/bin/bash", "-o", "errexit", "-o", "errtrace", "-o", "nounset", "-o", "pipefail", "-c"]
 
 RUN <<EOT
     apt-get update
@@ -64,18 +64,19 @@ RUN <<EOT
     rm -rf /tmp/* /var/tmp/*
 EOT
 
-COPY --chmod=755 py.sh /usr/local/bin/py
-COPY --chmod=755 py_checkupd.sh /usr/local/bin/py_checkupd
-
 ARG DEBIAN_DIGEST
 ARG MULTIPYTHON_ROOT
 ENV PATH="$MULTIPYTHON_ROOT/sys:$PYENV_ROOT/bin:$PATH"
+COPY --chmod=755 bin/py.sh /usr/local/bin/py
+COPY --chmod=755 bin/checkupd.sh $MULTIPYTHON_ROOT/
+COPY tests/shared/latest/verbose.txt $MULTIPYTHON_ROOT/verbose
 RUN <<EOT
-mkdir -p "${MULTIPYTHON_ROOT}"
-echo "${DEBIAN_DIGEST}" > "${MULTIPYTHON_ROOT}/debian_image_digest"
+echo "${DEBIAN_DIGEST}" > "${MULTIPYTHON_ROOT}/base_image_digest"
+echo "base" > "${MULTIPYTHON_ROOT}/subset"
 py info | tee "${MULTIPYTHON_ROOT}/info.json" | jq
 EOT
 
+ENV VIRTUALENV_DISCOVERY=multipython
 ENTRYPOINT []
 CMD ["/bin/bash"]
 
@@ -83,126 +84,61 @@ CMD ["/bin/bash"]
 # single version images
 
 FROM base AS py27
-ARG LONG
-# hadolint ignore=DL3013
-RUN <<EOT
-pyenv install ${LONG}
-$(py bin ${LONG}) -m pip install --no-cache-dir -U pip setuptools
-py install ${LONG}
-EOT
+ARG py27
+RUN pyenv install ${py27}; py install
 
 FROM base AS py35
-ARG LONG
-# hadolint ignore=DL3013
-RUN <<EOT
-pyenv install ${LONG}
-$(py bin ${LONG}) -m pip install --no-cache-dir -U pip setuptools
-py install ${LONG}
-EOT
+ARG py35
+RUN pyenv install ${py35}; py install
 
 FROM base AS py36
-ARG LONG
-# hadolint ignore=DL3013
-RUN <<EOT
-pyenv install ${LONG}
-$(py bin ${LONG}) -m pip install --no-cache-dir -U pip setuptools
-py install ${LONG}
-EOT
+ARG py36
+RUN pyenv install ${py36}; py install
 
 FROM base AS py37
-ARG LONG
-# hadolint ignore=DL3013
-RUN <<EOT
-pyenv install ${LONG}
-$(py bin ${LONG}) -m pip install --no-cache-dir -U pip setuptools
-py install ${LONG}
-EOT
+ARG py37
+RUN pyenv install ${py37}; py install
 
 FROM base AS py38
-ARG LONG
-# hadolint ignore=DL3013
-RUN <<EOT
-pyenv install ${LONG}
-$(py bin ${LONG}) -m pip install --no-cache-dir -U pip setuptools
-py install ${LONG}
-EOT
+ARG py38
+RUN pyenv install ${py38}; py install
 
 FROM base AS py39
-ARG LONG
-# hadolint ignore=DL3013
-RUN <<EOT
-pyenv install ${LONG}
-$(py bin ${LONG}) -m pip install --no-cache-dir -U pip setuptools
-py install ${LONG}
-EOT
+ARG py39
+RUN pyenv install ${py39}; py install
 
 FROM base AS py310
-ARG LONG
-# hadolint ignore=DL3013
-RUN <<EOT
-pyenv install ${LONG}
-$(py bin ${LONG}) -m pip install --no-cache-dir -U pip setuptools
-py install ${LONG}
-EOT
+ARG py310
+RUN pyenv install ${py310}; py install
 
 FROM base AS py311
-ARG LONG
-# hadolint ignore=DL3013
-RUN <<EOT
-pyenv install ${LONG}
-$(py bin ${LONG}) -m pip install --no-cache-dir -U pip setuptools
-py install ${LONG}
-EOT
+ARG py311
+RUN pyenv install ${py311}; py install
 
 FROM base AS py312
-ARG LONG
-# hadolint ignore=DL3013
-RUN <<EOT
-pyenv install ${LONG}
-$(py bin ${LONG}) -m pip install --no-cache-dir -U pip setuptools
-py install ${LONG}
-EOT
+ARG py312
+RUN pyenv install ${py312}; py install
 
 FROM base AS py313
-ARG LONG
-# hadolint ignore=DL3013
-RUN <<EOT
-pyenv install ${LONG}
-$(py bin ${LONG}) -m pip install --no-cache-dir -U pip setuptools
-py install ${LONG}
-EOT
+ARG py313
+RUN pyenv install ${py313}; py install
 
 FROM base AS py314
-ARG LONG
-# hadolint ignore=DL3013
-RUN <<EOT
-pyenv install ${LONG}
-$(py bin ${LONG}) -m pip install --no-cache-dir -U pip setuptools
-py install ${LONG}
-EOT
+ARG py314
+RUN pyenv install ${py314}; py install
 
 FROM base AS py313t
-ARG LONG
-# hadolint ignore=DL3013
-RUN <<EOT
-pyenv install ${LONG}
-$(py bin ${LONG}) -m pip install --no-cache-dir -U pip setuptools
-py install ${LONG}
-EOT
+ARG py313t
+RUN pyenv install ${py313t}; py install
 
 FROM base AS py314t
-ARG LONG
-# hadolint ignore=DL3013
-RUN <<EOT
-pyenv install ${LONG}
-$(py bin ${LONG}) -m pip install --no-cache-dir -U pip setuptools
-py install ${LONG}
-EOT
+ARG py314t
+RUN pyenv install ${py314t}; py install
 
 
-# final
+# latest
 
-FROM base AS final
+FROM base AS latest
 RUN mkdir /root/.pyenv/versions
 COPY --from=py27 /root/.pyenv/versions /root/.pyenv/versions/
 COPY --from=py35 /root/.pyenv/versions /root/.pyenv/versions/
@@ -217,4 +153,12 @@ COPY --from=py313 /root/.pyenv/versions /root/.pyenv/versions/
 COPY --from=py314 /root/.pyenv/versions /root/.pyenv/versions/
 COPY --from=py313t /root/.pyenv/versions /root/.pyenv/versions/
 COPY --from=py314t /root/.pyenv/versions /root/.pyenv/versions/
-RUN py install py313
+RUN py install --as latest
+
+
+# stable
+
+FROM base AS stable
+RUN mkdir /root/.pyenv/versions
+COPY --from=py313 /root/.pyenv/versions /root/.pyenv/versions/
+RUN py install --as stable
