@@ -11,3 +11,5 @@ docker pull makukha/multipython@latest
 ```shell
 docker run --rm -v .:/app makukha/multipython tox run --root /app
 ```
+
+Single version images have tox installed and can be used standalone.

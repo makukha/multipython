@@ -15,10 +15,10 @@ Images are expected to be updated in these cases:
 
 In all these and other cases, all images are rebuilt from ground up.
 
-## Initialize on macOS
+## Initialize dev environment
 
 ```shell
-$ zsh .dev/install-macports.sh
+$ task init
 ```
 
 ## Develop

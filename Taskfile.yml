@@ -5,6 +5,11 @@ vars:
 
 tasks:
 
+  init:
+    desc: Initialize dev environment.
+    cmds:
+      - sh .dev/install-macports.sh
+
   checkupd:
     desc: Check for version updates.
     cmds:
@@ -95,7 +100,7 @@ tasks:
 
   _bump:
     internal: true
-    prompt: The version will be bumped as above. Continue?
+    prompt: Version will be updated as above. Continue?
     cmds:
       - uvx bump-my-version bump release
 

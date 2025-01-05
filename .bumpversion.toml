@@ -16,12 +16,11 @@ serialize = ["{release}.{patch}", "{release}"]
 
 files = [
   {filename = "DOCKERHUB.md"},
-  {filename = "README.md"},
   {filename = "docker-bake.hcl"},
   {filename = "bin/py.sh"},
   {filename = "tests/share/info/base.json"},
   {filename = "tests/share/info/latest.json"},
   {filename = "tests/share/info/stable.json"},
   {filename = "tests/share/info/supported.json"},
-  {filename = "tests/share/info/test_readme_advanced.json"},
+  {filename = "tests/test_readme_advanced/info.json"},
 ]
