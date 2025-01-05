@@ -19,23 +19,23 @@
 
 # Supported tags and respective `Dockerfile` links
 
-* [`latest, 2025.1.3`](https://github.com/makukha/multipython/blob/v2025.1.3/Dockerfile) — *all Python versions, pyenv, tox, uv*
-* [`stable, stable-2025.1.3`](https://github.com/makukha/multipython/blob/v2025.1.3/Dockerfile) — *CPython 3.13.1 — latest stable version*
-* [`supported, supported-2025.1.3`](https://github.com/makukha/multipython/blob/v2025.1.3/Dockerfile) — *CPython 3.13.1 — latest stable version*
-* [`base, base-2025.1.3`](https://github.com/makukha/multipython/blob/v2025.1.3/Dockerfile) — *pyenv, uv*
-* [`py314t, py314t-2025.1.3`](https://github.com/makukha/multipython/blob/v2025.1.3/Dockerfile) — *CPython 3.14.0a3 free-threaded*
-* [`py313t, py313t-2025.1.3`](https://github.com/makukha/multipython/blob/v2025.1.3/Dockerfile) — *CPython 3.13.1 free-threaded*
-* [`py314, py314-2025.1.3`](https://github.com/makukha/multipython/blob/v2025.1.3/Dockerfile) — *CPython 3.14.0a3*
-* [`py313, py313-2025.1.3`](https://github.com/makukha/multipython/blob/v2025.1.3/Dockerfile) — *CPython 3.13.1*
-* [`py312, py312-2025.1.3`](https://github.com/makukha/multipython/blob/v2025.1.3/Dockerfile) — *CPython 3.12.8*
-* [`py311, py311-2025.1.3`](https://github.com/makukha/multipython/blob/v2025.1.3/Dockerfile) — *CPython 3.11.11*
-* [`py310, py310-2025.1.3`](https://github.com/makukha/multipython/blob/v2025.1.3/Dockerfile) — *CPython 3.10.16*
-* [`py39, py39-2025.1.3`](https://github.com/makukha/multipython/blob/v2025.1.3/Dockerfile) — *CPython 3.9.21*
-* [`py38, py38-2025.1.3`](https://github.com/makukha/multipython/blob/v2025.1.3/Dockerfile) — *CPython 3.8.20*
-* [`py37, py37-2025.1.3`](https://github.com/makukha/multipython/blob/v2025.1.3/Dockerfile) — *CPython 3.7.17*
-* [`py36, py36-2025.1.3`](https://github.com/makukha/multipython/blob/v2025.1.3/Dockerfile) — *CPython 3.6.15*
-* [`py35, py35-2025.1.3`](https://github.com/makukha/multipython/blob/v2025.1.3/Dockerfile) — *CPython 3.5.10*
-* [`py27, py27-2025.1.3`](https://github.co-m/makukha/multipython/blob/v2025.1.3/Dockerfile) — *CPython 2.7.18*
+* [`latest, 2513`](https://github.com/makukha/multipython/blob/v2513/Dockerfile) — *all Python versions, pyenv, tox, uv*
+* [`stable, stable-2513`](https://github.com/makukha/multipython/blob/v2513/Dockerfile) — *CPython 3.13.1 — latest stable version*
+* [`supported, supported-2513`](https://github.com/makukha/multipython/blob/v2513/Dockerfile) — *CPython 3.13.1 — latest stable version*
+* [`base, base-2513`](https://github.com/makukha/multipython/blob/v2513/Dockerfile) — *pyenv, uv*
+* [`py314t, py314t-2513`](https://github.com/makukha/multipython/blob/v2513/Dockerfile) — *CPython 3.14.0a3 free-threaded*
+* [`py313t, py313t-2513`](https://github.com/makukha/multipython/blob/v2513/Dockerfile) — *CPython 3.13.1 free-threaded*
+* [`py314, py314-2513`](https://github.com/makukha/multipython/blob/v2513/Dockerfile) — *CPython 3.14.0a3*
+* [`py313, py313-2513`](https://github.com/makukha/multipython/blob/v2513/Dockerfile) — *CPython 3.13.1*
+* [`py312, py312-2513`](https://github.com/makukha/multipython/blob/v2513/Dockerfile) — *CPython 3.12.8*
+* [`py311, py311-2513`](https://github.com/makukha/multipython/blob/v2513/Dockerfile) — *CPython 3.11.11*
+* [`py310, py310-2513`](https://github.com/makukha/multipython/blob/v2513/Dockerfile) — *CPython 3.10.16*
+* [`py39, py39-2513`](https://github.com/makukha/multipython/blob/v2513/Dockerfile) — *CPython 3.9.21*
+* [`py38, py38-2513`](https://github.com/makukha/multipython/blob/v2513/Dockerfile) — *CPython 3.8.20*
+* [`py37, py37-2513`](https://github.com/makukha/multipython/blob/v2513/Dockerfile) — *CPython 3.7.17*
+* [`py36, py36-2513`](https://github.com/makukha/multipython/blob/v2513/Dockerfile) — *CPython 3.6.15*
+* [`py35, py35-2513`](https://github.com/makukha/multipython/blob/v2513/Dockerfile) — *CPython 3.5.10*
+* [`py27, py27-2513`](https://github.co-m/makukha/multipython/blob/v2513/Dockerfile) — *CPython 2.7.18*
 
 
 # How to use this image

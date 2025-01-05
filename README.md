@@ -161,11 +161,11 @@ The default tox version v4.5.1.1 is dictated by [virtualenv support](https://vir
 
 Starting from Jan 2025, this project uses [CalVer](https://calver.org) convention with [Date62](http://github.com/date62/date62-python) based dates.
 
-Release version format is `YYMD[.P]`
+Release version format is `YYMD[.patch]`
 * `YY` is `25,26,...`
 * `M` is Base16 month (`1` = Jan, `A,B,C` = Oct, Nov, Dec)
 * `D` is Base62 day of month (from `1` to `V` = 31)
-* `.P` is optional suffix allowing multiple releases per day
+* `.patch` is optional numerical suffix allowing multiple releases per day
 
 # Security
 
