@@ -14,7 +14,7 @@ LATEST=()
 docker run --rm $IMG:stable py info -c > tmp/info/stable.json
 for (( i = 0; i < ${#PKG[@]}; i++ ))
 do
-  LATEST+=("$(jq -r '.python[] | select(.is_system==true) | .packages.'"${PKG[$i]}" tmp/info/stable.json)")
+  LATEST+=("$(jq -r '.python[] | select(.is_system==true) | .packages.'"${PKG[$i]}" "tmp/info/stable.json")")
 done
 
 # header
@@ -22,17 +22,17 @@ for col in Tag ${PKG[@]}; do echo -n "| $col "; done; echo "|"
 for col in Tag ${PKG[@]}; do echo -n "|---"; done; echo "|"
 
 print_rows () {
-  read -a TAGS <<<"$1"
+  read -ar TAGS <<<"$1"
   for tag in "${TAGS[@]}"
   do
     if [ "$tag" != "stable" ]; then
-      docker run --rm $IMG:$tag py info -c > tmp/info/$tag.json
+      docker run --rm "$IMG:$tag" py info -c > "tmp/info/$tag.json"
     fi
     echo -n "| "'`'"$tag"'`'" "
     for (( i = 0; i < ${#PKG[@]}; i++ ))
     do
-      V="$(jq -r ".python[] | select(.is_system==true) | .packages.${PKG[$i]}" tmp/info/$tag.json)"
-      printf "| $V"
+      V="$(jq -r ".python[] | select(.is_system==true) | .packages.${PKG[$i]}" "tmp/info/$tag.json")"
+      echo "| $V"
       if [ "$V" = "${LATEST[$i]}" ]; then printf ' \xE2\x9C\xA8 '; else printf ' '; fi
     done
     echo "|"

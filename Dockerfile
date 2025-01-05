@@ -1,7 +1,3 @@
-# hadolint global ignore=DL3008,DL4006
-# DL3008 => apt pakage versions are not locked in this project
-# DL4006 => -o pipefail is already set globally
-
 ARG DEBIAN_DIGEST=sha256:5f21ebd358442f40099c997a3f4db906a7b1bd872249e67559f55de654b55d3b
 ARG PYENV_ROOT=/root/.pyenv
 ARG MULTIPYTHON_ROOT=/root/.multipython
@@ -11,6 +7,7 @@ ARG MULTIPYTHON_ROOT=/root/.multipython
 FROM debian@${DEBIAN_DIGEST} AS base
 SHELL ["/bin/bash", "-o", "errexit", "-o", "errtrace", "-o", "nounset", "-o", "pipefail", "-c"]
 
+# hadolint ignore=DL3008
 RUN <<EOT
     apt-get update
     apt-get install -y --no-install-recommends \

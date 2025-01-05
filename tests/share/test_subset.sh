@@ -1,4 +1,5 @@
 #!/bin/bash
+# shellcheck disable=SC2266
 set -eEux -o pipefail
 
 
@@ -6,7 +7,8 @@ cd /tmp/share
 SUBSET="$1"
 
 if [ "$SUBSET" = "base" ]; then
-  filter_subset=cat
+  # shellcheck disable=SC2034
+  filter_subset="cat"
 else
   TAGS="$(jq -r .python[].tag "info/$SUBSET.json" | xargs echo | sed 's/ /|/g; s/\./\\./g')"
   filter_subset () {
@@ -25,7 +27,7 @@ py | diff -s - "usage.txt"
 # TEST: py --version
 
 echo -e "\n>>> Testing: $SUBSET: py --version..."
-py --version | diff -s - <(echo "multipython $(jq -r .multipython.version < info/$SUBSET.json)")
+py --version | diff -s - <(echo "multipython $(jq -r .multipython.version < "info/$SUBSET.json")")
 
 
 # TEST: py bin
@@ -35,7 +37,7 @@ if [ "$SUBSET" = "base" ]; then
   py bin --cmd | [ ! -t 0 ]
   py bin --path | [ ! -t 0 ]
   py bin --dir | [ ! -t 0 ]
-  ! py bin
+  py bin && exit 1
 else
   _py_bin_cmds () {
     paste -d' ' "data/ls.txt" "data/bin.txt" | filter_subset | awk '{print $5}'
@@ -59,7 +61,7 @@ else
   py bin --path 0.0.0 | [ ! -t 0 ]
   py bin --dir 0.0.0 | [ ! -t 0 ]
   # option required
-  ! py bin
+  py bin && exit 1
 fi
 
 
@@ -96,14 +98,14 @@ if [ "$SUBSET" = "base" ]; then
   py ls --short | [ ! -t 0 ]
   py ls --tag | [ ! -t 0 ]
   py ls --all | [ ! -t 0 ]
-  ! py ls
+  py ls && exit 1
 else
-  py ls --long | diff -s - <(cat "data/ls.txt" | filter_subset | awk '{print $3}')
-  py ls --short | diff -s - <(cat "data/ls.txt" | filter_subset | awk '{print $2}')
-  py ls --tag | diff -s - <(cat "data/ls.txt" | filter_subset | awk '{print $1}')
-  py ls --all | diff -s - <(cat "data/ls.txt" | filter_subset)
+  py ls --long | diff -s - <(filter_subset < data/ls.txt | awk '{print $3}')
+  py ls --short | diff -s - <(filter_subset < data/ls.txt | awk '{print $2}')
+  py ls --tag | diff -s - <(filter_subset < data/ls.txt | awk '{print $1}')
+  py ls --all | diff -s - <(filter_subset < data/ls.txt)
   # option required
-  ! py ls
+  py ls && exit 1
 fi
 
 
@@ -119,7 +121,7 @@ echo -e "\n>>> Testing: $SUBSET: py sys..."
 if [ "$SUBSET" = "base" ]; then
   py sys | [ ! -t 0 ]
 else
-  [ "$(py sys)" = "$(jq -r '.python[] | select(.is_system==true) | .tag' info/$SUBSET.json)" ]
+  [ "$(py sys)" = "$(jq -r '.python[] | select(.is_system==true) | .tag' "info/$SUBSET.json")" ]
 fi
 
 

@@ -17,6 +17,7 @@ UV_ROOT=$(uv python dir)
 
 _py_ls_long () {
   if [ -d "$PYENV_ROOT/versions" ]; then
+    # shellcheck disable=SC2012
     ls -1 "$PYENV_ROOT/versions" | sed 's/\(.*t\)$/t\1/' | sort -rV | sed 's/^t//'
   fi
 }
@@ -217,6 +218,7 @@ py_install () {
       FN="$(_pip_snapshot_file "$tag")"
       PIP="$(py_bin -p "$tag") -m pip"
       if [ -f "$FN" ]; then
+        # shellcheck disable=2086
         $PIP freeze 2>/dev/null | xargs -r $PIP uninstall -y
         _all_pip_install -r "$FN" <<<"$tag"
       else
@@ -248,6 +250,7 @@ py_install () {
         3.6) PIP_ARGS="--no-cache-dir" ;;
         *)   PIP_ARGS="--no-cache-dir --root-user-action=ignore" ;;
       esac
+      # shellcheck disable=SC2086
       "$(py_bin -p "$tag")" -m pip install $PIP_ARGS "$@"
     done
   }
@@ -355,7 +358,6 @@ main () {
   if [ $# = 0 ]; then
     py_usage
   else
-    # shellcheck disable=SC2086
     case $1 in
       bin)       shift; py_bin "$@" ;;
       checkupd)  bash "$MULTIPYTHON_ROOT/checkupd.sh" ;;  # internal, undocumented

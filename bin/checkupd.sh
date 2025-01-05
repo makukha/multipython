@@ -10,7 +10,7 @@ trap "exit 1" ERR
 
 DEB_CHANNEL="$(py info -c | jq -r .base_image.channel)"
 DEB_CURRENT="$(py info -c | jq -r .base_image.digest)"
-DEB_LATEST=$(curl -s https://hub.docker.com/v2/namespaces/library/repositories/debian/tags/$DEB_CHANNEL | jq -r .digest)
+DEB_LATEST=$(curl -s "https://hub.docker.com/v2/namespaces/library/repositories/debian/tags/$DEB_CHANNEL" | jq -r .digest)
 DEB_STATUS=$([[ "$DEB_CURRENT" == "$DEB_LATEST" ]] && echo latest || echo changed)
 
 PYENV_CURRENT=$(py info -c | jq -r .pyenv.version)
