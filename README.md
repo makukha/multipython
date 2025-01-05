@@ -1,6 +1,6 @@
 # multipython 🐳<sup>🐍🐍</sup>
 
-> Multi-version Python Docker image for testing and research.
+> Multi-version Python Docker image for research and testing with tox.
 
 [![GitHub Release](https://img.shields.io/github/v/tag/makukha/multipython?label=release)](https://github.com/makukha/multipython)
 [![GitHub Release Date](https://img.shields.io/github/release-date/makukha/multipython?label=release%20date)](https://github.com/makukha/multipython)  
@@ -10,84 +10,38 @@
 
 # Features
 
-* `makukha/multipython` — [pip](https://pip.pypa.io), [pyenv](https://github.com/pyenv/pyenv), [tox](https://tox.wiki), [uv](https://docs.astral.sh/uv), Python distributions
-* `makukha/multipython:stable` — latest stable single version image
-* `makukha/multipython:supported` — all [supported](https://devguide.python.org/versions) versions
-* `makukha/multipython:{py314...}` — single version images
-* [Build your own environment](#build-your-own-environment) from single version images
-* Based on `debian:stable-slim`
-* Single platform `linux/amd64`
-* Tox env names match tag names, even non-standard `py313t`
+<!-- docsub: cat docs/part/features.md -->
+<!-- docsub: begin -->
+<!-- docsub: end -->
+
+
+# Basic usage
+
+<!-- docsub: cat docs/part/basic-usage.md -->
+<!-- docsub: begin -->
+<!-- docsub: end -->
+
 
 ## Python versions
 
-### `makukha/multipython:latest`
+<!-- docsub: cat docs/part/python-versions.md -->
+<!-- docsub: begin -->
+<!-- docsub: end -->
 
-| Distribution     | Note          | Tag      | Executable    | Source |
-|------------------|---------------|----------|---------------|--------|
-| CPython 3.14.0a3 | free threaded | `py314t` | `python3.14t` | pyenv  |
-| CPython 3.13.1   | free threaded | `py313t` | `python3.13t` | pyenv  |
-| CPython 3.14.0a3 |               | `py314`  | `python3.14`  | pyenv  |
-| CPython 3.13.1   | system ⚙️     | `py313`  | `python3.13`  | pyenv  |
-| CPython 3.12.8   |               | `py312`  | `python3.12`  | pyenv  |
-| CPython 3.11.11  |               | `py311`  | `python3.11`  | pyenv  |
-| CPython 3.10.16  |               | `py310`  | `python3.10`  | pyenv  |
-| CPython 3.9.21   |               | `py39`   | `python3.9`   | pyenv  |
-| CPython 3.8.20   | EOL           | `py38`   | `python3.8`   | pyenv  |
-| CPython 3.7.17   | EOL           | `py37`   | `python3.7`   | pyenv  |
-| CPython 3.6.15   | EOL           | `py36`   | `python3.6`   | pyenv  |
-| CPython 3.5.10   | EOL           | `py35`   | `python3.5`   | pyenv  |
-| CPython 2.7.18   | EOL           | `py27`   | `python2.7`   | pyenv  |
-
-### `makukha/multipython:stable`
-
-| Distribution     | Note          | Tag      | Executable    | Source |
-|------------------|---------------|----------|---------------|--------|
-| CPython 3.13.1   | system ⚙️     | `py313`  | `python3.13`  | pyenv  |
-
-### `makukha/multipython:supported`
-
-| Distribution     | Note          | Tag      | Executable    | Source |
-|------------------|---------------|----------|---------------|--------|
-| CPython 3.13.1   | free threaded | `py313t` | `python3.13t` | pyenv  |
-| CPython 3.13.1   | system ⚙️     | `py313`  | `python3.13`  | pyenv  |
-| CPython 3.12.8   |               | `py312`  | `python3.12`  | pyenv  |
-| CPython 3.11.11  |               | `py311`  | `python3.11`  | pyenv  |
-| CPython 3.10.16  |               | `py310`  | `python3.10`  | pyenv  |
-| CPython 3.9.21   |               | `py39`   | `python3.9`   | pyenv  |
 
 ### Executables
 
 All executables are on `PATH` as symlinks to respective distributions. System ⚙️ Python, that is always the latest stable version, is also available as simply `python`.
+
+### Distribution sources
+
+The only used source used is [pyenv](https://github.com/pyenv/pyenv). However, it is planned to use [python-build-standalone](https://github.com/astral-sh/python-build-standalone) distributions for supported Python versions to speed up tests and image builds.
 
 ### Versions
 
 * Check [Versions](#versions) section for [pyenv](https://github.com/pyenv/pyenv), [tox](https://tox.wiki), [uv](https://docs.astral.sh/uv), [pip](https://pip.pypa.io), [setuptools](https://setuptools.pypa.io) versions.
 
 * See [Status of Python versions](https://devguide.python.org/versions) for the list of end-of-life versions.
-
-### Distribution sources
-
-The only used source used is [pyenv](https://github.com/pyenv/pyenv). However, it is planned to use [python-build-standalone](https://github.com/astral-sh/python-build-standalone) distributions for supported Python versions to speed up tests and image builds.
-
-# Basic usage
-
-```shell
-docker pull makukha/multipython@latest
-```
-
-<!-- docsub after line 2: cat tests/test_readme_basic/tox.ini -->
-```ini
-# tox.ini
-
-```
-
-```shell
-docker run --rm -v .:/test makukha/multipython tox run --root /test
-```
-
-> [!NOTE]
-> Pay attention that tox env names match docker image single version tags, even non-standard free threaded `py313t` and `py314t`. This was made possible by custom virtualenv plugin [virtualenv-multipython](https://github.com/makukha/virtualenv-multipython).
 
 
 # Advanced usage
@@ -102,13 +56,12 @@ Combine single version images to use a subset of Python distributions.
 
 ```
 
-## Helper utility `py`
+## CLI helper utility `py`
 
-`makukha/multipython` image comes with helper utility:
+All `makukha/multipython` images come with helper utility
 
 ```shell
-$ docker run --rm -it makukha/multipython
-$ py version --sys
+$ docker run --rm makukha/multipython py sys
 3.13.1
 ```
 
@@ -118,7 +71,7 @@ $ py version --sys
 
 <!-- docsub after line 1: sh tests/share/data/ls.txt | cut -d' ' -f3 -->
 ```shell
-$ py ls
+$ py ls -l
 ```
 </td>
 <td>
@@ -143,13 +96,35 @@ $ py ls -t
 $ py --help
 ```
 
+## JSON metadata
+
+### Docker images
+
+Every [image](https://hub.docker.com/r/makukha/multipython) has JSON metadata file `/root/.multipython/info.json`
+
+### Custom images
+
+After running `py install` in custom image Dockerfile, `/root/.multipython/info.json` is updated automatically.
+
+### Sources
+
+* `latest` – [tests/share/info/latest.json](https://github.com/makukha/multipython/blob/main/tests/share/info/latest.json)
+* `stable` – [tests/share/info/stable.json](https://github.com/makukha/multipython/blob/main/tests/share/info/stable.json)
+* `supported` – [tests/share/info/stable.json](https://github.com/makukha/multipython/blob/main/tests/share/info/supported.json)
+* `base` – [tests/share/info/base.json](https://github.com/makukha/multipython/blob/main/tests/share/info/base.json)
+
+### CLI `py info`
+
+```shell
+docker run --rm makukha/multipython:latest py info -c
+```
+
+<!-- docsub: sh task run:latest -- py info -c | sed -ne '1,/    },/p' && echo '...' -->
+```json
+```
+
+
 # Versions
-
-## multipython release versioning
-
-Starting from Jan 2025, this project uses [CalVer](https://calver.org) convention with [Date62](http://github.com/date62/date62-python)-based dates.
-
-Version format is `YYMD[.P]`, where `YY` is `25,26,...`, `M` is HEX month (`1` = Jan, `A,B,C` = Oct, Nov, Dec), `D` is Base62-encoded day of month from `1` to `V` (31), `.P` is optional digital patch part if it will be needed to have multiple releases at the same day.
 
 ## Base tools
 
@@ -162,7 +137,7 @@ All released images share same versions of base tools, but [tox version](#tox-ve
 
 <span>✨</span> latest version, will be updated in future releases.
 
-## Python tools
+## Python packages
 
 Versions below are for system python distribution, symlinked to `python`.
 
@@ -182,45 +157,26 @@ The default tox version v4.5.1.1 is dictated by [virtualenv support](https://vir
 | `<3.8`             | `<20.27.0`  | `>=4.6` |
 | `>=3.8`            | `>=20.27.0` | `>=4.6` |
 
-## JSON metadata
+## multipython versioning
 
-All versions included, paths to sources, and some other info is available in JSON format to be used for reference and in dev pipelines.
+Starting from Jan 2025, this project uses [CalVer](https://calver.org) convention with [Date62](http://github.com/date62/date62-python) based dates.
 
-### On Docker images
-
-On every image `makukha/multipython:<tag>` for all tags, including `base`, at `/root/.multipython/info.json`.
-
-### On custom Docker images
-
-After running `py install` (see [instructions](#build-your-own-environment)), `/root/.multipython/info.json` is updated, so custom images also have real metadata.
-
-### On GitHub
-
-* `makukha/multipython:latest` – [tests/share/info/latest.json](https://github.com/makukha/multipython/blob/main/tests/share/info/latest.json)
-* `makukha/multipython:stable` – [tests/share/info/stable.json](https://github.com/makukha/multipython/blob/main/tests/share/info/stable.json)
-* `makukha/multipython:supported` – [tests/share/info/stable.json](https://github.com/makukha/multipython/blob/main/tests/share/info/supported.json)
-* `makukha/multipython:base` – [tests/share/info/base.json](https://github.com/makukha/multipython/blob/main/tests/share/info/base.json)
-
-### [Helper utility](#helper-utility-py) `py info`
-
-```shell
-docker run --rm makukha/multipython:latest py info -c
-```
-
-<!-- docsub: sh task run:latest -- py info -c | sed -ne '1,/    },/p' && echo '...' -->
-```json
-```
+Release version format is `YYMD[.P]`
+* `YY` is `25,26,...`
+* `M` is Base16 month (`1` = Jan, `A,B,C` = Oct, Nov, Dec)
+* `D` is Base62 day of month (from `1` to `V` = 31)
+* `.P` is optional suffix allowing multiple releases per day
 
 # Security
 
-1. Check [vulnerability reports](https://hub.docker.com/r/makukha/multipython/tags) provided by Docker Scout.
-2. Use specific [image digest](#image-digests).
-3. Report security vulnerabilities via [GitHub Security Advisories](https://github.com/makukha/multipython/security/advisories).
+1. Check [vulnerability reports](https://hub.docker.com/r/makukha/multipython/tags) provided by Docker Scout
+2. Use specific [image digest](#image-digests)
+3. Report security vulnerabilities via [GitHub Security Advisories](https://github.com/makukha/multipython/security/advisories)
 
 Security vulnerabilities can come from
 
 * Base [Debian image](https://hub.docker.com/_/debian/tags?name=stable-slim) `debian:stable-slim`
-* Python distributions, especially [reached end-of-life](https://devguide.python.org/versions).
+* Python distributions, especially [reached end-of-life](https://devguide.python.org/versions)
 * multipython itself
 
 ## Image digests
@@ -247,11 +203,11 @@ Security vulnerabilities can come from
 
 # Feedback and contributing
 
-* To file bug report or feature request, please [create an issue](https://github.com/makukha/multipython/issues).
-* To report security vulnerability, please use [GitHub Security Advisories](https://github.com/makukha/multipython/security/advisories).
-* Want to contribute? Check [Contribution Guidelines](https://github.com/makukha/multipython/blob/main/.github/CONTRIBUTING.md).
+<!-- docsub: cat docs/part/feedback.md -->
+<!-- docsub: begin -->
+<!-- docsub: end -->
 
 
 # Changelog
 
-Check repository [CHANGELOG.md](https://github.com/makukha/multipython/tree/main/CHANGELOG.md).
+Check repository [CHANGELOG.md](https://github.com/makukha/multipython/tree/main/CHANGELOG.md)
