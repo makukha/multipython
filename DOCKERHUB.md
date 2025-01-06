@@ -2,11 +2,9 @@
 
 [![OpenSSF Best Practices](https://www.bestpractices.dev/projects/9755/badge)](https://www.bestpractices.dev/projects/9755)
 
-
-<!-- docsub: cat docs/part/features.md -->
 <!-- docsub: begin -->
+<!-- docsub: include docs/part/features.md -->
 <!-- docsub: end -->
-
 
 # Quick reference
 
@@ -15,7 +13,6 @@
 * **Where to get help**: [GitHub repository](https://github.com/makukha/multipython)
 * **Where to file issues**: [GitHub issues](https://github.com/makukha/multipython/issues)
 * **Documentation**: [github.com/makukha/multipython](https://github.com/makukha/multipython)
-
 
 # Supported tags and respective `Dockerfile` links
 
@@ -37,18 +34,17 @@
 * [`py35, py35-2513`](https://github.com/makukha/multipython/blob/v2513/Dockerfile) — *CPython 3.5.10*
 * [`py27, py27-2513`](https://github.co-m/makukha/multipython/blob/v2513/Dockerfile) — *CPython 2.7.18*
 
-
 # How to use this image
 
-<!-- docsub: cat docs/part/basic-usage.md -->
 <!-- docsub: begin -->
+<!-- docsub: include docs/part/basic-usage.md -->
 <!-- docsub: end -->
 
 
 ## Python versions
 
-<!-- docsub: cat docs/part/python-versions.md -->
 <!-- docsub: begin -->
+<!-- docsub: include docs/part/python-versions.md -->
 <!-- docsub: end -->
 
 
@@ -63,6 +59,6 @@
 
 # Feedback and contributing
 
-<!-- docsub: cat docs/part/feedback.md -->
 <!-- docsub: begin -->
+<!-- docsub: include docs/part/feedback.md -->
 <!-- docsub: end -->

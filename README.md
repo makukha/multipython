@@ -7,25 +7,24 @@
 [![Docker Pulls](https://img.shields.io/docker/pulls/makukha/multipython)](https://hub.docker.com/r/makukha/multipython)
 [![OpenSSF Best Practices](https://www.bestpractices.dev/projects/9755/badge)](https://www.bestpractices.dev/projects/9755)
 
-
 # Features
 
-<!-- docsub: cat docs/part/features.md -->
 <!-- docsub: begin -->
+<!-- docsub: include docs/part/features.md -->
 <!-- docsub: end -->
 
 
 # Basic usage
 
-<!-- docsub: cat docs/part/basic-usage.md -->
 <!-- docsub: begin -->
+<!-- docsub: include docs/part/basic-usage.md -->
 <!-- docsub: end -->
 
 
 ## Python versions
 
-<!-- docsub: cat docs/part/python-versions.md -->
 <!-- docsub: begin -->
+<!-- docsub: include docs/part/python-versions.md -->
 <!-- docsub: end -->
 
 
@@ -50,51 +49,70 @@ The only used source used is [pyenv](https://github.com/pyenv/pyenv). However, i
 
 Combine single version images to use a subset of Python distributions.
 
-<!-- docsub after line 2: cat tests/test_readme_advanced/Dockerfile -->
+<!-- docsub: begin -->
+<!-- docsub: include tests/test_readme_advanced/Dockerfile -->
+<!-- docsub: lines after 3 upto -1 -->
 ```Dockerfile
 # Dockerfile
 
 ```
+<!-- docsub: end -->
 
 ## CLI helper utility `py`
 
 All `makukha/multipython` images come with helper utility
 
+<!-- docsub: begin -->
+<!-- docsub: exec docker run --rm makukha/multipython py sys -->
+<!-- docsub: lines after 2 upto -1 -->
 ```shell
 $ docker run --rm makukha/multipython py sys
 3.13.1
 ```
+<!-- docsub: end -->
 
 <table>
 <tr>
 <td>
 
-<!-- docsub after line 1: sh tests/share/data/ls.txt | cut -d' ' -f3 -->
+<!-- docsub: begin -->
+<!-- docsub: exec cat tests/share/data/ls.txt | cut -d' ' -f3 -->
+<!-- docsub: lines after 2 upto -1 -->
 ```shell
 $ py ls -l
 ```
+<!-- docsub: end -->
 </td>
 <td>
 
-<!-- docsub after line 1: sh tests/share/data/ls.txt | cut -d' ' -f2 -->
+<!-- docsub: begin -->
+<!-- docsub: exec cat tests/share/data/ls.txt | cut -d' ' -f2 -->
+<!-- docsub: lines after 2 upto -1 -->
 ```shell
 $ py ls -s
 ```
+<!-- docsub: end -->
 </td>
 <td>
 
-<!-- docsub after line 1: sh tests/share/data/ls.txt | cut -d' ' -f1 -->
+<!-- docsub: begin -->
+<!-- docsub: exec cat tests/share/data/ls.txt | cut -d' ' -f1 -->
+<!-- docsub: lines after 2 upto -1 -->
 ```shell
 $ py ls -t
 ```
+<!-- docsub: end -->
 </td>
 </tr>
 </table>
 
-<!-- docsub after line 1: cat tests/share/usage.txt -->
+<!-- docsub: begin -->
+<!-- docsub: include tests/share/usage.txt -->
+<!-- docsub: lines after 2 upto -1 -->
 ```shell
 $ py --help
 ```
+<!-- docsub: end -->
 
 ## JSON metadata
 
@@ -119,9 +137,12 @@ After running `py install` in custom image Dockerfile, `/root/.multipython/info.
 docker run --rm makukha/multipython:latest py info -c
 ```
 
-<!-- docsub: sh task run:latest -- py info -c | sed -ne '1,/    },/p' && echo '...' -->
+<!-- docsub: begin -->
+<!-- docsub: exec task run:latest -- py info -c | sed -ne '1,/    },/p' && echo '...' -->
+<!-- docsub: lines after 1 upto -1 -->
 ```json
 ```
+<!-- docsub: end -->
 
 
 # Versions
@@ -141,9 +162,12 @@ All released images share same versions of base tools, but [tox version](#tox-ve
 
 Versions below are for system python distribution, symlinked to `python`.
 
-<!-- docsub: cat docs/tab/package-versions.md -->
+<!-- docsub: begin -->
+<!-- docsub: include docs/tab/package-versions.md -->
+<!-- docsub: lines after 2 -->
 | Image tag   | pip    | setuptools | tox | virtualenv |
 |-------------|--------|------------|-----|------------|
+<!-- docsub: end -->
 
 <span>✨</span> latest version, will be updated in future releases.
 
@@ -181,7 +205,6 @@ Security vulnerabilities can come from
 
 ## Image digests
 
-<!-- docsub: cat docs/tab/image-digests.md -->
 | Image tag | Digest |
 |-----------|--------|
 
@@ -203,8 +226,8 @@ Security vulnerabilities can come from
 
 # Feedback and contributing
 
-<!-- docsub: cat docs/part/feedback.md -->
 <!-- docsub: begin -->
+<!-- docsub: include docs/part/feedback.md -->
 <!-- docsub: end -->
 
 
