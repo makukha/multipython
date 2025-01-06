@@ -27,7 +27,7 @@ tasks:
   lint:
     desc: Run linters.
     cmds:
-      - hadolint Dockerfile tests/Dockerfile
+      - hadolint Dockerfile
       - shellcheck bin/*.sh tests/share/*.sh .dev/*.sh
 
   build:
@@ -44,18 +44,6 @@ tasks:
     desc: Build stable image.
     cmds:
       - docker buildx bake stable
-
-  docs:gen:
-    desc: Generate docs tables.
-    vars:
-      VERSION: {sh: uvx bump-my-version show current_version 2>/dev/null}
-    cmds:
-      - bash .dev/gen-package-versions.sh > docs/tab/package-versions.md
-      - bash .dev/gen-image-digests.sh "{{.VERSION}}" > docs/tab/image-digests.md
-
-  docs:sub:
-    desc: Update docs.
-    cmds: []
 
   clean:
     desc: Prune local tags, images, and build cache.
@@ -89,6 +77,19 @@ tasks:
       BUILDKIT_PROGRESS: plain
     cmds:
       - docker buildx bake --no-cache test
+
+  # docs
+
+  docs:
+    desc: Update docs.
+    vars:
+      VERSION: {sh: uvx bump-my-version show current_version 2>/dev/null}
+    cmds:
+      # generate tables
+      - bash .dev/gen-package-versions.sh "{{.VERSION}}" > docs/tab/package-versions.md
+      # substitute parts
+      - docsub -i docs/part/basic-usage.md
+      - docsub README.md
 
   # release
 
