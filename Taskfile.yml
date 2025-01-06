@@ -88,8 +88,7 @@ tasks:
       # generate tables
       - bash .dev/gen-package-versions.sh "{{.VERSION}}" > docs/tab/package-versions.md
       # substitute parts
-      - docsub -i docs/part/basic-usage.md
-      - docsub README.md
+      - docsub -i docs/part/basic-usage.md DOCKERHUB.md README.md
 
   # release
 

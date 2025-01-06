@@ -4,6 +4,14 @@
 
 <!-- docsub: begin -->
 <!-- docsub: include docs/part/features.md -->
+* `makukha/multipython` — [pip](https://pip.pypa.io), [pyenv](https://github.com/pyenv/pyenv), [tox](https://tox.wiki), [uv](https://docs.astral.sh/uv), Python distributions
+* `makukha/multipython:stable` — latest stable single version image
+* `makukha/multipython:supported` — all [supported](https://devguide.python.org/versions) versions
+* `makukha/multipython:{py314...}` — single version images
+* Tox env names match tag names, even non-standard `py313t`
+* [Build your own environment](https://github.com/makukha/multipython#build-your-own-environment) from single version images
+* Based on `debian:stable-slim`
+* Single platform `linux/amd64`
 <!-- docsub: end -->
 
 # Quick reference
@@ -36,15 +44,59 @@
 
 # How to use this image
 
-<!-- docsub: begin -->
+<!-- docsub: begin #readme -->
 <!-- docsub: include docs/part/basic-usage.md -->
+```shell
+docker pull makukha/multipython@latest
+```
+
+<!-- docsub: begin -->
+<!-- docsub: include tests/test_readme_basic/tox.ini -->
+<!-- docsub: lines after 2 upto -1 -->
+```ini
+# tox.ini
+[tox]
+env_list = py{27,35,36,37,38,39,310,311,312,313,314,313t,314t}
+[testenv]
+command = {env_python} --version
+```
 <!-- docsub: end -->
+
+```shell
+docker run --rm -v .:/src makukha/multipython tox run --root /src
+```
+
+Single version images have tox installed and can be used on their own:
+```shell
+$ docker run --rm -v .:/src makukha/multipython:py38 tox run --root /src
+```
+<!-- docsub: end #readme -->
 
 
 ## Python versions
 
 <!-- docsub: begin -->
 <!-- docsub: include docs/part/python-versions.md -->
+* `makukha/multipython:latest` —
+
+| Distribution     | Note          | Tag      | Executable    | Source |
+|------------------|---------------|----------|---------------|--------|
+| CPython 3.14.0a3 | free threaded | `py314t` | `python3.14t` | pyenv  |
+| CPython 3.13.1   | free threaded | `py313t` | `python3.13t` | pyenv  |
+| CPython 3.14.0a3 |               | `py314`  | `python3.14`  | pyenv  |
+| CPython 3.13.1   | system ⚙️     | `py313`  | `python3.13`  | pyenv  |
+| CPython 3.12.8   |               | `py312`  | `python3.12`  | pyenv  |
+| CPython 3.11.11  |               | `py311`  | `python3.11`  | pyenv  |
+| CPython 3.10.16  |               | `py310`  | `python3.10`  | pyenv  |
+| CPython 3.9.21   |               | `py39`   | `python3.9`   | pyenv  |
+| CPython 3.8.20   | EOL           | `py38`   | `python3.8`   | pyenv  |
+| CPython 3.7.17   | EOL           | `py37`   | `python3.7`   | pyenv  |
+| CPython 3.6.15   | EOL           | `py36`   | `python3.6`   | pyenv  |
+| CPython 3.5.10   | EOL           | `py35`   | `python3.5`   | pyenv  |
+| CPython 2.7.18   | EOL           | `py27`   | `python2.7`   | pyenv  |
+
+* `makukha/multipython:stable` — `py313`
+* `makukha/multipython:supported` — `py313t`, `py313`, `py312`, `py311`, `py310`, `py39`
 <!-- docsub: end -->
 
 
@@ -61,4 +113,7 @@
 
 <!-- docsub: begin -->
 <!-- docsub: include docs/part/feedback.md -->
+* To file bug report or feature request, please [create an issue](https://github.com/makukha/multipython/issues).
+* To report security vulnerability, please use [GitHub Security Advisories](https://github.com/makukha/multipython/security/advisories).
+* Want to contribute? Check [Contribution Guidelines](https://github.com/makukha/multipython/blob/main/.github/CONTRIBUTING.md).
 <!-- docsub: end -->

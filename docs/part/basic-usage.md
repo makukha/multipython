@@ -15,7 +15,10 @@ command = {env_python} --version
 <!-- docsub: end -->
 
 ```shell
-docker run --rm -v .:/app makukha/multipython tox run --root /app
+docker run --rm -v .:/src makukha/multipython tox run --root /src
 ```
 
-Single version images have tox installed and can be used standalone.
+Single version images have tox installed and can be used on their own:
+```shell
+$ docker run --rm -v .:/src makukha/multipython:py38 tox run --root /src
+```
