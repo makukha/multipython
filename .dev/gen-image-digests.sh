@@ -13,10 +13,10 @@ print_rows () {
   while IFS= read -r TAG
   do
     DIGEST="$(curl -s "$TAGS_URL/$TAG" | jq -r .digest)"
-    printf '| `%s` | `%s` |\n' "$IMG:$TAG" "$DIGEST"
-    echo -n '.' >&2
+    printf '%s %s\n' "$TAG" "$DIGEST"
+    printf '.' >&2
   done
-  echo >&2
+  printf '\n' >&2
 }
 
 docker buildx bake --print 2>/dev/null \
