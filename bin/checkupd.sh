@@ -1,60 +1,69 @@
 #!/bin/bash
 
-# shellcheck disable=SC1091
-. "$(py root)/deps"
+set -o errexit
+set -o errtrace
+set -o nounset
+set -o pipefail
+trap "exit 1" ERR
 
-DEBIAN_CURRENT="$DEBIAN_DIGEST"
-DEBIAN_LATEST=$(curl -s https://hub.docker.com/v2/namespaces/library/repositories/debian/tags/stable-slim | jq -r .digest)
-DEBIAN_STATUS=$([[ "$DEBIAN_CURRENT" == "$DEBIAN_LATEST" ]] && echo latest || echo changed)
+# versions and statuses
 
-PYENV_CURRENT=$(pyenv --version | cut -d' ' -f2)
+DEB_CHANNEL="$(py info -c | jq -r .base_image.channel)"
+DEB_CURRENT="$(py info -c | jq -r .base_image.digest)"
+DEB_LATEST=$(curl -s "https://hub.docker.com/v2/namespaces/library/repositories/debian/tags/$DEB_CHANNEL" | jq -r .digest)
+DEB_STATUS=$([[ "$DEB_CURRENT" == "$DEB_LATEST" ]] && echo latest || echo changed)
+
+PYENV_CURRENT=$(py info -c | jq -r .pyenv.version)
 PYENV_LATEST=$(curl -s https://api.github.com/repos/pyenv/pyenv/releases | jq -r .[0].name | sed -e's/^v//')
 PYENV_STATUS=$([[ "$PYENV_CURRENT" == "$PYENV_LATEST" ]] && echo latest || echo changed)
 
-UV_CURRENT=$(uv --version | cut -d' ' -f2)
+UV_CURRENT=$(py info -c | jq -r .uv.version)
 UV_LATEST=$(curl -s https://api.github.com/repos/astral-sh/uv/releases | jq -r .[0].name | sed -e's/^v//')
 UV_STATUS=$([[ "$UV_CURRENT" == "$UV_LATEST" ]] && echo latest || echo changed)
 
-RED=$(tput setaf 1)
-GREEN=$(tput setaf 2)
-OFF=$(tput setaf 9)
+# presentation helpers
 
 row () {
   status="$1"
   current="$2"
   latest="$3"
   if [ "$status" == "changed" ]; then
-    printf "$RED%7s  %s$OFF" "$status" "$latest"
+    printf '\033[0;31m%7s  %s\033[0m' "$status" "$latest"
   else
-    printf "$GREEN%7s  %s$OFF" "$status" "$current"
+    printf '\033[0;32m%7s  %s\033[0m' "$status" "$current"
   fi
 }
 
-printf "DEBIAN_DIGEST  %s\n" "$(row "$DEBIAN_STATUS" "$DEBIAN_CURRENT" "$DEBIAN_LATEST")"
+# status table
+
+printf "DEBIAN_DIGEST  %s\n" "$(row "$DEB_STATUS" "$DEB_CURRENT" "$DEB_LATEST")"
 printf "PYENV_VERSION  %s\n" "$(row "$PYENV_STATUS" "$PYENV_CURRENT" "$PYENV_LATEST")"
 printf "UV_VERSION     %s\n" "$(row "$UV_STATUS" "$UV_CURRENT" "$UV_LATEST")"
 
+# pyenv latest hash
 if [ "$PYENV_STATUS" == "changed" ]; then
   wget -q "https://github.com/pyenv/pyenv/archive/refs/tags/v${PYENV_LATEST}.tar.gz" -O /tmp/pyenv.tar.gz
   printf "PYENV_SHA256   %s\n" "$(row "$PYENV_STATUS" "?" "$(sha256sum /tmp/pyenv.tar.gz | cut -d' ' -f1)")"
 fi
 
+# uv latest hash
 if [ "$UV_STATUS" == "changed" ]; then
   wget -q "https://github.com/astral-sh/uv/releases/download/${UV_LATEST}/uv-x86_64-unknown-linux-gnu.tar.gz" -O /tmp/uv.tar.gz
   UV_TAR_SHA256="$(sha256sum /tmp/uv.tar.gz | cut -d' ' -f1)"
   UV_GITHUB_SHA256="$(wget -q -O- "https://github.com/astral-sh/uv/releases/download/${UV_LATEST}/uv-x86_64-unknown-linux-gnu.tar.gz.sha256" | cut -d' ' -f1)"
   if [ ! "$UV_TAR_SHA256" == "$UV_GITHUB_SHA256" ]; then
-    echo "uv sha256 do not match!"
+    echo "uv sha256 do not match!" >&2
     exit 1
   fi
   printf "UV_SHA256      %s\n" "$(row "$UV_STATUS" "?" "$UV_GITHUB_SHA256")"
 fi
 
-if [ "$DEBIAN_STATUS $PYENV_STATUS" = "latest latest" ]; then
+# summary
+
+if [ "$DEB_STATUS $PYENV_STATUS $UV_STATUS" = "latest latest latest" ]; then
   echo "All dependencies are up to date!"
   exit 0
 else
-  echo "Dependencies changed, project update required."
-  echo 'Run "pyenv install --list" to get latest Python versions.'
+  echo "Dependencies changed, project update required." >&2
   exit 1
 fi

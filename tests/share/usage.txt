@@ -1,0 +1,32 @@
+usage: py bin {--cmd|--dir|--path} [TAG]
+       py info [--cached]
+       py install
+       py ls {--long|--short|--tag|--all}
+       py root
+       py sys
+       py --version
+       py --help
+
+commands:
+  bin      Show Python executable command or path
+  info     Extended details in JSON format
+  install  Install optional packages and symlinks
+  ls       List all distributions
+  root     Show multipython root path
+  sys      Show system python tag
+
+binary info formats:
+  -c --cmd   Command name, expected to be on PATH
+  -d --dir   Path to distribution bin directory
+  -p --path  Path to distribution binary
+
+version formats:
+  -l --long   Full version without prefix, e.g. 3.9.12
+  -s --short  Short version without prefix, e.g. 3.9
+  -t --tag    Python tag, e.g. py39, pp19
+  -a --all    Lines 'tag short long', e.g. 'py39 3.9 3.9.3'
+
+other options:
+  -c --cached  Show cached results
+  --version    Show multipython distribution version
+  --help       Show this help and exit

@@ -1,12 +1,19 @@
-variable "IMG" { default = "makukha/multipython" }
-variable "RELEASE" { default = "2024.12.26" }
+variable "IMG" {
+  default = "makukha/multipython"
+}
+variable "RELEASE" {
+  default = "2517"
+}
 
-variable "PYENV_VERSION" { default = "2.5.0" }
-variable "PYENV_SHA256" { default = "12c42bdaf3741895ad710a957d44dc2b0c5260f95f857318a6681981fe1b1c0b" }
-variable "UV_VERSION" { default = "0.5.12" }
-variable "UV_SHA256" { default = "65b8dcf3f3e592887fae0daf1b3a9e3aad1262f74bb21cf80d1700c7caba7f23" }
-
-variable "PY" {
+variable "BASE_VERSIONS" {
+  default = {
+    PYENV_VERSION = "2.5.0"
+    PYENV_SHA256 = "12c42bdaf3741895ad710a957d44dc2b0c5260f95f857318a6681981fe1b1c0b"
+    UV_VERSION = "0.5.15"
+    UV_SHA256 = "6c650324daafc07331c00b458872d50f56f160544015c8a499fd2e160b404ebb"
+  }
+}
+variable "PY_VERSIONS" {
   default = {
     py27 = "2.7.18"
     py35 = "3.5.10"
@@ -25,25 +32,50 @@ variable "PY" {
   }
 }
 
+# subsets
+
+variable "SUBSET_ARGS" {
+  default = {
+    latest = {
+      SUBSET = "latest"
+      RELEASE_TAG = "${RELEASE}"
+    }
+    cpython = {
+      SUBSET = "cpython"
+      RELEASE_TAG = "cpython-${RELEASE}"
+    }
+    supported = {
+      SUBSET = "supported"
+      RELEASE_TAG = "supported-${RELEASE}"
+    }
+    unsafe = {
+      SUBSET = "unsafe"
+      RELEASE_TAG = "unsafe-${RELEASE}"
+    }
+  }
+}
+
 
 # --- build
 
 group "default" {
-  targets = ["base", "py", "final"]
+  targets = [
+    "base",
+    "py",
+    "latest",
+    "cpython",
+    "supported",
+    "unsafe",
+  ]
 }
 
-target "base_versions" {
-  args = {
-    PYENV_VERSION = PYENV_VERSION
-    PYENV_SHA256 = PYENV_SHA256
-    UV_VERSION = UV_VERSION
-    UV_SHA256 = UV_SHA256
-  }
+target "__build__" {
+  args = "${merge(BASE_VERSIONS, PY_VERSIONS)}"
   platforms = ["linux/amd64"]
 }
 
 target "base" {
-  inherits = ["base_versions"]
+  inherits = ["__build__"]
   target = "base"
   tags = [
     "${IMG}:base",
@@ -52,26 +84,52 @@ target "base" {
 }
 
 target "py" {
-  inherits = ["base_versions"]
-  args = PY
-  matrix = {
-    TAG = keys(PY)
-  }
-  name = TAG
-  target = TAG
+  inherits = ["__build__"]
+  target = PY_TAG
   tags = [
-    "${IMG}:${TAG}",
-    "${IMG}:${TAG}-${RELEASE}",
+    "${IMG}:${PY_TAG}",
+    "${IMG}:${PY_TAG}-${RELEASE}",
+  ]
+  matrix = {
+    PY_TAG = keys(PY_VERSIONS)
+  }
+  name = PY_TAG
+}
+
+target "latest" {
+  inherits = ["__build__"]
+  target = "latest"
+  tags = [
+    "${IMG}",
+    "${IMG}:latest",
+    "${IMG}:${RELEASE}",
   ]
 }
 
-target "final" {
-  inherits = ["base_versions"]
-  args = PY
-  target = "final"
+target "cpython" {
+  inherits = ["__build__"]
+  target = "cpython"
   tags = [
-    "${IMG}:latest",
-    "${IMG}:${RELEASE}",
+    "${IMG}:cpython",
+    "${IMG}:cpython-${RELEASE}",
+  ]
+}
+
+target "supported" {
+  inherits = ["__build__"]
+  target = "supported"
+  tags = [
+    "${IMG}:supported",
+    "${IMG}:supported-${RELEASE}",
+  ]
+}
+
+target "unsafe" {
+  inherits = ["__build__"]
+  target = "unsafe"
+  tags = [
+    "${IMG}:unsafe",
+    "${IMG}:unsafe-${RELEASE}",
   ]
 }
 
@@ -80,52 +138,66 @@ target "final" {
 
 group "test" {
   targets = [
-    "test-base",
-    "test-final",
-    "test-readme",
-    "test-tox",
+    "test_base",
+    "test_subsets",
+    "test_readme_basic",
+    "test_readme_advanced_test",
   ]
 }
 
-target "test-base" {
-  target = "test-base"
-  args = { RELEASE = RELEASE }
-  context = "tests"
+target "__test__" {
   output = ["type=cacheonly"]
 }
 
-target "test-final" {
-  target = "test-final"
-  args = { RELEASE = RELEASE }
-  context = "tests"
-  output = ["type=cacheonly"]
+target "test_base" {
+  inherits = ["__test__"]
+  dockerfile-inline = <<EOF
+    FROM ${IMG}:base-${RELEASE}
+    COPY tests/share /tmp/share
+    RUN bash /tmp/share/test_subset.sh base
+  EOF
 }
 
-target "test-readme" {
-  args = { RELEASE = RELEASE }
-  context = "tests"
+target "test_subsets" {
+  inherits = ["__test__"]
+  dockerfile-inline = <<EOF
+    FROM ${IMG}:${SUBSET_ARGS[SUBSET]["RELEASE_TAG"]}
+    COPY tests/share /tmp/share
+    RUN bash /tmp/share/test_subset.sh "${SUBSET}"
+  EOF
   matrix = {
-    TARGET = [
-      "test-readme-basic",
-      "test-readme-advanced",
+    SUBSET = [
+      "latest",
+      "cpython",
+      "supported",
+      "unsafe",
     ]
   }
-  name = TARGET
-  output = ["type=cacheonly"]
-  target = TARGET
+  name = "test_subset_${SUBSET}"
 }
 
-target "test-tox" {
-  args = { RELEASE = RELEASE }
-  context = "tests"
-  matrix = {
-    TARGET = [
-      "test-tox-36",
-      "test-tox-37",
-      "test-tox-38",
-    ]
+target "test_readme_basic" {
+  inherits = ["__test__"]
+  dockerfile-inline = <<EOF
+    FROM ${IMG}:${RELEASE}
+    COPY tests/test_readme_basic/tox.ini ./
+    RUN tox run
+  EOF
+}
+
+target "test_readme_advanced_setup" {
+  dockerfile = "tests/test_readme_advanced/Dockerfile"
+}
+
+target "test_readme_advanced_test" {
+  inherits = ["__test__"]
+  contexts = {
+    setup = "target:test_readme_advanced_setup"
   }
-  name = TARGET
-  output = ["type=cacheonly"]
-  target = TARGET
+  dockerfile-inline = <<EOF
+    FROM setup
+    COPY tests/share /tmp/share
+    COPY tests/test_readme_advanced/info.json /tmp/share/info/test_readme_advanced.json
+    RUN bash /tmp/share/test_subset.sh test_readme_advanced
+  EOF
 }

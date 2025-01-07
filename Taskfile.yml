@@ -2,31 +2,45 @@ version: '3'
 
 vars:
   IMG: makukha/multipython
-  RELEASE: {sh: yq -oy '.tool.bumpversion.current_version' .bumpversion.toml}
 
 tasks:
+
+  init:
+    desc: Initialize dev environment.
+    cmds:
+      - sh .dev/install-macports.sh
 
   checkupd:
     desc: Check for version updates.
     cmds:
       - docker buildx bake base
-      - docker run --rm -t {{.IMG}}:base py_checkupd
+      - docker run --rm -t {{.IMG}}:base py checkupd
+
+  news:*:
+    desc: Create news item {security|breaking|removed|deprecated|added|changed|fixed|docs|misc}.
+    vars:
+      ISSUE: {sh: git rev-parse --abbrev-ref HEAD | cut -d- -f1}
+      SECTION: '{{index .MATCH 0}}'
+    cmds:
+      - uvx towncrier create -c "{{.CLI_ARGS}}" "{{.ISSUE}}.{{.SECTION}}.md"
 
   lint:
     desc: Run linters.
     cmds:
-      - hadolint Dockerfile tests/Dockerfile
-      - shellcheck *.sh tests/*.sh
+      - hadolint Dockerfile
+      - shellcheck bin/*.sh tests/share/*.sh .dev/*.sh
 
   build:
     desc: Build all docker images.
     cmds:
       - docker buildx bake
 
-  build:base:
-    desc: Build base docker image.
+  build:*:
+    desc: Build specific target.
+    vars:
+      TARGET: "{{index .MATCH 0}}"
     cmds:
-      - docker buildx bake base
+      - docker buildx bake {{.TARGET}}
 
   clean:
     desc: Prune local tags, images, and build cache.
@@ -44,8 +58,15 @@ tasks:
 
   shell:*:
     desc: Shell to image {base,tox,py*,latest}.
+    vars:
+      TAG: "{{index .MATCH 0}}"
     cmds:
-      - docker run --rm -it {{.IMG}}:{{index .MATCH 0}} /bin/bash
+      - docker run --rm -it {{.CLI_ARGS}} -h {{.TAG}} {{.IMG}}:{{.TAG}} /bin/bash
+
+  run:*:
+    desc: Run command in image {base,py*,latest} container.
+    cmds:
+      - docker run --rm -it {{.IMG}}:{{index .MATCH 0}} {{.CLI_ARGS}}
 
   test:
     desc: Run tests.
@@ -54,22 +75,44 @@ tasks:
     cmds:
       - docker buildx bake --no-cache test
 
-  version:
+  # docs
+
+  docs:
+    desc: Update docs.
+    vars:
+      VERSION: {sh: uvx bump-my-version show current_version 2>/dev/null}
+    cmds:
+      - bash .dev/gen-package-versions.sh "{{.VERSION}}" > docs/gen/package-versions.md
+      - bash .dev/gen-image-digests.sh "{{.VERSION}}" > docs/gen/image-digests.md
+      - docsub -i docs/part/basic-usage.md DOCKERHUB.md README.md
+
+  # release
+
+  release:version:
     desc: Bump release version.
     cmds:
       - uvx bump-my-version bump --dry-run --verbose release
-      - task: version:bump
+      - task: _bump
 
-  version:bump:
+  _bump:
     internal: true
-    prompt: The version will be bumped as above. Continue?
+    prompt: Version will be updated as above. Continue?
     cmds:
       - uvx bump-my-version bump release
 
-  release:
+  release:changelog:
+    desc: Collect changelog entries.
+    vars:
+      VERSION: {sh: uvx bump-my-version show current_version 2>/dev/null}
+    cmds:
+      - towncrier build --yes --version "{{.VERSION}}"
+
+  release:push:
     desc: Push base images to Docker Registry.
     prompt: Release all images. Continue?
-    status:  # guard against overwriting
-      - docker pull {{.IMG}}:{{.RELEASE}}
+    vars:
+      TARGETS:
+        sh: docker buildx bake --print 2>/dev/null | jq -r '.group.default.targets[]'
     cmds:
-      - docker buildx bake --push
+      - cmd: docker buildx bake --push {{.ITEM}}; sleep 30
+        for: { var: TARGETS }

@@ -1,17 +1,27 @@
 [tool.bumpversion]
-current_version = "2024.12.26"
+
+current_version = "2517"
 allow_dirty = true
+
 parse = """(?x)
-  (?P<release>                   # release (mandatory)
-    (?:[1-9][0-9]{3})\\.         # YYYY.
-    (?:1[0-2]|[1-9])\\.          # MM.
-    (?:3[0-1]|[1-2][0-9]|[1-9])  # DD
-  )
-  (?:\\.(?P<patch>\\d+))?        # .patch (optional)
+    (?P<release>
+        (?:[0-9]{2})
+        (?:[1-9ABC])
+        (?:[1-9A-V])
+    )
+    (?:\\.(?P<patch>[1-9][0-9]*))?
 """
-parts = { release = { calver_format = "{YYYY}.{MM}.{DD}" } }
+parts = { release = { calver_format = "{YY}{M62}{D62}" } }
 serialize = ["{release}.{patch}", "{release}"]
+
 files = [
   {filename = "docker-bake.hcl"},
-  {filename = "docs/dockerhub.md"},
+  {filename = "docs/part/image-tags.md"},
+  {filename = "bin/py.sh"},
+  {filename = "tests/share/info/base.json"},
+  {filename = "tests/share/info/cpython.json"},
+  {filename = "tests/share/info/latest.json"},
+  {filename = "tests/share/info/supported.json"},
+  {filename = "tests/share/info/unsafe.json"},
+  {filename = "tests/test_readme_advanced/info.json"},
 ]
