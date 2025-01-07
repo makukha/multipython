@@ -15,12 +15,12 @@ parts = { release = { calver_format = "{YY}{M62}{D62}" } }
 serialize = ["{release}.{patch}", "{release}"]
 
 files = [
-  {filename = "DOCKERHUB.md"},
   {filename = "docker-bake.hcl"},
+  {filename = "docs/part/image-tags.md"},
   {filename = "bin/py.sh"},
   {filename = "tests/share/info/base.json"},
+  {filename = "tests/share/info/cpython.json"},
   {filename = "tests/share/info/latest.json"},
-  {filename = "tests/share/info/stable.json"},
   {filename = "tests/share/info/supported.json"},
   {filename = "tests/test_readme_advanced/info.json"},
 ]

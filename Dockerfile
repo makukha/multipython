@@ -133,6 +133,14 @@ ARG py314t
 RUN pyenv install ${py314t}; py install
 
 
+# cpython
+
+FROM base AS cpython
+RUN mkdir /root/.pyenv/versions
+COPY --from=py313 /root/.pyenv/versions /root/.pyenv/versions/
+RUN py install --as cpython
+
+
 # latest
 
 FROM base AS latest
@@ -151,14 +159,6 @@ COPY --from=py314 /root/.pyenv/versions /root/.pyenv/versions/
 COPY --from=py313t /root/.pyenv/versions /root/.pyenv/versions/
 COPY --from=py314t /root/.pyenv/versions /root/.pyenv/versions/
 RUN py install --as latest
-
-
-# stable
-
-FROM base AS stable
-RUN mkdir /root/.pyenv/versions
-COPY --from=py313 /root/.pyenv/versions /root/.pyenv/versions/
-RUN py install --as stable
 
 
 # supported

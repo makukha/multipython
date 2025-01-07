@@ -11,10 +11,12 @@
 
 <!-- docsub: begin -->
 <!-- docsub: include docs/part/features.md -->
-* `makukha/multipython` — [pip](https://pip.pypa.io), [pyenv](https://github.com/pyenv/pyenv), [tox](https://tox.wiki), [uv](https://docs.astral.sh/uv), Python distributions
-* `makukha/multipython:stable` — latest stable single version image
-* `makukha/multipython:supported` — all [supported](https://devguide.python.org/versions) versions
+* `makukha/multipython` — prerelease and [supported](https://devguide.python.org/versions) Python distributions
+* `makukha/multipython:cpython` — latest bugfix CPython image
+* `makukha/multipython:supported` — [supported](https://devguide.python.org/versions) versions, not including prerelease
+* `makukha/multipython:unsafe` — all versions, including EOL
 * `makukha/multipython:{py314...}` — single version images
+* All images include [pip](https://pip.pypa.io), [pyenv](https://github.com/pyenv/pyenv), [tox](https://tox.wiki), [uv](https://docs.astral.sh/uv)
 * Tox env names match tag names, even non-standard `py313t`
 * [Build your own environment](https://github.com/makukha/multipython#build-your-own-environment) from single version images
 * Based on `debian:stable-slim`
@@ -26,10 +28,6 @@
 
 <!-- docsub: begin #readme -->
 <!-- docsub: include docs/part/basic-usage.md -->
-```shell
-docker pull makukha/multipython@latest
-```
-
 <!-- docsub: begin -->
 <!-- docsub: include tests/test_readme_basic/tox.ini -->
 <!-- docsub: lines after 2 upto -1 -->
@@ -43,22 +41,20 @@ command = {env_python} --version
 <!-- docsub: end -->
 
 ```shell
-docker run --rm -v .:/src makukha/multipython tox run --root /src
+docker run --rm -v .:/src makukha/multipython:unsafe tox run --root /src
 ```
 
 Single version images have tox installed and can be used on their own:
 ```shell
-$ docker run --rm -v .:/src makukha/multipython:py38 tox run --root /src
+$ docker run --rm -v .:/src makukha/multipython:py310 tox run --root /src
 ```
 <!-- docsub: end #readme -->
 
 
-## Python versions
+# Python versions
 
 <!-- docsub: begin -->
 <!-- docsub: include docs/part/python-versions.md -->
-* `makukha/multipython:latest` —
-
 | Distribution     | Note          | Tag      | Executable    | Source |
 |------------------|---------------|----------|---------------|--------|
 | CPython 3.14.0a3 | free threaded | `py314t` | `python3.14t` | pyenv  |
@@ -75,14 +71,16 @@ $ docker run --rm -v .:/src makukha/multipython:py38 tox run --root /src
 | CPython 3.5.10   | EOL           | `py35`   | `python3.5`   | pyenv  |
 | CPython 2.7.18   | EOL           | `py27`   | `python2.7`   | pyenv  |
 
-* `makukha/multipython:stable` — `py313`
-* `makukha/multipython:supported` — `py313t`, `py313`, `py312`, `py311`, `py310`, `py39`
+* `makukha/multipython` — `py3{9,10,11,12,13,14}`, `py3{13,14}t`
+* `makukha/multipython:cpython` — `py313`
+* `makukha/multipython:supported` — `py3{9,10,11,12,13}`, `py313t`
+* `makukha/multipython:unsafe` — all tags above
 <!-- docsub: end -->
 
 
 ### Executables
 
-All executables are on `PATH` as symlinks to respective distributions. System ⚙️ Python, that is always the latest stable version, is also available as simply `python`.
+All executables are on `PATH` as symlinks to respective distributions. System ⚙️ Python, that is always the latest bugfix version, is also available as `python`.
 
 ### Distribution sources
 
@@ -255,8 +253,8 @@ After running `py install` in custom image Dockerfile, `/root/.multipython/info.
 ### Sources
 
 * `latest` – [tests/share/info/latest.json](https://github.com/makukha/multipython/blob/main/tests/share/info/latest.json)
-* `stable` – [tests/share/info/stable.json](https://github.com/makukha/multipython/blob/main/tests/share/info/stable.json)
-* `supported` – [tests/share/info/stable.json](https://github.com/makukha/multipython/blob/main/tests/share/info/supported.json)
+* `cpython` – [tests/share/info/cpython.json](https://github.com/makukha/multipython/blob/main/tests/share/info/cpython.json)
+* `supported` – [tests/share/info/supported.json](https://github.com/makukha/multipython/blob/main/tests/share/info/supported.json)
 * `base` – [tests/share/info/base.json](https://github.com/makukha/multipython/blob/main/tests/share/info/base.json)
 
 ### CLI `py info`
@@ -340,7 +338,7 @@ Versions below are for system python distribution, symlinked to `python`.
 | Tag | pip | setuptools | tox | virtualenv |
 |---|---|---|---|---|
 | `latest` | 24.3.1 ✨ | 75.7.0 ✨ | 4.5.1.1 | 20.21.1 |
-| `stable` | 24.3.1 ✨ | 75.7.0 ✨ | 4.23.2 ✨ | 20.28.1 ✨ |
+| `cpython` | 24.3.1 ✨ | 75.7.0 ✨ | 4.23.2 ✨ | 20.28.1 ✨ |
 | `supported` | 24.3.1 ✨ | 75.7.0 ✨ | 4.23.2 ✨ | 20.28.1 ✨ |
 | `base` | — | — | — | — |
 | `py314t` | 24.3.1 ✨ | 75.7.0 ✨ | 4.23.2 ✨ | 20.28.1 ✨ |

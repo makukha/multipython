@@ -35,15 +35,12 @@ tasks:
     cmds:
       - docker buildx bake
 
-  build:base:
-    desc: Build base image.
+  build:*:
+    desc: Build specific target.
+    vars:
+      TARGET: "{{index .MATCH 0}}"
     cmds:
-      - docker buildx bake base
-
-  build:stable:
-    desc: Build stable image.
-    cmds:
-      - docker buildx bake stable
+      - docker buildx bake {{.TARGET}}
 
   clean:
     desc: Prune local tags, images, and build cache.

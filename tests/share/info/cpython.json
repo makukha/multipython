@@ -1,7 +1,7 @@
 {
   "multipython": {
     "version": "2517",
-    "subset": "stable",
+    "subset": "cpython",
     "root": "/root/.multipython"
   },
   "pyenv": {

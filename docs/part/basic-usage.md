@@ -1,7 +1,3 @@
-```shell
-docker pull makukha/multipython@latest
-```
-
 <!-- docsub: begin -->
 <!-- docsub: include tests/test_readme_basic/tox.ini -->
 <!-- docsub: lines after 2 upto -1 -->
@@ -15,10 +11,10 @@ command = {env_python} --version
 <!-- docsub: end -->
 
 ```shell
-docker run --rm -v .:/src makukha/multipython tox run --root /src
+docker run --rm -v .:/src makukha/multipython:unsafe tox run --root /src
 ```
 
-Single version images have tox installed and can be used on their own:
+Single version images can be used on their own:
 ```shell
-$ docker run --rm -v .:/src makukha/multipython:py38 tox run --root /src
+$ docker run --rm -v .:/src makukha/multipython:py310 tox run --root /src
 ```

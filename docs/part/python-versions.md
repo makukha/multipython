@@ -1,5 +1,3 @@
-* `makukha/multipython:latest` —
-
 | Distribution     | Note          | Tag      | Executable    | Source |
 |------------------|---------------|----------|---------------|--------|
 | CPython 3.14.0a3 | free threaded | `py314t` | `python3.14t` | pyenv  |
@@ -16,5 +14,7 @@
 | CPython 3.5.10   | EOL           | `py35`   | `python3.5`   | pyenv  |
 | CPython 2.7.18   | EOL           | `py27`   | `python2.7`   | pyenv  |
 
-* `makukha/multipython:stable` — `py313`
-* `makukha/multipython:supported` — `py313t`, `py313`, `py312`, `py311`, `py310`, `py39`
+* `makukha/multipython` — `py3{9,10,11,12,13,14}`, `py3{13,14}t`
+* `makukha/multipython:cpython` — `py313`
+* `makukha/multipython:supported` — `py3{9,10,11,12,13}`, `py313t`
+* `makukha/multipython:unsafe` — all tags above

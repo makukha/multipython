@@ -3,7 +3,7 @@
 IMG=makukha/multipython
 
 RELEASE="$1"
-SUBSET="latest stable supported"
+SUBSET="latest cpython supported"
 PARTIAL="py314t py313t py314 py313 py312 py311 py310 py39 py38 py37 py36 py35 py27"
 PKG=(pip setuptools tox virtualenv)
 
@@ -12,10 +12,10 @@ mkdir -p tmp/info
 
 # get latest versions
 LATEST=()
-docker run --rm "$IMG:stable-$RELEASE" py info -c > tmp/info/stable.json
+docker run --rm "$IMG:cpython-$RELEASE" py info -c > tmp/info/cpython.json
 for (( i = 0; i < ${#PKG[@]}; i++ ))
 do
-  LATEST+=("$(jq -r '.python[] | select(.is_system==true) | .packages.'"${PKG[$i]}" "tmp/info/stable.json")")
+  LATEST+=("$(jq -r '.python[] | select(.is_system==true) | .packages.'"${PKG[$i]}" "tmp/info/cpython.json")")
 done
 
 # header
@@ -30,7 +30,7 @@ print_rows () {
     # copy json metadata
     if [ "$tag" = "latest" ]; then
       docker run --rm "$IMG:$RELEASE" py info -c > "tmp/info/$tag.json"
-    elif [ "$tag" = "stable" ]; then
+    elif [ "$tag" = "cpython" ]; then
       true  # already copied
     else
       docker run --rm "$IMG:$tag-$RELEASE" py info -c > "tmp/info/$tag.json"

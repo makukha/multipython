@@ -40,9 +40,9 @@ variable "SUBSET_ARGS" {
       SUBSET = "latest"
       RELEASE_TAG = "${RELEASE}"
     }
-    stable = {
-      SUBSET = "stable"
-      RELEASE_TAG = "stable-${RELEASE}"
+    cpython = {
+      SUBSET = "cpython"
+      RELEASE_TAG = "cpython-${RELEASE}"
     }
     supported = {
       SUBSET = "supported"
@@ -59,7 +59,7 @@ group "default" {
     "base",
     "py",
     "latest",
-    "stable",
+    "cpython",
     "supported",
   ]
 }
@@ -100,12 +100,12 @@ target "latest" {
   ]
 }
 
-target "stable" {
+target "cpython" {
   inherits = ["__build__"]
-  target = "stable"
+  target = "cpython"
   tags = [
-    "${IMG}:stable",
-    "${IMG}:stable-${RELEASE}",
+    "${IMG}:cpython",
+    "${IMG}:cpython-${RELEASE}",
   ]
 }
 
@@ -153,7 +153,7 @@ target "test_subsets" {
   matrix = {
     SUBSET = [
       "latest",
-      "stable",
+      "cpython",
       "supported",
     ]
   }

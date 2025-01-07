@@ -4,10 +4,12 @@
 
 <!-- docsub: begin -->
 <!-- docsub: include docs/part/features.md -->
-* `makukha/multipython` — [pip](https://pip.pypa.io), [pyenv](https://github.com/pyenv/pyenv), [tox](https://tox.wiki), [uv](https://docs.astral.sh/uv), Python distributions
-* `makukha/multipython:stable` — latest stable single version image
-* `makukha/multipython:supported` — all [supported](https://devguide.python.org/versions) versions
+* `makukha/multipython` — prerelease and [supported](https://devguide.python.org/versions) Python distributions
+* `makukha/multipython:cpython` — latest bugfix CPython image
+* `makukha/multipython:supported` — [supported](https://devguide.python.org/versions) versions, not including prerelease
+* `makukha/multipython:unsafe` — all versions, including EOL
 * `makukha/multipython:{py314...}` — single version images
+* All images include [pip](https://pip.pypa.io), [pyenv](https://github.com/pyenv/pyenv), [tox](https://tox.wiki), [uv](https://docs.astral.sh/uv)
 * Tox env names match tag names, even non-standard `py313t`
 * [Build your own environment](https://github.com/makukha/multipython#build-your-own-environment) from single version images
 * Based on `debian:stable-slim`
@@ -24,9 +26,12 @@
 
 # Supported tags and respective `Dockerfile` links
 
-* [`latest, 2517`](https://github.com/makukha/multipython/blob/v2517/Dockerfile) — *all Python versions, pyenv, tox, uv*
-* [`stable, stable-2517`](https://github.com/makukha/multipython/blob/v2517/Dockerfile) — *CPython 3.13.1 — latest stable version*
-* [`supported, supported-2517`](https://github.com/makukha/multipython/blob/v2517/Dockerfile) — *CPython 3.13.1 — latest stable version*
+<!-- docsub: begin -->
+<!-- docsub: include docs/part/image-tags.md -->
+* [`latest, 2517`](https://github.com/makukha/multipython/blob/v2517/Dockerfile) — *all supported and prerelease CPython versions*
+* [`cpython, cpython-2517`](https://github.com/makukha/multipython/blob/v2517/Dockerfile) — *CPython 3.13.1 — latest version*
+* [`supported, supported-2517`](https://github.com/makukha/multipython/blob/v2517/Dockerfile) — *all supported CPython versions*
+* [`unsafe, unsafe-2517`](https://github.com/makukha/multipython/blob/v2517/Dockerfile) — *all CPython versions, including EOL*
 * [`base, base-2517`](https://github.com/makukha/multipython/blob/v2517/Dockerfile) — *pyenv, uv*
 * [`py314t, py314t-2517`](https://github.com/makukha/multipython/blob/v2517/Dockerfile) — *CPython 3.14.0a3 free-threaded*
 * [`py313t, py313t-2517`](https://github.com/makukha/multipython/blob/v2517/Dockerfile) — *CPython 3.13.1 free-threaded*
@@ -42,14 +47,13 @@
 * [`py35, py35-2517`](https://github.com/makukha/multipython/blob/v2517/Dockerfile) — *CPython 3.5.10*
 * [`py27, py27-2517`](https://github.co-m/makukha/multipython/blob/v2517/Dockerfile) — *CPython 2.7.18*
 
+All images with Python include pip, pyenv, tox, uv.
+<!-- docsub: end -->
+
 # How to use this image
 
 <!-- docsub: begin #readme -->
 <!-- docsub: include docs/part/basic-usage.md -->
-```shell
-docker pull makukha/multipython@latest
-```
-
 <!-- docsub: begin -->
 <!-- docsub: include tests/test_readme_basic/tox.ini -->
 <!-- docsub: lines after 2 upto -1 -->
@@ -63,22 +67,22 @@ command = {env_python} --version
 <!-- docsub: end -->
 
 ```shell
-docker run --rm -v .:/src makukha/multipython tox run --root /src
+docker run --rm -v .:/src makukha/multipython:unsafe tox run --root /src
 ```
 
 Single version images have tox installed and can be used on their own:
 ```shell
-$ docker run --rm -v .:/src makukha/multipython:py38 tox run --root /src
+$ docker run --rm -v .:/src makukha/multipython:py310 tox run --root /src
 ```
 <!-- docsub: end #readme -->
+
+See [Documentation](https://github.com/makukha/multipython?tab=readme-ov-file) for advanced usage.
 
 
 ## Python versions
 
 <!-- docsub: begin -->
 <!-- docsub: include docs/part/python-versions.md -->
-* `makukha/multipython:latest` —
-
 | Distribution     | Note          | Tag      | Executable    | Source |
 |------------------|---------------|----------|---------------|--------|
 | CPython 3.14.0a3 | free threaded | `py314t` | `python3.14t` | pyenv  |
@@ -95,8 +99,10 @@ $ docker run --rm -v .:/src makukha/multipython:py38 tox run --root /src
 | CPython 3.5.10   | EOL           | `py35`   | `python3.5`   | pyenv  |
 | CPython 2.7.18   | EOL           | `py27`   | `python2.7`   | pyenv  |
 
-* `makukha/multipython:stable` — `py313`
-* `makukha/multipython:supported` — `py313t`, `py313`, `py312`, `py311`, `py310`, `py39`
+* `makukha/multipython` — `py3{9,10,11,12,13,14}`, `py3{13,14}t`
+* `makukha/multipython:cpython` — `py313`
+* `makukha/multipython:supported` — `py3{9,10,11,12,13}`, `py313t`
+* `makukha/multipython:unsafe` — all tags above
 <!-- docsub: end -->
 
 
