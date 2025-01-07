@@ -20,6 +20,7 @@ Prepare for multi-source (pyenv + uv) and multi-implementation (PyPy, RustPython
 ### Breaking 🔥
 
 - Changed commands and options of `py` helper utility  ([#36](https://github.com/makukha/multipython/issues/36), [#37](https://github.com/makukha/multipython/issues/37), [#38](https://github.com/makukha/multipython/issues/38), [#39](https://github.com/makukha/multipython/issues/39), [#40](https://github.com/makukha/multipython/issues/40), [#42](https://github.com/makukha/multipython/issues/42), [#43](https://github.com/makukha/multipython/issues/43), [#44](https://github.com/makukha/multipython/issues/44), [#46](https://github.com/makukha/multipython/issues/46))
+- Changed versioning scheme to [Date62](http://github.com/date62/date62-python) based CalVer ([#48](https://github.com/makukha/multipython/issues/48)).
 
 ### Added 🌿
 
@@ -42,5 +43,5 @@ Prepare for multi-source (pyenv + uv) and multi-implementation (PyPy, RustPython
 ### Misc
 
 - Removed personal helpers ([#29](https://github.com/makukha/multipython/issues/29))
-- Use locally cached version info in `checkupd` ([#34](https://github.com/makukha/multipython/issues/34))
+- Use locally cached version info in `checkupd` ([#30](https://github.com/makukha/multipython/issues/30), [#34](https://github.com/makukha/multipython/issues/34))
 - Refactored tests for better availability to [docsub](https://github.com/makukha/docsub) ([#35](https://github.com/makukha/multipython/issues/35))
