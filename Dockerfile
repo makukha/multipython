@@ -145,11 +145,6 @@ RUN py install --as cpython
 
 FROM base AS latest
 RUN mkdir /root/.pyenv/versions
-COPY --from=py27 /root/.pyenv/versions /root/.pyenv/versions/
-COPY --from=py35 /root/.pyenv/versions /root/.pyenv/versions/
-COPY --from=py36 /root/.pyenv/versions /root/.pyenv/versions/
-COPY --from=py37 /root/.pyenv/versions /root/.pyenv/versions/
-COPY --from=py38 /root/.pyenv/versions /root/.pyenv/versions/
 COPY --from=py39 /root/.pyenv/versions /root/.pyenv/versions/
 COPY --from=py310 /root/.pyenv/versions /root/.pyenv/versions/
 COPY --from=py311 /root/.pyenv/versions /root/.pyenv/versions/
@@ -172,3 +167,23 @@ COPY --from=py312 /root/.pyenv/versions /root/.pyenv/versions/
 COPY --from=py313 /root/.pyenv/versions /root/.pyenv/versions/
 COPY --from=py313t /root/.pyenv/versions /root/.pyenv/versions/
 RUN py install --as supported
+
+
+# unsafe
+
+FROM base AS unsafe
+RUN mkdir /root/.pyenv/versions
+COPY --from=py27 /root/.pyenv/versions /root/.pyenv/versions/
+COPY --from=py35 /root/.pyenv/versions /root/.pyenv/versions/
+COPY --from=py36 /root/.pyenv/versions /root/.pyenv/versions/
+COPY --from=py37 /root/.pyenv/versions /root/.pyenv/versions/
+COPY --from=py38 /root/.pyenv/versions /root/.pyenv/versions/
+COPY --from=py39 /root/.pyenv/versions /root/.pyenv/versions/
+COPY --from=py310 /root/.pyenv/versions /root/.pyenv/versions/
+COPY --from=py311 /root/.pyenv/versions /root/.pyenv/versions/
+COPY --from=py312 /root/.pyenv/versions /root/.pyenv/versions/
+COPY --from=py313 /root/.pyenv/versions /root/.pyenv/versions/
+COPY --from=py314 /root/.pyenv/versions /root/.pyenv/versions/
+COPY --from=py313t /root/.pyenv/versions /root/.pyenv/versions/
+COPY --from=py314t /root/.pyenv/versions /root/.pyenv/versions/
+RUN py install --as unsafe

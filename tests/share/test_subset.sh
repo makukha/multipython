@@ -130,7 +130,7 @@ fi
 echo -e "\n>>> Testing: $SUBSET: tox..."
 if [ "$SUBSET" = "base" ]; then
   true  # no tox installed
-elif [ "$SUBSET" = "latest" ]; then
+elif [ "$SUBSET" = "unsafe" ]; then
   tox run
 else
   tox run -m "$SUBSET"

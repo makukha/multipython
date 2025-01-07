@@ -48,6 +48,10 @@ variable "SUBSET_ARGS" {
       SUBSET = "supported"
       RELEASE_TAG = "supported-${RELEASE}"
     }
+    unsafe = {
+      SUBSET = "unsafe"
+      RELEASE_TAG = "unsafe-${RELEASE}"
+    }
   }
 }
 
@@ -61,6 +65,7 @@ group "default" {
     "latest",
     "cpython",
     "supported",
+    "unsafe",
   ]
 }
 
@@ -118,6 +123,15 @@ target "supported" {
   ]
 }
 
+target "unsafe" {
+  inherits = ["__build__"]
+  target = "unsafe"
+  tags = [
+    "${IMG}:unsafe",
+    "${IMG}:unsafe-${RELEASE}",
+  ]
+}
+
 
 # --- test
 
@@ -155,6 +169,7 @@ target "test_subsets" {
       "latest",
       "cpython",
       "supported",
+      "unsafe",
     ]
   }
   name = "test_subset_${SUBSET}"

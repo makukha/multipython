@@ -3,14 +3,14 @@
 IMG=makukha/multipython
 
 RELEASE="$1"
-SUBSET="latest cpython supported"
+SUBSET="latest cpython supported unsafe"
 PARTIAL="py314t py313t py314 py313 py312 py311 py310 py39 py38 py37 py36 py35 py27"
 PKG=(pip setuptools tox virtualenv)
 
 
 mkdir -p tmp/info
 
-# get latest versions
+# get LATEST version numbers
 LATEST=()
 docker run --rm "$IMG:cpython-$RELEASE" py info -c > tmp/info/cpython.json
 for (( i = 0; i < ${#PKG[@]}; i++ ))

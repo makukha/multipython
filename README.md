@@ -14,7 +14,7 @@
 * `makukha/multipython` — prerelease and [supported](https://devguide.python.org/versions) Python distributions
 * `makukha/multipython:cpython` — latest bugfix CPython image
 * `makukha/multipython:supported` — [supported](https://devguide.python.org/versions) versions, not including prerelease
-* `makukha/multipython:unsafe` — all versions, including EOL
+* `makukha/multipython:unsafe` — all versions, including end-of-life
 * `makukha/multipython:{py314...}` — single version images
 * All images include [pip](https://pip.pypa.io), [pyenv](https://github.com/pyenv/pyenv), [tox](https://tox.wiki), [uv](https://docs.astral.sh/uv)
 * Tox env names match tag names, even non-standard `py313t`
@@ -44,7 +44,7 @@ command = {env_python} --version
 docker run --rm -v .:/src makukha/multipython:unsafe tox run --root /src
 ```
 
-Single version images have tox installed and can be used on their own:
+Single version images can be used on their own:
 ```shell
 $ docker run --rm -v .:/src makukha/multipython:py310 tox run --root /src
 ```
@@ -255,6 +255,7 @@ After running `py install` in custom image Dockerfile, `/root/.multipython/info.
 * `latest` – [tests/share/info/latest.json](https://github.com/makukha/multipython/blob/main/tests/share/info/latest.json)
 * `cpython` – [tests/share/info/cpython.json](https://github.com/makukha/multipython/blob/main/tests/share/info/cpython.json)
 * `supported` – [tests/share/info/supported.json](https://github.com/makukha/multipython/blob/main/tests/share/info/supported.json)
+* `unsafe` – [tests/share/info/unsafe.json](https://github.com/makukha/multipython/blob/main/tests/share/info/unsafe.json)
 * `base` – [tests/share/info/base.json](https://github.com/makukha/multipython/blob/main/tests/share/info/base.json)
 
 ### CLI `py info`
@@ -279,14 +280,14 @@ docker run --rm makukha/multipython:latest py info -c
     "python_versions": "/root/.pyenv/versions"
   },
   "tox": {
-    "version": "4.5.1.1"
+    "version": "4.23.2"
   },
   "uv": {
     "version": "0.5.15",
     "python_versions": "/root/.local/share/uv/python"
   },
   "virtualenv": {
-    "version": "20.21.1"
+    "version": "20.28.1"
   },
   "base_image": {
     "name": "debian",
@@ -324,7 +325,7 @@ All released images share same versions of base tools, but [tox version](#tox-ve
 | `base`    | 2.5.0✨ | 0.5.15✨ | —         |
 | Other     | 2.5.0✨ | 0.5.15✨ | *varying* |
 
-<span>✨</span> latest version, will be updated in future releases.
+<span>✨</span> latest version, will be updated in upcoming releases.
 
 ## Python packages
 
@@ -337,9 +338,10 @@ Versions below are for system python distribution, symlinked to `python`.
 |-------------|--------|------------|-----|------------|
 | Tag | pip | setuptools | tox | virtualenv |
 |---|---|---|---|---|
-| `latest` | 24.3.1 ✨ | 75.7.0 ✨ | 4.5.1.1 | 20.21.1 |
+| `latest` | 24.3.1 ✨ | 75.7.0 ✨ | 4.23.2 ✨ | 20.28.1 ✨ |
 | `cpython` | 24.3.1 ✨ | 75.7.0 ✨ | 4.23.2 ✨ | 20.28.1 ✨ |
 | `supported` | 24.3.1 ✨ | 75.7.0 ✨ | 4.23.2 ✨ | 20.28.1 ✨ |
+| `unsafe` | 24.3.1 ✨ | 75.7.0 ✨ | 4.5.1.1 | 20.21.1 |
 | `base` | — | — | — | — |
 | `py314t` | 24.3.1 ✨ | 75.7.0 ✨ | 4.23.2 ✨ | 20.28.1 ✨ |
 | `py313t` | 24.3.1 ✨ | 75.7.0 ✨ | 4.23.2 ✨ | 20.28.1 ✨ |
@@ -356,11 +358,11 @@ Versions below are for system python distribution, symlinked to `python`.
 | `py27` | 20.3.4 | 44.1.1 | 3.28.0 | 20.15.1 |
 <!-- docsub: end -->
 
-<span>✨</span> latest version, will be updated in future releases.
+<span>✨</span> latest version, will be updated in upcoming releases.
 
 ## tox version
 
-The default tox version v4.5.1.1 is dictated by [virtualenv support](https://virtualenv.pypa.io/en/latest/changelog.html) of Python versions. Virtualenv v20.22 dropped support for Python 3.6, v20.27 dropped support of Python 3.7. Depending on minimal Python version used in custom environment, tox version will be automatically selected by `py install`.
+The minimal tox version v4.5.1.1 is dictated by [virtualenv support](https://virtualenv.pypa.io/en/latest/changelog.html) of Python versions. Virtualenv v20.22 dropped support for Python 3.6, v20.27 dropped support of Python 3.7. Depending on minimal Python version used in custom environment, tox version will be automatically selected by `py install`.
 
 | Min Python version | virtualenv  | tox     |
 |--------------------|-------------|---------|

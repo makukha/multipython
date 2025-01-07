@@ -22,5 +22,6 @@ files = [
   {filename = "tests/share/info/cpython.json"},
   {filename = "tests/share/info/latest.json"},
   {filename = "tests/share/info/supported.json"},
+  {filename = "tests/share/info/unsafe.json"},
   {filename = "tests/test_readme_advanced/info.json"},
 ]

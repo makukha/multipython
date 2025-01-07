@@ -7,7 +7,7 @@
 * `makukha/multipython` — prerelease and [supported](https://devguide.python.org/versions) Python distributions
 * `makukha/multipython:cpython` — latest bugfix CPython image
 * `makukha/multipython:supported` — [supported](https://devguide.python.org/versions) versions, not including prerelease
-* `makukha/multipython:unsafe` — all versions, including EOL
+* `makukha/multipython:unsafe` — all versions, including end-of-life
 * `makukha/multipython:{py314...}` — single version images
 * All images include [pip](https://pip.pypa.io), [pyenv](https://github.com/pyenv/pyenv), [tox](https://tox.wiki), [uv](https://docs.astral.sh/uv)
 * Tox env names match tag names, even non-standard `py313t`
@@ -70,7 +70,7 @@ command = {env_python} --version
 docker run --rm -v .:/src makukha/multipython:unsafe tox run --root /src
 ```
 
-Single version images have tox installed and can be used on their own:
+Single version images can be used on their own:
 ```shell
 $ docker run --rm -v .:/src makukha/multipython:py310 tox run --root /src
 ```
