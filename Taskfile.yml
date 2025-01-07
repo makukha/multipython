@@ -86,7 +86,7 @@ tasks:
       VERSION: {sh: uvx bump-my-version show current_version 2>/dev/null}
     cmds:
       # generate tables
-      - bash .dev/gen-package-versions.sh "{{.VERSION}}" > docs/tab/package-versions.md
+      - bash .dev/gen-package-versions.sh "{{.VERSION}}" > docs/gen/package-versions.md
       # substitute parts
       - docsub -i docs/part/basic-usage.md DOCKERHUB.md README.md
 

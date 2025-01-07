@@ -271,7 +271,7 @@ docker run --rm makukha/multipython:latest py info -c
 ```json
 {
   "multipython": {
-    "version": "2513",
+    "version": "2517",
     "subset": "latest",
     "root": "/root/.multipython"
   },
@@ -284,7 +284,7 @@ docker run --rm makukha/multipython:latest py info -c
     "version": "4.5.1.1"
   },
   "uv": {
-    "version": "0.5.14",
+    "version": "0.5.15",
     "python_versions": "/root/.local/share/uv/python"
   },
   "virtualenv": {
@@ -307,7 +307,7 @@ docker run --rm makukha/multipython:latest py info -c
       "is_system": false,
       "packages": {
         "pip": "24.3.1",
-        "setuptools": "75.6.0"
+        "setuptools": "75.7.0"
       }
     },
 ...
@@ -323,8 +323,8 @@ All released images share same versions of base tools, but [tox version](#tox-ve
 
 | Image tag | pyenv | uv      | tox       |
 |-----------|-------|---------|-----------|
-| `base`    | 2.5.0✨ | 0.5.14✨ | —         |
-| Other     | 2.5.0✨ | 0.5.14✨ | *varying* |
+| `base`    | 2.5.0✨ | 0.5.15✨ | —         |
+| Other     | 2.5.0✨ | 0.5.15✨ | *varying* |
 
 <span>✨</span> latest version, will be updated in future releases.
 
@@ -333,24 +333,24 @@ All released images share same versions of base tools, but [tox version](#tox-ve
 Versions below are for system python distribution, symlinked to `python`.
 
 <!-- docsub: begin -->
-<!-- docsub: include docs/tab/package-versions.md -->
+<!-- docsub: include docs/gen/package-versions.md -->
 <!-- docsub: lines after 2 -->
 | Image tag   | pip    | setuptools | tox | virtualenv |
 |-------------|--------|------------|-----|------------|
 | Tag | pip | setuptools | tox | virtualenv |
 |---|---|---|---|---|
-| `latest` | 24.3.1 ✨ | 75.6.0 ✨ | 4.5.1.1 | 20.21.1 |
-| `stable` | 24.3.1 ✨ | 75.6.0 ✨ | 4.23.2 ✨ | 20.28.1 ✨ |
-| `supported` | 24.3.1 ✨ | 75.6.0 ✨ | 4.23.2 ✨ | 20.28.1 ✨ |
+| `latest` | 24.3.1 ✨ | 75.7.0 ✨ | 4.5.1.1 | 20.21.1 |
+| `stable` | 24.3.1 ✨ | 75.7.0 ✨ | 4.23.2 ✨ | 20.28.1 ✨ |
+| `supported` | 24.3.1 ✨ | 75.7.0 ✨ | 4.23.2 ✨ | 20.28.1 ✨ |
 | `base` | — | — | — | — |
-| `py314t` | 24.3.1 ✨ | 75.6.0 ✨ | 4.23.2 ✨ | 20.28.1 ✨ |
-| `py313t` | 24.3.1 ✨ | 75.6.0 ✨ | 4.23.2 ✨ | 20.28.1 ✨ |
-| `py314` | 24.3.1 ✨ | 75.6.0 ✨ | 4.23.2 ✨ | 20.28.1 ✨ |
-| `py313` | 24.3.1 ✨ | 75.6.0 ✨ | 4.23.2 ✨ | 20.28.1 ✨ |
-| `py312` | 24.3.1 ✨ | 75.6.0 ✨ | 4.23.2 ✨ | 20.28.1 ✨ |
-| `py311` | 24.3.1 ✨ | 75.6.0 ✨ | 4.23.2 ✨ | 20.28.1 ✨ |
-| `py310` | 24.3.1 ✨ | 75.6.0 ✨ | 4.23.2 ✨ | 20.28.1 ✨ |
-| `py39` | 24.3.1 ✨ | 75.6.0 ✨ | 4.23.2 ✨ | 20.28.1 ✨ |
+| `py314t` | 24.3.1 ✨ | 75.7.0 ✨ | 4.23.2 ✨ | 20.28.1 ✨ |
+| `py313t` | 24.3.1 ✨ | 75.7.0 ✨ | 4.23.2 ✨ | 20.28.1 ✨ |
+| `py314` | 24.3.1 ✨ | 75.7.0 ✨ | 4.23.2 ✨ | 20.28.1 ✨ |
+| `py313` | 24.3.1 ✨ | 75.7.0 ✨ | 4.23.2 ✨ | 20.28.1 ✨ |
+| `py312` | 24.3.1 ✨ | 75.7.0 ✨ | 4.23.2 ✨ | 20.28.1 ✨ |
+| `py311` | 24.3.1 ✨ | 75.7.0 ✨ | 4.23.2 ✨ | 20.28.1 ✨ |
+| `py310` | 24.3.1 ✨ | 75.7.0 ✨ | 4.23.2 ✨ | 20.28.1 ✨ |
+| `py39` | 24.3.1 ✨ | 75.7.0 ✨ | 4.23.2 ✨ | 20.28.1 ✨ |
 | `py38` | 24.3.1 ✨ | 75.3.0 | 4.23.2 ✨ | 20.28.1 ✨ |
 | `py37` | 24.0 | 68.0.0 | 4.8.0 | 20.26.6 |
 | `py36` | 21.3.1 | 59.6.0 | 3.28.0 | 20.17.1 |

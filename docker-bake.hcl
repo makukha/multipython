@@ -2,15 +2,15 @@ variable "IMG" {
   default = "makukha/multipython"
 }
 variable "RELEASE" {
-  default = "2513"
+  default = "2517"
 }
 
 variable "BASE_VERSIONS" {
   default = {
     PYENV_VERSION = "2.5.0"
     PYENV_SHA256 = "12c42bdaf3741895ad710a957d44dc2b0c5260f95f857318a6681981fe1b1c0b"
-    UV_VERSION = "0.5.14"
-    UV_SHA256 = "22034760075b92487b326da5aa1a2a3e1917e2e766c12c0fd466fccda77013c7"
+    UV_VERSION = "0.5.15"
+    UV_SHA256 = "6c650324daafc07331c00b458872d50f56f160544015c8a499fd2e160b404ebb"
   }
 }
 variable "PY_VERSIONS" {

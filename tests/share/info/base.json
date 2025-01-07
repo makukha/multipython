@@ -1,6 +1,6 @@
 {
   "multipython": {
-    "version": "2513",
+    "version": "2517",
     "subset": "base",
     "root": "/root/.multipython"
   },
@@ -10,7 +10,7 @@
     "python_versions": "/root/.pyenv/versions"
   },
   "uv": {
-    "version": "0.5.14",
+    "version": "0.5.15",
     "python_versions": "/root/.local/share/uv/python"
   },
   "base_image": {

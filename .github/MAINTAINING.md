@@ -34,7 +34,9 @@ $ task run:* -- ...
 ## Pre-release
 
 ```shell
+$ task checkupd
 $ task lint clean build test
+$ task docs
 ```
 
 ## Release

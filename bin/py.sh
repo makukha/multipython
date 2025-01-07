@@ -5,7 +5,7 @@ set -o errtrace
 set -o nounset
 set -o pipefail
 
-MULTIPYTHON_VERSION=2513
+MULTIPYTHON_VERSION=2517
 MULTIPYTHON_ROOT=/root/.multipython
 MULTIPYTHON_INFO="$MULTIPYTHON_ROOT/info.json"
 
