@@ -1,6 +1,4 @@
-[![GitHub Release](https://img.shields.io/github/v/tag/makukha/multipython?label=release)](https://github.com/makukha/multipython) [![GitHub Release Date](https://img.shields.io/github/release-date/makukha/multipython?label=release%20date)](https://github.com/makukha/multipython)
-
-[![OpenSSF Best Practices](https://www.bestpractices.dev/projects/9755/badge)](https://www.bestpractices.dev/projects/9755)
+[![GitHub Release](https://img.shields.io/github/v/tag/makukha/multipython?label=release)](https://github.com/makukha/multipython)°[![GitHub Release Date](https://img.shields.io/github/release-date/makukha/multipython?label=release%20date)](https://github.com/makukha/multipython)°[![OpenSSF Best Practices](https://www.bestpractices.dev/projects/9755/badge)](https://www.bestpractices.dev/projects/9755)
 
 <!-- docsub: begin -->
 <!-- docsub: include docs/part/features.md -->
@@ -116,32 +114,34 @@ See [Documentation](https://github.com/makukha/multipython?tab=readme-ov-file) f
 
 # Image digests
 
+Use image digests for 100% reproducible results.
+
 ```shell
 $ docker run --rm -v .:/src -w /src makukha/multipython@sha256:... tox run
 ```
 
 <!-- docsub: begin -->
-<!-- docsub: include docs/gen/image-digests.md -->
-<!-- docsub: lines after 2 -->
-| Image | Digest |
-|-------|--------|
-| `makukha/multipython:base-2517` | `sha256:24dcc37b3a4056948f8597f410294285d9fc36f5498ce128f549dae01dde01ab` |
-| `makukha/multipython:cpython-2517` | `sha256:35575dbed8aaba989771ee28948971d52355d586512dd09decceb72b1c180cf7` |
-| `makukha/multipython:py27-2517` | `sha256:fc94ecb658fe22690a26cbabdad01c5b18f8b1a819f1ea8020a318ff8e9bb664` |
-| `makukha/multipython:py310-2517` | `sha256:164286485adb7785e9eb813840aec82eb9d2216b37ac82de069e3794e6888191` |
-| `makukha/multipython:py311-2517` | `sha256:824fcead713fad77d4e7c5e5240ba526c86e83ce6341e7dd6a5f7969b9b23786` |
-| `makukha/multipython:py312-2517` | `sha256:5071b73e4f55af32ca25dcd161ce0dd5be76ec20a85709451a30449e22b87337` |
-| `makukha/multipython:py313-2517` | `sha256:12091f77b5548d42daabe30024a05b3c8ba9121197ac1edc4e94538ac3e27e9f` |
-| `makukha/multipython:py313t-2517` | `sha256:1f1e1f9b0289da360849fa49443f7306cf287ea274f147530765bf22a5f15705` |
-| `makukha/multipython:py314-2517` | `sha256:21b95ff22d207948e908442f41f1169b9bd49bdd6f7004959829fe10d87829eb` |
-| `makukha/multipython:py314t-2517` | `sha256:09c8b4b08cae9c91747c1aa7d958b6c9ffad9c80daad668f555a4c615ececce4` |
-| `makukha/multipython:py35-2517` | `sha256:aaf9506c3a9b6b9fba2606aa586646c3653507ccee5105a8b64bd9b1d92269bb` |
-| `makukha/multipython:py36-2517` | `sha256:b443be7588a65994a61910ee912f442110f68e724069509d38896a37420ba8fb` |
-| `makukha/multipython:py37-2517` | `sha256:a0231c32a7cd2f64f555c9500a9e4ed81a277269cfcda58dc768f8947f93405f` |
-| `makukha/multipython:py38-2517` | `sha256:2793e528d58cdff20cf7199669d153a09591870fb7fd77c12719523c3894ca4c` |
-| `makukha/multipython:py39-2517` | `sha256:d5addd34754f0bda92ffce443b6f1ac8a27491676680c67bd6729470d2e475ca` |
-| `makukha/multipython:supported-2517` | `sha256:a569d378b7c0a23110883bcaf227dd505da037435e24e29db3be338f44e76b3d` |
-| `makukha/multipython:unsafe-2517` | `sha256:8cdd2df01a12bb829a40283aaa6db1860bcd36bf01e4aa87a343f939ccf4d36c` |
+<!-- docsub: exec awk '{print $1" 👉 "$2}' docs/gen/image-digests.txt -->
+<!-- docsub: lines after 1 upto -1 -->
+```text
+base-2517 👉 sha256:24dcc37b3a4056948f8597f410294285d9fc36f5498ce128f549dae01dde01ab
+cpython-2517 👉 sha256:35575dbed8aaba989771ee28948971d52355d586512dd09decceb72b1c180cf7
+py27-2517 👉 sha256:fc94ecb658fe22690a26cbabdad01c5b18f8b1a819f1ea8020a318ff8e9bb664
+py310-2517 👉 sha256:164286485adb7785e9eb813840aec82eb9d2216b37ac82de069e3794e6888191
+py311-2517 👉 sha256:824fcead713fad77d4e7c5e5240ba526c86e83ce6341e7dd6a5f7969b9b23786
+py312-2517 👉 sha256:5071b73e4f55af32ca25dcd161ce0dd5be76ec20a85709451a30449e22b87337
+py313-2517 👉 sha256:12091f77b5548d42daabe30024a05b3c8ba9121197ac1edc4e94538ac3e27e9f
+py313t-2517 👉 sha256:1f1e1f9b0289da360849fa49443f7306cf287ea274f147530765bf22a5f15705
+py314-2517 👉 sha256:21b95ff22d207948e908442f41f1169b9bd49bdd6f7004959829fe10d87829eb
+py314t-2517 👉 sha256:09c8b4b08cae9c91747c1aa7d958b6c9ffad9c80daad668f555a4c615ececce4
+py35-2517 👉 sha256:aaf9506c3a9b6b9fba2606aa586646c3653507ccee5105a8b64bd9b1d92269bb
+py36-2517 👉 sha256:b443be7588a65994a61910ee912f442110f68e724069509d38896a37420ba8fb
+py37-2517 👉 sha256:a0231c32a7cd2f64f555c9500a9e4ed81a277269cfcda58dc768f8947f93405f
+py38-2517 👉 sha256:2793e528d58cdff20cf7199669d153a09591870fb7fd77c12719523c3894ca4c
+py39-2517 👉 sha256:d5addd34754f0bda92ffce443b6f1ac8a27491676680c67bd6729470d2e475ca
+supported-2517 👉 sha256:a569d378b7c0a23110883bcaf227dd505da037435e24e29db3be338f44e76b3d
+unsafe-2517 👉 sha256:8cdd2df01a12bb829a40283aaa6db1860bcd36bf01e4aa87a343f939ccf4d36c
+```
 <!-- docsub: end -->
 
 # Feedback and contributing

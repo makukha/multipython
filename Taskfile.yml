@@ -83,8 +83,11 @@ tasks:
       VERSION: {sh: uvx bump-my-version show current_version 2>/dev/null}
     cmds:
       - bash .dev/gen-package-versions.sh "{{.VERSION}}" > docs/gen/package-versions.md
-      - bash .dev/gen-image-digests.sh "{{.VERSION}}" > docs/gen/image-digests.md
-      - docsub -i docs/part/basic-usage.md DOCKERHUB.md README.md
+      - bash .dev/gen-image-digests.sh "{{.VERSION}}" > docs/gen/image-digests.txt
+      - docsub -i
+          docs/part/basic-usage.md
+          DOCKERHUB.md
+          README.md
 
   # release
 
