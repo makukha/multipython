@@ -48,9 +48,9 @@ $ task lint clean build test
 $ task release:push
 ```
 
-Manually update [repository overview](https://hub.docker.com/repository/docker/makukha/multipython/general) from DOCKERHUB.md.
-
-Update image digests after pushing to the registry:
+Update image digests after pushing to registry:
 ```shell
 $ task docs
 ```
+
+Manually update [repository overview](https://hub.docker.com/repository/docker/makukha/multipython/general) from `DOCKERHUB.md`.

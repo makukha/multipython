@@ -11,10 +11,10 @@ command = {env_python} --version
 <!-- docsub: end -->
 
 ```shell
-docker run --rm -v .:/src makukha/multipython:unsafe tox run --root /src
+docker run --rm -v .:/src -w /src makukha/multipython:unsafe tox run
 ```
 
 Single version images can be used on their own:
 ```shell
-$ docker run --rm -v .:/src makukha/multipython:py310 tox run --root /src
+$ docker run --rm -v .:/src -w /src makukha/multipython:py310 tox run
 ```

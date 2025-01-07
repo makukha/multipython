@@ -100,6 +100,7 @@ target "latest" {
   inherits = ["__build__"]
   target = "latest"
   tags = [
+    "${IMG}",
     "${IMG}:latest",
     "${IMG}:${RELEASE}",
   ]
