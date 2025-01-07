@@ -25,7 +25,7 @@ $ task init
 
 ```shell
 $ task checkupd
-$ task changelog:* -- Message — by @username
+$ task news:* -- Message — by @username
 $ task build:*
 $ task shell:* -- -v ...
 $ task run:* -- ...
@@ -46,5 +46,11 @@ $ task release:version
 $ task release:changelog
 $ task lint clean build test
 $ task release:push
+```
+
+Manually update [repository overview](https://hub.docker.com/repository/docker/makukha/multipython/general) from DOCKERHUB.md.
+
+Update image digests after pushing to the registry:
+```shell
 $ task docs
 ```

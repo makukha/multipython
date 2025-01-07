@@ -16,7 +16,7 @@ tasks:
       - docker buildx bake base
       - docker run --rm -t {{.IMG}}:base py checkupd
 
-  changelog:*:
+  news:*:
     desc: Create news item {security|breaking|removed|deprecated|added|changed|fixed|docs|misc}.
     vars:
       ISSUE: {sh: git rev-parse --abbrev-ref HEAD | cut -d- -f1}
