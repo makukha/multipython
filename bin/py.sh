@@ -12,6 +12,22 @@ MULTIPYTHON_INFO="$MULTIPYTHON_ROOT/info.json"
 PYENV_ROOT=$(pyenv root)
 UV_ROOT=$(uv python dir)
 
+declare -rA TAG_PATTERN=(
+  ["py314t"]="Python 3.14.0a3 experimental free-threading build ("
+  ["py313t"]="Python 3.13.1 experimental free-threading build ("
+  ["py314"]="Python 3.14.0a3 ("
+  ["py313"]="Python 3.13.1 ("
+  ["py312"]="Python 3.12.8 ("
+  ["py311"]="Python 3.11.11 ("
+  ["py310"]="Python 3.10.16 ("
+  ["py39"]="Python 3.9.21 ("
+  ["py38"]="Python 3.8.20 ("
+  ["py37"]="Python 3.7.17 ("
+  ["py36"]="Python 3.6.15 ("
+  ["py35"]="Python 3.5.10"
+  ["py27"]="Python 2.7.18"
+)
+
 
 # helpers
 
@@ -185,7 +201,7 @@ py_info () {
 py_install () {
   # shortcut
   if [ -z "$(_py_ls_all)" ]; then
-    echo No Python distributions found. >&2
+    echo "No Python distributions found" >&2
     exit 1
   fi
 
@@ -313,8 +329,28 @@ py_sys () {
   if [ -z "$(command -v python)" ]; then
     exit 0
   fi
-  VERB="$(python -VV 2>&1 | head -1 | sed 's/ (.*/ (/')"
-  sed -n "s/ $VERB$//p" "$MULTIPYTHON_ROOT/verbose.txt"
+  py_tag python
+}
+
+py_tag () {
+  if [ "$#" = 0 ]; then
+    echo "Option required" >&2
+    exit 1
+  fi
+  if [ -z "$(command -v "$1")" ] && [ ! -f "$1" ]; then
+    echo "Executable does not exist: $1" >&2
+    exit 1
+  fi
+  HEADER="$("$1" -VV 2>&1 | head -1)"
+  for TAG in "${!TAG_PATTERN[@]}"
+  do
+    if [[ "$HEADER" == "${TAG_PATTERN[$TAG]}"* ]]; then
+      echo "$TAG"
+      exit 0
+    fi
+  done
+  echo "Unknown executable: $HEADER"
+  exit 1
 }
 
 py_usage () {
@@ -324,6 +360,7 @@ py_usage () {
   echo "       py ls {--long|--short|--tag|--all}"
   echo "       py root"
   echo "       py sys"
+  echo "       py tag <EXECUTABLE>"
   echo "       py --version"
   echo "       py --help"
   echo
@@ -334,6 +371,7 @@ py_usage () {
   echo "  ls       List all distributions"
   echo "  root     Show multipython root path"
   echo "  sys      Show system python tag"
+  echo "  tag      Determine tag of executable"
   echo
   echo "binary info formats:"
   echo "  -c --cmd   Command name, expected to be on PATH"
@@ -366,6 +404,7 @@ main () {
       ls)        shift; py_ls "$@" ;;
       root)      echo "$MULTIPYTHON_ROOT" ;;
       sys)       shift; py_sys "$@" ;;
+      tag)       shift; py_tag "$@" ;;
       --version) echo "multipython $MULTIPYTHON_VERSION" ;;
       --help)    py_usage ;;
       *)

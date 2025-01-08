@@ -69,11 +69,18 @@ tasks:
       - docker run --rm -it {{.IMG}}:{{index .MATCH 0}} {{.CLI_ARGS}}
 
   test:
-    desc: Run tests.
+    desc: Run all tests.
     env:
       BUILDKIT_PROGRESS: plain
     cmds:
       - docker buildx bake --no-cache test
+
+  test:*:
+    desc: Test specific subset.
+    env:
+      BUILDKIT_PROGRESS: plain
+    cmds:
+      - docker buildx bake --no-cache test_subset_{{index .MATCH 0}}
 
   # docs
 
