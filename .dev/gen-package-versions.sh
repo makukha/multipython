@@ -18,12 +18,6 @@ do
   LATEST+=("$(jq -r '.python[] | select(.is_system==true) | .packages.'"${PKG[$i]}" "tmp/info/cpython.json")")
 done
 
-# header
-echo -n "| Tag "
-for col in "${PKG[@]}"; do echo -n "| $col "; done; echo "|"
-echo -n "|---"
-for col in "${PKG[@]}"; do echo -n "|---"; done; echo "|"
-
 print_rows () {
   for tag in $1
   do
