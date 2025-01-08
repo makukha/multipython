@@ -22,7 +22,7 @@ tasks:
       ISSUE: {sh: git rev-parse --abbrev-ref HEAD | cut -d- -f1}
       SECTION: '{{index .MATCH 0}}'
     cmds:
-      - uvx towncrier create -c "{{.CLI_ARGS}}" "{{.ISSUE}}.{{.SECTION}}.md"
+      - uvx towncrier create -c '{{.CLI_ARGS}}' "{{.ISSUE}}.{{.SECTION}}.md"
 
   lint:
     desc: Run linters.
