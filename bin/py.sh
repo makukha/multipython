@@ -28,6 +28,8 @@ declare -rA TAG_PATTERN=(
   ["py27"]="Python 2.7.18"
 )
 
+VIRTUALENV_MULTIPYTHON_VERSION=0.1.2
+
 
 # helpers
 
@@ -301,7 +303,8 @@ py_install () {
   fi
 
   # install system tox and plugins
-  py_sys | _all_pip_install --force-reinstall "$TOX_PIN" tox virtualenv-multipython
+  py_sys | _all_pip_install --force-reinstall "$TOX_PIN" tox \
+    "virtualenv-multipython==${VIRTUALENV_MULTIPYTHON_VERSION}"
 
   # generate and validate versions info
   py_info | tee "$MULTIPYTHON_INFO" | jq
