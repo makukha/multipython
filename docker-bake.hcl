@@ -9,8 +9,8 @@ variable "BASE_VERSIONS" {
   default = {
     PYENV_VERSION = "2.5.0"
     PYENV_SHA256 = "12c42bdaf3741895ad710a957d44dc2b0c5260f95f857318a6681981fe1b1c0b"
-    UV_VERSION = "0.5.15"
-    UV_SHA256 = "6c650324daafc07331c00b458872d50f56f160544015c8a499fd2e160b404ebb"
+    UV_VERSION = "0.5.16"
+    UV_SHA256 = "a320393232ac29acfe75cd0d3fb943ee2a5cc3727d2c9d1bb14bb9eea1fc60c9"
   }
 }
 variable "PY_VERSIONS" {
