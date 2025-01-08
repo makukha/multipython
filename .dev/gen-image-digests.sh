@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 
-IMG=makukha/multipython
 TAGS_URL=https://hub.docker.com/v2/namespaces/makukha/repositories/multipython/tags
 
 RELEASE="$1"
