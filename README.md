@@ -341,8 +341,6 @@ Versions below are for system python distribution, symlinked to `python`.
 <!-- docsub: lines after 2 -->
 | Image tag   | pip    | setuptools | tox | virtualenv |
 |-------------|--------|------------|-----|------------|
-| Tag | pip | setuptools | tox | virtualenv |
-|---|---|---|---|---|
 | `latest` | 24.3.1 ✨ | 75.7.0 ✨ | 4.23.2 ✨ | 20.28.1 ✨ |
 | `cpython` | 24.3.1 ✨ | 75.7.0 ✨ | 4.23.2 ✨ | 20.28.1 ✨ |
 | `supported` | 24.3.1 ✨ | 75.7.0 ✨ | 4.23.2 ✨ | 20.28.1 ✨ |
