@@ -66,7 +66,6 @@ ARG MULTIPYTHON_ROOT
 ENV PATH="$MULTIPYTHON_ROOT/sys:$PYENV_ROOT/bin:$PATH"
 COPY --chmod=755 bin/py.sh /usr/local/bin/py
 COPY --chmod=755 bin/checkupd.sh $MULTIPYTHON_ROOT/
-COPY tests/share/data/verbose.txt $MULTIPYTHON_ROOT/
 RUN <<EOT
 echo "${DEBIAN_DIGEST}" > "${MULTIPYTHON_ROOT}/base_image_digest"
 echo "base" > "${MULTIPYTHON_ROOT}/subset"

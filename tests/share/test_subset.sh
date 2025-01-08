@@ -83,7 +83,7 @@ py info | diff -s - "info/$SUBSET.json"
 
 echo -e "\n>>> Testing: $SUBSET: py install..."
 if [ "$SUBSET" = "base" ]; then
-  [ "$(py install 2>&1)" = "No Python distributions found." ]
+  [ "$(py install 2>&1)" = "No Python distributions found" ]
 else
   # "py install" is tested by "py info"
   true
@@ -122,6 +122,18 @@ if [ "$SUBSET" = "base" ]; then
   py sys | [ ! -t 0 ]
 else
   [ "$(py sys)" = "$(jq -r '.python[] | select(.is_system==true) | .tag' "info/$SUBSET.json")" ]
+fi
+
+
+# TEST: py tag
+
+echo -e "\n>>> Testing: $SUBSET: py tag..."
+[ "$(py tag 2>&1)" = "Option required" ]
+[ "$(py tag uNdEfInEd 2>&1)" = "Executable does not exist: uNdEfInEd" ]
+chmod a+x /tmp/share/unknown.sh
+[ "$(py tag /tmp/share/unknown.sh 2>&1)" = "Unknown executable: Python X.Y.Z" ]
+if [ "$SUBSET" != "base" ]; then
+  py bin --path | xargs -n1 py tag | diff -s - <(py ls --tag)
 fi
 
 

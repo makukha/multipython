@@ -207,6 +207,7 @@ usage: py bin {--cmd|--dir|--path} [TAG]
        py ls {--long|--short|--tag|--all}
        py root
        py sys
+       py tag <EXECUTABLE>
        py --version
        py --help
 
@@ -217,6 +218,7 @@ commands:
   ls       List all distributions
   root     Show multipython root path
   sys      Show system python tag
+  tag      Determine tag of executable
 
 binary info formats:
   -c --cmd   Command name, expected to be on PATH
