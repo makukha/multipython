@@ -367,11 +367,11 @@ Versions below are for system python distribution, symlinked to `python`.
 
 The minimal tox version v4.5.1.1 is dictated by [virtualenv support](https://virtualenv.pypa.io/en/latest/changelog.html) of Python versions. Virtualenv v20.22 dropped support for Python 3.6, v20.27 dropped support of Python 3.7. Depending on minimal Python version used in custom environment, tox version will be automatically selected by `py install`.
 
-| Min Python version | virtualenv  | tox     |
-|--------------------|-------------|---------|
-| `<3.7`             | `<20.22.0`  | `<4.6`  |
-| `<3.8`             | `<20.27.0`  | `>=4.6` |
-| `>=3.8`            | `>=20.27.0` | `>=4.6` |
+| Min Python version | virtualenv | tox     |
+|--------------------|------------|---------|
+| `<3.7`             | `<20.22`   | `<4.6`  |
+| `<3.8`             | `<20.27`   | `>=4.6` |
+| `>=3.8`            | `>=20.27`  | `>=4.6` |
 
 ## multipython versioning
 
