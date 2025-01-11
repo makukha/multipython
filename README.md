@@ -288,7 +288,7 @@ docker run --rm makukha/multipython:latest py info -c
     "version": "4.23.2"
   },
   "uv": {
-    "version": "0.5.17",
+    "version": "0.5.18",
     "python_versions": "/root/.local/share/uv/python"
   },
   "virtualenv": {
@@ -327,8 +327,8 @@ All released images share same versions of base tools, but [tox version](#tox-ve
 
 | Image tag | pyenv | uv      | tox       |
 |-----------|-------|---------|-----------|
-| `base`    | 2.5.0✨ | 0.5.17✨ | —         |
-| Other     | 2.5.0✨ | 0.5.17✨ | *varying* |
+| `base`    | 2.5.0✨ | 0.5.18✨ | —         |
+| Other     | 2.5.0✨ | 0.5.18✨ | *varying* |
 
 <span>✨</span> latest version, will be updated in upcoming releases.
 

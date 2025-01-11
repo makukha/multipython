@@ -10,7 +10,7 @@
     "python_versions": "/root/.pyenv/versions"
   },
   "uv": {
-    "version": "0.5.17",
+    "version": "0.5.18",
     "python_versions": "/root/.local/share/uv/python"
   },
   "base_image": {
