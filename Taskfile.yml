@@ -28,7 +28,7 @@ tasks:
       ISSUE: {sh: git rev-parse --abbrev-ref HEAD | cut -d- -f1}
       MSG: {sh: "git rev-parse --abbrev-ref HEAD | sed 's/^[0-9][0-9]*-//' | uvx caseutil -csentence"}
     cmds:
-      - uvx towncrier create -c '{{default .CLI_ARGS .MSG}}' "{{.ISSUE}}.{{.SECTION}}.md"
+      - uvx towncrier create -c '{{coalesce .CLI_ARGS .MSG}}' "{{.ISSUE}}.{{.SECTION}}.md"
 
   lint:
     desc: Run linters.
