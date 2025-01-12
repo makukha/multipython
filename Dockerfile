@@ -63,13 +63,13 @@ EOT
 
 ARG DEBIAN_DIGEST
 ARG MULTIPYTHON_ROOT
-ENV PATH="$MULTIPYTHON_ROOT/sys:$PYENV_ROOT/bin:$PATH"
+ENV PATH="$MULTIPYTHON_ROOT/sys/bin:$PYENV_ROOT/bin:$PATH"
 COPY --chmod=755 bin/py.sh /usr/local/bin/py
 COPY --chmod=755 bin/checkupd.sh $MULTIPYTHON_ROOT/
 RUN <<EOT
-echo "${DEBIAN_DIGEST}" > "${MULTIPYTHON_ROOT}/base_image_digest"
-echo "base" > "${MULTIPYTHON_ROOT}/subset"
-py info | tee "${MULTIPYTHON_ROOT}/info.json" | jq
+    echo "${DEBIAN_DIGEST}" > "${MULTIPYTHON_ROOT}/base_image_digest"
+    echo "base" > "${MULTIPYTHON_ROOT}/subset"
+    py info | tee "${MULTIPYTHON_ROOT}/info.json" | jq
 EOT
 
 ENV VIRTUALENV_DISCOVERY=multipython
@@ -83,79 +83,79 @@ FROM base AS py27-pyenv
 ARG py27
 RUN pyenv install ${py27}
 FROM py27-pyenv AS py27
-RUN py install
+RUN py install --as py27
 
 FROM base AS py35-pyenv
 ARG py35
 RUN pyenv install ${py35}
 FROM py35-pyenv AS py35
-RUN py install
+RUN py install --as py35
 
 FROM base AS py36-pyenv
 ARG py36
 RUN pyenv install ${py36}
 FROM py36-pyenv AS py36
-RUN py install
+RUN py install --as py36
 
 FROM base AS py37-pyenv
 ARG py37
 RUN pyenv install ${py37}
 FROM py37-pyenv AS py37
-RUN py install
+RUN py install --as py37
 
 FROM base AS py38-pyenv
 ARG py38
 RUN pyenv install ${py38}
 FROM py38-pyenv AS py38
-RUN py install
+RUN py install --as py38
 
 FROM base AS py39-pyenv
 ARG py39
 RUN pyenv install ${py39}
 FROM py39-pyenv AS py39
-RUN py install
+RUN py install --as py39
 
 FROM base AS py310-pyenv
 ARG py310
 RUN pyenv install ${py310}
 FROM py310-pyenv AS py310
-RUN py install
+RUN py install --as py310
 
 FROM base AS py311-pyenv
 ARG py311
 RUN pyenv install ${py311}
 FROM py311-pyenv AS py311
-RUN py install
+RUN py install --as py311
 
 FROM base AS py312-pyenv
 ARG py312
 RUN pyenv install ${py312}
 FROM py312-pyenv AS py312
-RUN py install
+RUN py install --as py312
 
 FROM base AS py313-pyenv
 ARG py313
 RUN pyenv install ${py313}
 FROM py313-pyenv AS py313
-RUN py install
+RUN py install --as py313
 
 FROM base AS py314-pyenv
 ARG py314
 RUN pyenv install ${py314}
 FROM py314-pyenv AS py314
-RUN py install
+RUN py install --as py314
 
 FROM base AS py313t-pyenv
 ARG py313t
 RUN pyenv install ${py313t}
 FROM py313t-pyenv AS py313t
-RUN py install
+RUN py install --as py313t
 
 FROM base AS py314t-pyenv
 ARG py314t
 RUN pyenv install ${py314t}
 FROM py314t-pyenv AS py314t
-RUN py install
+RUN py install --as py314t
 
 
 # cpython
