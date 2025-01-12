@@ -79,64 +79,90 @@ CMD ["/bin/bash"]
 
 # single version images
 
-FROM base AS py27
+FROM base AS py27-pyenv
 ARG py27
-RUN pyenv install ${py27}; py install
+RUN pyenv install ${py27}
+FROM py27-pyenv AS py27
+RUN py install
 
-FROM base AS py35
+FROM base AS py35-pyenv
 ARG py35
-RUN pyenv install ${py35}; py install
+RUN pyenv install ${py35}
+FROM py35-pyenv AS py35
+RUN py install
 
-FROM base AS py36
+FROM base AS py36-pyenv
 ARG py36
-RUN pyenv install ${py36}; py install
+RUN pyenv install ${py36}
+FROM py36-pyenv AS py36
+RUN py install
 
-FROM base AS py37
+FROM base AS py37-pyenv
 ARG py37
-RUN pyenv install ${py37}; py install
+RUN pyenv install ${py37}
+FROM py37-pyenv AS py37
+RUN py install
 
-FROM base AS py38
+FROM base AS py38-pyenv
 ARG py38
-RUN pyenv install ${py38}; py install
+RUN pyenv install ${py38}
+FROM py38-pyenv AS py38
+RUN py install
 
-FROM base AS py39
+FROM base AS py39-pyenv
 ARG py39
-RUN pyenv install ${py39}; py install
+RUN pyenv install ${py39}
+FROM py39-pyenv AS py39
+RUN py install
 
-FROM base AS py310
+FROM base AS py310-pyenv
 ARG py310
-RUN pyenv install ${py310}; py install
+RUN pyenv install ${py310}
+FROM py310-pyenv AS py310
+RUN py install
 
-FROM base AS py311
+FROM base AS py311-pyenv
 ARG py311
-RUN pyenv install ${py311}; py install
+RUN pyenv install ${py311}
+FROM py311-pyenv AS py311
+RUN py install
 
-FROM base AS py312
+FROM base AS py312-pyenv
 ARG py312
-RUN pyenv install ${py312}; py install
+RUN pyenv install ${py312}
+FROM py312-pyenv AS py312
+RUN py install
 
-FROM base AS py313
+FROM base AS py313-pyenv
 ARG py313
-RUN pyenv install ${py313}; py install
+RUN pyenv install ${py313}
+FROM py313-pyenv AS py313
+RUN py install
 
-FROM base AS py314
+FROM base AS py314-pyenv
 ARG py314
-RUN pyenv install ${py314}; py install
+RUN pyenv install ${py314}
+FROM py314-pyenv AS py314
+RUN py install
 
-FROM base AS py313t
+FROM base AS py313t-pyenv
 ARG py313t
-RUN pyenv install ${py313t}; py install
+RUN pyenv install ${py313t}
+FROM py313t-pyenv AS py313t
+RUN py install
 
-FROM base AS py314t
+FROM base AS py314t-pyenv
 ARG py314t
-RUN pyenv install ${py314t}; py install
+RUN pyenv install ${py314t}
+FROM py314t-pyenv AS py314t
+RUN py install
 
 
 # cpython
 
 FROM base AS cpython
 RUN mkdir /root/.pyenv/versions
-COPY --from=py313 /root/.pyenv/versions /root/.pyenv/versions/
+COPY --from=py313-pyenv /root/.pyenv/versions /root/.pyenv/versions/
 RUN py install --as cpython
 
 
@@ -144,14 +170,14 @@ RUN py install --as cpython
 
 FROM base AS latest
 RUN mkdir /root/.pyenv/versions
-COPY --from=py39 /root/.pyenv/versions /root/.pyenv/versions/
-COPY --from=py310 /root/.pyenv/versions /root/.pyenv/versions/
-COPY --from=py311 /root/.pyenv/versions /root/.pyenv/versions/
-COPY --from=py312 /root/.pyenv/versions /root/.pyenv/versions/
-COPY --from=py313 /root/.pyenv/versions /root/.pyenv/versions/
-COPY --from=py314 /root/.pyenv/versions /root/.pyenv/versions/
-COPY --from=py313t /root/.pyenv/versions /root/.pyenv/versions/
-COPY --from=py314t /root/.pyenv/versions /root/.pyenv/versions/
+COPY --from=py39-pyenv /root/.pyenv/versions /root/.pyenv/versions/
+COPY --from=py310-pyenv /root/.pyenv/versions /root/.pyenv/versions/
+COPY --from=py311-pyenv /root/.pyenv/versions /root/.pyenv/versions/
+COPY --from=py312-pyenv /root/.pyenv/versions /root/.pyenv/versions/
+COPY --from=py313-pyenv /root/.pyenv/versions /root/.pyenv/versions/
+COPY --from=py314-pyenv /root/.pyenv/versions /root/.pyenv/versions/
+COPY --from=py313t-pyenv /root/.pyenv/versions /root/.pyenv/versions/
+COPY --from=py314t-pyenv /root/.pyenv/versions /root/.pyenv/versions/
 RUN py install --as latest
 
 
@@ -159,12 +185,12 @@ RUN py install --as latest
 
 FROM base AS supported
 RUN mkdir /root/.pyenv/versions
-COPY --from=py39 /root/.pyenv/versions /root/.pyenv/versions/
-COPY --from=py310 /root/.pyenv/versions /root/.pyenv/versions/
-COPY --from=py311 /root/.pyenv/versions /root/.pyenv/versions/
-COPY --from=py312 /root/.pyenv/versions /root/.pyenv/versions/
-COPY --from=py313 /root/.pyenv/versions /root/.pyenv/versions/
-COPY --from=py313t /root/.pyenv/versions /root/.pyenv/versions/
+COPY --from=py39-pyenv /root/.pyenv/versions /root/.pyenv/versions/
+COPY --from=py310-pyenv /root/.pyenv/versions /root/.pyenv/versions/
+COPY --from=py311-pyenv /root/.pyenv/versions /root/.pyenv/versions/
+COPY --from=py312-pyenv /root/.pyenv/versions /root/.pyenv/versions/
+COPY --from=py313-pyenv /root/.pyenv/versions /root/.pyenv/versions/
+COPY --from=py313t-pyenv /root/.pyenv/versions /root/.pyenv/versions/
 RUN py install --as supported
 
 
@@ -172,17 +198,17 @@ RUN py install --as supported
 
 FROM base AS unsafe
 RUN mkdir /root/.pyenv/versions
-COPY --from=py27 /root/.pyenv/versions /root/.pyenv/versions/
-COPY --from=py35 /root/.pyenv/versions /root/.pyenv/versions/
-COPY --from=py36 /root/.pyenv/versions /root/.pyenv/versions/
-COPY --from=py37 /root/.pyenv/versions /root/.pyenv/versions/
-COPY --from=py38 /root/.pyenv/versions /root/.pyenv/versions/
-COPY --from=py39 /root/.pyenv/versions /root/.pyenv/versions/
-COPY --from=py310 /root/.pyenv/versions /root/.pyenv/versions/
-COPY --from=py311 /root/.pyenv/versions /root/.pyenv/versions/
-COPY --from=py312 /root/.pyenv/versions /root/.pyenv/versions/
-COPY --from=py313 /root/.pyenv/versions /root/.pyenv/versions/
-COPY --from=py314 /root/.pyenv/versions /root/.pyenv/versions/
-COPY --from=py313t /root/.pyenv/versions /root/.pyenv/versions/
-COPY --from=py314t /root/.pyenv/versions /root/.pyenv/versions/
+COPY --from=py27-pyenv /root/.pyenv/versions /root/.pyenv/versions/
+COPY --from=py35-pyenv /root/.pyenv/versions /root/.pyenv/versions/
+COPY --from=py36-pyenv /root/.pyenv/versions /root/.pyenv/versions/
+COPY --from=py37-pyenv /root/.pyenv/versions /root/.pyenv/versions/
+COPY --from=py38-pyenv /root/.pyenv/versions /root/.pyenv/versions/
+COPY --from=py39-pyenv /root/.pyenv/versions /root/.pyenv/versions/
+COPY --from=py310-pyenv /root/.pyenv/versions /root/.pyenv/versions/
+COPY --from=py311-pyenv /root/.pyenv/versions /root/.pyenv/versions/
+COPY --from=py312-pyenv /root/.pyenv/versions /root/.pyenv/versions/
+COPY --from=py313-pyenv /root/.pyenv/versions /root/.pyenv/versions/
+COPY --from=py314-pyenv /root/.pyenv/versions /root/.pyenv/versions/
+COPY --from=py313t-pyenv /root/.pyenv/versions /root/.pyenv/versions/
+COPY --from=py314t-pyenv /root/.pyenv/versions /root/.pyenv/versions/
 RUN py install --as unsafe
