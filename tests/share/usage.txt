@@ -11,7 +11,7 @@ usage: py bin {--cmd|--dir|--path} [TAG]
 commands:
   bin      Show Python executable command or path
   info     Extended details in JSON format
-  install  Install optional packages and symlinks
+  install  Install sys environment, commands, and seed packages
   ls       List all distributions
   root     Show multipython root path
   sys      Show system python tag

@@ -6,7 +6,13 @@ set -o nounset
 set -o pipefail
 
 MULTIPYTHON_VERSION=2517
+VIRTUALENV_MULTIPYTHON_VERSION=0.3.1
+TOX_MULTIPYTHON_VERSION=0.2.0
+
 MULTIPYTHON_ROOT=/root/.multipython
+MULTIPYTHON_BASE_IMAGE_DIGEST="$MULTIPYTHON_ROOT/base_image_digest"
+MULTIPYTHON_SUBSET="$MULTIPYTHON_ROOT/subset"
+MULTIPYTHON_SYS="$MULTIPYTHON_ROOT/sys"
 MULTIPYTHON_INFO="$MULTIPYTHON_ROOT/info.json"
 
 PYENV_ROOT=$(pyenv root)
@@ -28,17 +34,8 @@ declare -rA TAG_PATTERN=(
   ["py27"]="Python 2.7.18"
 )
 
-VIRTUALENV_MULTIPYTHON_VERSION=0.1.2
 
-
-# helpers
-
-_py_ls_long () {
-  if [ -d "$PYENV_ROOT/versions" ]; then
-    # shellcheck disable=SC2012
-    ls -1 "$PYENV_ROOT/versions" | sed 's/\(.*t\)$/t\1/' | sort -rV | sed 's/^t//'
-  fi
-}
+# helpers: tags
 
 _py_short () {
   sed 's/^\([0-9]*\)\.\([0-9]*\)[^t]*\(t\?\)$/\1.\2\3/'
@@ -47,6 +44,22 @@ _py_short () {
 _py_tag () {
   _py_short | sed 's/^/py/; s/\.//'
 }
+
+_py_ls_long () {
+  if [ -d "$PYENV_ROOT/versions" ]; then
+    # shellcheck disable=SC2012
+    ls -1 "$PYENV_ROOT/versions" | sed 's/\(.*t\)$/t\1/' | sort -rV | sed 's/^t//'
+  fi
+}
+
+_py_ls_all () {
+  _py_ls_long | while IFS= read -r long
+  do
+    echo "$(_py_tag <<<"$long")" "$(_py_short <<<"$long")" "$long"
+  done
+}
+
+# helpers: sys
 
 _propose_sys_tag () {
   # first, try stable CPyton w/o free threading
@@ -62,11 +75,63 @@ _propose_sys_tag () {
   echo "$PYTHON_VER" | _py_tag
 }
 
-_py_ls_all () {
-  _py_ls_long | while IFS= read -r long
-  do
-    echo "$(_py_tag <<<"$long")" "$(_py_short <<<"$long")" "$long"
-  done
+# helpers: pip
+
+_pip_install () {
+  EXECUTABLE="$1"
+  shift
+  case "$(py_tag "$EXECUTABLE")" in
+    py27) PIP_ARGS="--no-cache-dir" ;;
+    py35) PIP_ARGS="--no-cache-dir --cert=/etc/ssl/certs/ca-certificates.crt" ;;
+    py36) PIP_ARGS="--no-cache-dir" ;;
+    *)    PIP_ARGS="--no-cache-dir --root-user-action=ignore" ;;
+  esac
+  # shellcheck disable=SC2086
+  "$EXECUTABLE" -m pip install $PIP_ARGS "$@"
+}
+
+_pip_seed_bindir () {
+  BINDIR="$1"
+  SEED_MARK="$BINDIR/.multipython"
+  if [ ! -e "$SEED_MARK" ]; then
+    _pip_install "$BINDIR/python" -U pip setuptools wheel
+    touch "$SEED_MARK"
+  fi
+}
+
+_pip_install_system () {
+  SYS_TAG="$(_propose_sys_tag)"
+
+  # determine system virtualenv version requirements
+  PY_MIN="$(_py_ls_long | _py_short | sed 's/^[^0-9]\+//' | sort -V | head -1)"
+  if [ "$PY_MIN" = "$(echo -e "3.6\n$PY_MIN" | sort -V | head -1)" ]; then
+    # PY_MIN<=3.6
+    VENV="virtualenv>=20,<20.22"
+  elif [ "$PY_MIN" = "$(echo -e "3.7\n$PY_MIN" | sort -V | head -1)" ]; then
+    # PY_MIN<=3.7
+    VENV="virtualenv>=20,<20.27"
+  else
+    VENV="virtualenv>=20"
+  fi
+
+  # install virtualenv in sys tag, create sys venv, and remove virtualenv
+  SYS_TAG_PYTHON="$(py_bin --path "$SYS_TAG")"
+  _pip_install "$SYS_TAG_PYTHON" virtualenv
+  test -h "$MULTIPYTHON_SYS" && unlink "$MULTIPYTHON_SYS"
+  "$SYS_TAG_PYTHON" -m virtualenv --discovery=builtin "$MULTIPYTHON_SYS"
+  "$SYS_TAG_PYTHON" -m pip uninstall -y virtualenv
+
+  # seed system environment
+  _pip_seed_bindir "$MULTIPYTHON_SYS/bin"
+  PYTHON="$MULTIPYTHON_SYS/bin/python"
+
+  # install tox, virtualenv, and plugins
+  _pip_install "$PYTHON" "$VENV" tox \
+    "virtualenv-multipython==$VIRTUALENV_MULTIPYTHON_VERSION"
+  TOX_MAJOR="$("$PYTHON" -m tox -q --version 2>/dev/null | cut -c1)"
+  if [ "$TOX_MAJOR" = "3" ]; then
+    _pip_install "$PYTHON" "tox-multipython==$TOX_MULTIPYTHON_VERSION"
+  fi
 }
 
 
@@ -158,9 +223,16 @@ py_info () {
   echo '{'
   echo '  "multipython": {'
   echo '    "version": "'$MULTIPYTHON_VERSION'",'
-  echo '    "subset": "'"$(cat $MULTIPYTHON_ROOT/subset)"'",'
+  echo '    "subset": "'"$(cat $MULTIPYTHON_SUBSET)"'",'
   echo '    "root": "'$MULTIPYTHON_ROOT'"'
   echo '  },'
+    if [ -e "$MULTIPYTHON_SYS/bin/python" ]; then
+    echo '  "sys": {'
+    echo '    "tag": "'"$SYS_TAG"'",'
+    echo '    "root": "'"$MULTIPYTHON_SYS"'",'
+    echo '    "bin_dir": "'"$MULTIPYTHON_SYS/bin"'"'
+    echo '  },'
+  fi
   if [ -n "$PYENV_VER" ]; then
     echo '  "pyenv": {'
     echo '    "version": "'"$PYENV_VER"'",'
@@ -168,15 +240,15 @@ py_info () {
     echo '    "python_versions": "'"$PYENV_ROOT/versions"'"'
     echo '  },'
   fi
-  if [ -n "$TOX_VER" ]; then
-    echo '  "tox": {'
-    echo '    "version": "'"$TOX_VER"'"'
-    echo '  },'
-  fi
   if [ -n "$UV_VER" ]; then
     echo '  "uv": {'
     echo '    "version": "'"$UV_VER"'"',
     echo '    "python_versions": "'"$UV_ROOT"'"'
+    echo '  },'
+  fi
+  if [ -n "$TOX_VER" ]; then
+    echo '  "tox": {'
+    echo '    "version": "'"$TOX_VER"'"'
     echo '  },'
   fi
   if [ -n "$VENV_VER" ]; then
@@ -187,7 +259,7 @@ py_info () {
   echo '  "base_image": {'
   echo '    "name": "debian",'
   echo '    "channel": "stable-slim",'
-  echo '    "digest": "'"$(cat $MULTIPYTHON_ROOT/base_image_digest)"'"'
+  echo '    "digest": "'"$(cat $MULTIPYTHON_BASE_IMAGE_DIGEST)"'"'
   echo '  },'
 
   if [ "$(_py_ls_long)" == "" ]; then
@@ -201,110 +273,33 @@ py_info () {
 }
 
 py_install () {
-  # shortcut
-  if [ -z "$(_py_ls_all)" ]; then
+  # require some tags
+  if [ -z "$(_py_ls_long)" ]; then
     echo "No Python distributions found" >&2
     exit 1
   fi
 
-  # options
+  # internal options
   if [ $# = 0 ]; then
-    echo "custom" > "$MULTIPYTHON_ROOT/subset"
+    echo "custom" > "$MULTIPYTHON_SUBSET"
   elif [ "$1" = "--as" ]; then
-    echo "$2" > "$MULTIPYTHON_ROOT/subset"
+    echo "$2" > "$MULTIPYTHON_SUBSET"
     shift; shift
   fi
 
-  _pip_snapshot_file () {
-    echo "$(py_bin -d "$1")/../lib/.multipython.original"
-  }
-
-  _all_pip_snapshot () {
-    while IFS=$'\n' read -r tag
-    do
-      FN="$(_pip_snapshot_file "$tag")"
-      PIP="$(py_bin -p "$tag") -m pip"
-      if [ ! -f "$FN" ]; then
-        $PIP freeze --all 2>/dev/null > "$FN"
-      fi
-    done
-  }
-
-  _all_pip_rollback () {
-    while IFS=$'\n' read -r tag
-    do
-      FN="$(_pip_snapshot_file "$tag")"
-      PIP="$(py_bin -p "$tag") -m pip"
-      if [ -f "$FN" ]; then
-        # shellcheck disable=2086
-        $PIP freeze 2>/dev/null | xargs -r $PIP uninstall -y
-        _all_pip_install -r "$FN" <<<"$tag"
-      else
-        echo "Snapshot not available: $FN" >&2
-        exit 1
-      fi
-    done
-  }
-
-  _all_pip_ensure_original () {
-    while IFS=$'\n' read -r tag
-    do
-      FN="$(_pip_snapshot_file "$tag")"
-      if [ ! -f "$FN" ]; then
-        _all_pip_snapshot <<<"$tag"
-      else
-        _all_pip_rollback <<<"$tag"
-      fi
-    done
-  }
-
-  _all_pip_install () {
-    while IFS=$'\n' read -r tag
-    do
-      short="$(_py_ls_all | sed -n '/^'"$tag"'/p' | awk '{print $2}')"
-      case $short in
-        2.7) PIP_ARGS="--no-cache-dir" ;;
-        3.5) PIP_ARGS="--no-cache-dir --cert=/etc/ssl/certs/ca-certificates.crt" ;;
-        3.6) PIP_ARGS="--no-cache-dir" ;;
-        *)   PIP_ARGS="--no-cache-dir --root-user-action=ignore" ;;
-      esac
-      # shellcheck disable=SC2086
-      "$(py_bin -p "$tag")" -m pip install $PIP_ARGS "$@"
-    done
-  }
-
-  # link individual distributions
+  # symlink commands
   paste -d' ' \
     <(_py_ls_all | py_bin -p) \
     <(_py_ls_all | awk '{print "/usr/local/bin/python"$2}') \
   | xargs -r -I% sh -c 'ln -s %'
 
-  # install/update individual pip and setuptools
-  py_ls -t | _all_pip_install -U pip setuptools
+  # seed tags
+  py_bin --dir | while read -r BINDIR; do
+    _pip_seed_bindir "$BINDIR"
+  done
 
-  # freeze or roll back to original state
-  py_ls -t | _all_pip_ensure_original
-
-  # link system executable
-  SYS_TAG="$(_propose_sys_tag)"
-  test -h "$MULTIPYTHON_ROOT/sys" && unlink "$MULTIPYTHON_ROOT/sys"
-  ln -s "$(py_bin -d "$SYS_TAG")" "$MULTIPYTHON_ROOT/sys"
-
-  # determine min tox version
-  PY_MIN="$(_py_ls_long | _py_short | sed 's/^[^0-9]\+//' | sort -V | head -1)"
-  if [ "$PY_MIN" = "$(echo -e "3.6\n$PY_MIN" | sort -V | head -1)" ]; then
-    # PY_MIN<=3.6
-    TOX_PIN="virtualenv<20.22"
-  elif [ "$PY_MIN" = "$(echo -e "3.7\n$PY_MIN" | sort -V | head -1)" ]; then
-    # PY_MIN<=3.7
-    TOX_PIN="virtualenv<20.27"
-  else
-    TOX_PIN="virtualenv"
-  fi
-
-  # install system tox and plugins
-  py_sys | _all_pip_install --force-reinstall "$TOX_PIN" tox \
-    "virtualenv-multipython==${VIRTUALENV_MULTIPYTHON_VERSION}"
+  # provision system environment
+  _pip_install_system
 
   # generate and validate versions info
   py_info | tee "$MULTIPYTHON_INFO" | jq
@@ -370,7 +365,7 @@ py_usage () {
   echo "commands:"
   echo "  bin      Show Python executable command or path"
   echo "  info     Extended details in JSON format"
-  echo "  install  Install optional packages and symlinks"
+  echo "  install  Install sys environment, commands, and seed packages"
   echo "  ls       List all distributions"
   echo "  root     Show multipython root path"
   echo "  sys      Show system python tag"
