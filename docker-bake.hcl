@@ -7,6 +7,7 @@ variable "RELEASE" {
 
 variable "BASE_VERSIONS" {
   default = {
+    RELEASE = "${RELEASE}"
     PYENV_VERSION = "2.5.0"
     PYENV_SHA256 = "12c42bdaf3741895ad710a957d44dc2b0c5260f95f857318a6681981fe1b1c0b"
     UV_VERSION = "0.5.18"
@@ -138,6 +139,7 @@ target "unsafe" {
 
 group "test" {
   targets = [
+    "checkupd",
     "test_base",
     "test_subsets",
     "test_readme_basic",
@@ -147,6 +149,14 @@ group "test" {
 
 target "__test__" {
   output = ["type=cacheonly"]
+}
+
+target "checkupd" {
+  inherits = ["__test__"]
+  dockerfile-inline = <<EOF
+    FROM ${IMG}:base-${RELEASE}
+    RUN py checkupd
+  EOF
 }
 
 target "test_base" {
@@ -179,7 +189,7 @@ target "test_subsets" {
 target "test_readme_basic" {
   inherits = ["__test__"]
   dockerfile-inline = <<EOF
-    FROM ${IMG}:${RELEASE}
+    FROM ${IMG}:unsafe-${RELEASE}
     COPY tests/test_readme_basic/tox.ini ./
     RUN tox run
   EOF

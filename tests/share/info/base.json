@@ -17,6 +17,5 @@
     "name": "debian",
     "channel": "stable-slim",
     "digest": "sha256:5f21ebd358442f40099c997a3f4db906a7b1bd872249e67559f55de654b55d3b"
-  },
-  "python": []
+  }
 }

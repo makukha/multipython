@@ -20,8 +20,8 @@ fi
 # TEST: py --help
 
 echo -e "\n>>> Testing: $SUBSET: py --help..."
-py --help | diff -s - "usage.txt"
-py | diff -s - "usage.txt"
+py --help | diff -s - usage.txt
+py | diff -s - usage.txt
 
 
 # TEST: py --version
@@ -63,12 +63,6 @@ else
   # option required
   py bin && exit 1
 fi
-
-
-# TEST: py checkupd
-
-echo -e "\n>>> Testing: $SUBSET: py checkupd..."
-py checkupd
 
 
 # TEST: py info
@@ -119,7 +113,7 @@ echo -e "\n>>> Testing: $SUBSET: py root..."
 
 echo -e "\n>>> Testing: $SUBSET: py sys..."
 if [ "$SUBSET" = "base" ]; then
-  py sys | [ ! -t 0 ]
+  [ "$(py sys 2>&1)" = "Executable does not exist: python" ]
 else
   [ "$(py sys)" = "$(jq -r '.python[] | select(.is_system==true) | .tag' "info/$SUBSET.json")" ]
 fi
@@ -147,3 +141,13 @@ elif [ "$SUBSET" = "unsafe" ]; then
 else
   tox run -m "$SUBSET"
 fi
+
+
+# TEST: virtualenv
+
+echo -e "\n>>> Testing: $SUBSET: virtualenv..."
+for TAG in $(py ls --tag | xargs)
+do
+  virtualenv --python "$TAG" --no-seed "/tmp/$TAG"
+  [ "$(py tag "/tmp/$TAG/bin/python")" = "$TAG" ]
+done
