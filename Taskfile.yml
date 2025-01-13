@@ -34,7 +34,7 @@ tasks:
     desc: Run linters.
     cmds:
       - hadolint Dockerfile
-      - shellcheck bin/*.sh tests/share/*.sh .dev/*.sh
+      - shellcheck bin/**/*.sh tests/share/*.sh .dev/*.sh
 
   build:
     desc: Build all docker images.

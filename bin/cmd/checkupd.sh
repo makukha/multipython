@@ -1,10 +1,10 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 set -o errexit
 set -o errtrace
 set -o nounset
 set -o pipefail
-trap "exit 1" ERR
+
 
 # versions and statuses
 
@@ -52,7 +52,7 @@ if [ "$UV_STATUS" == "changed" ]; then
   UV_TAR_SHA256="$(sha256sum /tmp/uv.tar.gz | cut -d' ' -f1)"
   UV_GITHUB_SHA256="$(wget -q -O- "https://github.com/astral-sh/uv/releases/download/${UV_LATEST}/uv-x86_64-unknown-linux-gnu.tar.gz.sha256" | cut -d' ' -f1)"
   if [ ! "$UV_TAR_SHA256" == "$UV_GITHUB_SHA256" ]; then
-    echo "uv sha256 do not match!" >&2
+    printf "uv sha256 do not match!\n" >&2
     exit 1
   fi
   printf "UV_SHA256      %s\n" "$(row "$UV_STATUS" "?" "$UV_GITHUB_SHA256")"
@@ -61,9 +61,9 @@ fi
 # summary
 
 if [ "$DEB_STATUS $PYENV_STATUS $UV_STATUS" = "latest latest latest" ]; then
-  echo "All dependencies are up to date!"
+  printf "All dependencies are up to date!\n"
   exit 0
 else
-  echo "Dependencies changed, project update required." >&2
+  printf "Dependencies changed, project update required.\n" >&2
   exit 1
 fi
