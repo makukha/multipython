@@ -1,10 +1,10 @@
 usage: py bin {--cmd|--dir|--path} [TAG]
        py info [--cached]
        py install
-       py ls {--long|--short|--tag|--all}
+       py ls {--tag|--short|--long|--all}
        py root
        py sys
-       py tag <EXECUTABLE>
+       py tag <PYTHON>
        py --version
        py --help
 
@@ -23,9 +23,9 @@ binary info formats:
   -p --path  Path to distribution binary
 
 version formats:
-  -l --long   Full version without prefix, e.g. 3.9.12
-  -s --short  Short version without prefix, e.g. 3.9
   -t --tag    Python tag, e.g. py39, pp19
+  -s --short  Short version without prefix, e.g. 3.9
+  -l --long   Full version without prefix, e.g. 3.9.12
   -a --all    Lines 'tag short long', e.g. 'py39 3.9 3.9.3'
 
 other options:
