@@ -44,17 +44,11 @@ def image_digests():
 
 @app.command
 def package_versions(group: Literal['base', 'derived', 'single'], /):
-    def get_info(target: str, release: str) -> dict:
-        tag = target if target == 'latest' else f'{target}-{release}'
-        info = check_output(
-            ['docker', 'run', '--rm', f'{IMG}:{tag}', 'py', 'info', '-c'],
-            stderr=DEVNULL,
-        )
-        return json.loads(info)
+    def get_info(target: str) -> dict:
+        return json.loads((INFO_DIR / f'{target}.json').read_text())
 
     bake = check_output(['docker', 'buildx', 'bake', '--print'], stderr=DEVNULL)
     data = json.loads(bake)
-    release = data['target']['base']['args']['RELEASE']
     out = sys.stdout
 
     # setup
@@ -68,9 +62,7 @@ def package_versions(group: Literal['base', 'derived', 'single'], /):
     elif group == 'single':
         pkgs = ('pip', 'setuptools', 'tox', 'virtualenv')
         targets = [t for t in data['target'] if t.startswith('py')]
-        # todo: use get_info later
-        tags_info = json.loads((INFO_DIR / 'unsafe.json').read_text())
-        tags = [py['tag'] for py in tags_info['python']]
+        tags = [py['tag'] for py in get_info('unsafe')['python']]
         targets.sort(key=lambda x: tags.index(x))
     else:
         assert_never(group)
@@ -81,15 +73,15 @@ def package_versions(group: Literal['base', 'derived', 'single'], /):
 
     # body
     if group == 'base':
-        info = get_info(targets[0], release)
+        info = get_info(targets[0])
         cells = ' | '.join(f'{info[p]['version']} {LATEST}' for p in pkgs)
         out.write(f'| `{targets[0]}` | {cells} |\n')
         out.write(f'| *other images* | {cells} |\n')
     elif group == 'derived' or group == 'single':
-        latest = get_info('latest', release)['system'][('packages')]
+        latest = get_info('latest')['system'][('packages')]
         mark = lambda p, v: f' {LATEST}' if latest[p] == v else ''  # noqa: E731 = lambda
-        for target in track(tuple(targets), console=Console(file=sys.stderr)):
-            info = get_info(target, release)
+        for target in targets:
+            info = get_info(target)
             versions = {p: info['system']['packages'][p] for p in pkgs}
             cells = ' | '.join(f'{v}{mark(p, v)}' for p, v in versions.items())
             out.write(f'| `{target}` | {cells} |\n')
