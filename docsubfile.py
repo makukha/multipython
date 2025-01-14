@@ -32,10 +32,12 @@ def image_digests():
     NS, REPO = IMG.split('/')
     stdout = sys.stdout
     for tag in track(tuple(tags), console=Console(file=sys.stderr)):
-        with urlopen(  # noqa: S310 = Audit URL open for permitted schemes
-            'https://hub.docker.com/v2/'
-            f'namespaces/{NS}/repositories/{REPO}/tags/{tag}'
-        ) as f:
+        with (
+            urlopen(  # noqa: S310 = Audit URL open for permitted schemes
+                'https://hub.docker.com/v2/'
+                f'namespaces/{NS}/repositories/{REPO}/tags/{tag}'
+            ) as f
+        ):
             info = json.load(f)
             stdout.write(f'| `{tag}` | `{info["digest"]}` |\n')
 
@@ -61,14 +63,15 @@ def package_versions(group: Literal['base', 'derived', 'single'], /):
         targets = ['base']
         pkgs = ('pyenv', 'uv')
     elif group == 'derived':
-        targets = [t for t in data['target'].keys() if t != 'base' and not t.startswith('py')]
         pkgs = ('pip', 'setuptools', 'tox', 'virtualenv')
+        targets = [t for t in data['target'] if t != 'base' and not t.startswith('py')]
     elif group == 'single':
-        targets = [t for t in data['target'].keys() if t.startswith('py')]
-        tags_info = json.loads((INFO_DIR / 'unsafe.json').read_text())  # todo: use get_info later
+        pkgs = ('pip', 'setuptools', 'tox', 'virtualenv')
+        targets = [t for t in data['target'] if t.startswith('py')]
+        # todo: use get_info later
+        tags_info = json.loads((INFO_DIR / 'unsafe.json').read_text())
         tags = [py['tag'] for py in tags_info['python']]
         targets.sort(key=lambda x: tags.index(x))
-        pkgs = ('pip', 'setuptools', 'tox', 'virtualenv')
     else:
         assert_never(group)
 
