@@ -281,6 +281,22 @@ docker run --rm makukha/multipython:latest py info -c
     "subset": "latest",
     "root": "/root/.multipython"
   },
+  "pyenv": {
+    "version": "2.5.0",
+    "root": "/root/.pyenv",
+    "python_versions": "/root/.pyenv/versions"
+  },
+  "tox": {
+    "version": "4.23.2"
+  },
+  "uv": {
+    "version": "0.5.18",
+    "python_versions": "/root/.local/share/uv/python"
+  },
+  "virtualenv": {
+    "version": "20.28.1",
+    "config": "/root/.config/virtualenv/virtualenv.ini"
+  },
   "system": {
     "tag": "py313",
     "root": "/root/.multipython/sys",
@@ -303,22 +319,6 @@ docker run --rm makukha/multipython:latest py info -c
       "virtualenv": "20.28.1",
       "virtualenv-multipython": "0.3.1"
     }
-  },
-  "pyenv": {
-    "version": "2.5.0",
-    "root": "/root/.pyenv",
-    "python_versions": "/root/.pyenv/versions"
-  },
-  "tox": {
-    "version": "4.23.2"
-  },
-  "uv": {
-    "version": "0.5.18",
-    "python_versions": "/root/.local/share/uv/python"
-  },
-  "virtualenv": {
-    "version": "20.28.1",
-    "config": "/root/.config/virtualenv/virtualenv.ini"
   },
   "base_image": {
     "name": "debian",
@@ -347,49 +347,55 @@ docker run --rm makukha/multipython:latest py info -c
 
 # Versions
 
-## Base tools
+Tools available in [Base image](#base-image) have exactly the same versions in all Python images. For Python package versions, `system` environment is used.
 
-All released images share same versions of base tools, but [tox version](#tox-version) will vary depending on minimal Python version installed. The good news that it is selected automatically, even for custom images.
+✨ latest versions will be updated in upcoming releases.
 
-| Image tag | pyenv | uv      | tox       |
-|-----------|-------|---------|-----------|
-| `base`    | 2.5.0✨ | 0.5.18✨ | —         |
-| Other     | 2.5.0✨ | 0.5.18✨ | *varying* |
-
-<span>✨</span> latest version, will be updated in upcoming releases.
-
-## Python packages
-
-Versions below are for system python distribution, symlinked to `python`.
+## Base image
 
 <!-- docsub: begin -->
-<!-- docsub: include docs/gen/package-versions.md -->
-<!-- docsub: lines after 2 -->
-| Image tag   | pip    | setuptools | tox | virtualenv |
-|-------------|--------|------------|-----|------------|
-| `latest` | 24.3.1 ✨ | 75.8.0 ✨ | 4.23.2 ✨ | 20.28.1 ✨ |
-| `cpython` | 24.3.1 ✨ | 75.8.0 ✨ | 4.23.2 ✨ | 20.28.1 ✨ |
-| `supported` | 24.3.1 ✨ | 75.8.0 ✨ | 4.23.2 ✨ | 20.28.1 ✨ |
-| `unsafe` | 24.3.1 ✨ | 75.8.0 ✨ | 4.5.1.1 | 20.21.1 |
-| `base` | — | — | — | — |
-| `py314t` | 24.3.1 ✨ | 75.8.0 ✨ | 4.23.2 ✨ | 20.28.1 ✨ |
-| `py313t` | 24.3.1 ✨ | 75.8.0 ✨ | 4.23.2 ✨ | 20.28.1 ✨ |
-| `py314` | 24.3.1 ✨ | 75.8.0 ✨ | 4.23.2 ✨ | 20.28.1 ✨ |
-| `py313` | 24.3.1 ✨ | 75.8.0 ✨ | 4.23.2 ✨ | 20.28.1 ✨ |
-| `py312` | 24.3.1 ✨ | 75.8.0 ✨ | 4.23.2 ✨ | 20.28.1 ✨ |
-| `py311` | 24.3.1 ✨ | 75.8.0 ✨ | 4.23.2 ✨ | 20.28.1 ✨ |
-| `py310` | 24.3.1 ✨ | 75.8.0 ✨ | 4.23.2 ✨ | 20.28.1 ✨ |
-| `py39` | 24.3.1 ✨ | 75.8.0 ✨ | 4.23.2 ✨ | 20.28.1 ✨ |
-| `py38` | 24.3.1 ✨ | 75.3.0 | 4.23.2 ✨ | 20.28.1 ✨ |
+<!-- docsub: x package-versions base -->
+| Image tag | pyenv | uv |
+|---|---|---|
+| `base` | 2.5.0 ✨ | 0.5.18 ✨ |
+| *other images* | 2.5.0 ✨ | 0.5.18 ✨ |
+<!-- docsub: end -->
+
+## Derived images
+
+<!-- docsub: begin -->
+<!-- docsub: x package-versions derived -->
+| Image tag | pip | setuptools | tox | virtualenv |
+|---|---|---|---|---|
+| `cpython` | 24.3.1 ✨ | 75.8.0 ✨ | 4.23.2 ✨ | 20.28.1 ✨ |
+| `latest` | 24.3.1 ✨ | 75.8.0 ✨ | 4.23.2 ✨ | 20.28.1 ✨ |
+| `supported` | 24.3.1 ✨ | 75.8.0 ✨ | 4.23.2 ✨ | 20.28.1 ✨ |
+| `unsafe` | 24.3.1 ✨ | 75.8.0 ✨ | 4.5.1.1 | 20.21.1 |
+<!-- docsub: end -->
+
+
+## Single version images
+
+<!-- docsub: begin -->
+<!-- docsub: x package-versions single -->
+| Image tag | pip | setuptools | tox | virtualenv |
+|---|---|---|---|---|
+| `py314t` | 24.3.1 ✨ | 75.8.0 ✨ | 4.23.2 ✨ | 20.28.1 ✨ |
+| `py313t` | 24.3.1 ✨ | 75.8.0 ✨ | 4.23.2 ✨ | 20.28.1 ✨ |
+| `py314` | 24.3.1 ✨ | 75.8.0 ✨ | 4.23.2 ✨ | 20.28.1 ✨ |
+| `py313` | 24.3.1 ✨ | 75.8.0 ✨ | 4.23.2 ✨ | 20.28.1 ✨ |
+| `py312` | 24.3.1 ✨ | 75.8.0 ✨ | 4.23.2 ✨ | 20.28.1 ✨ |
+| `py311` | 24.3.1 ✨ | 75.8.0 ✨ | 4.23.2 ✨ | 20.28.1 ✨ |
+| `py310` | 24.3.1 ✨ | 75.8.0 ✨ | 4.23.2 ✨ | 20.28.1 ✨ |
+| `py39` | 24.3.1 ✨ | 75.8.0 ✨ | 4.23.2 ✨ | 20.28.1 ✨ |
+| `py38` | 24.3.1 ✨ | 75.3.0 | 4.23.2 ✨ | 20.28.1 ✨ |
 | `py37` | 24.0 | 68.0.0 | 4.8.0 | 20.26.6 |
 | `py36` | 21.3.1 | 59.6.0 | 3.28.0 | 20.17.1 |
 | `py35` | 20.3.4 | 50.3.2 | 3.28.0 | 20.15.1 |
 | `py27` | 20.3.4 | 44.1.1 | 3.28.0 | 20.15.1 |
 <!-- docsub: end -->
 
-<span>✨</span> latest version, will be updated in upcoming releases.
-
-## tox version
+## Tox version
 
 The minimal tox version v4.5.1.1 is dictated by [virtualenv support](https://virtualenv.pypa.io/en/latest/changelog.html) of Python versions. Virtualenv v20.22 dropped support for Python 3.6, v20.27 dropped support of Python 3.7. Depending on minimal Python version used in custom environment, tox version will be automatically selected by `py install`.
 
@@ -399,7 +405,7 @@ The minimal tox version v4.5.1.1 is dictated by [virtualenv support](https://vir
 | `<3.8`             | `<20.27`   | `>=4.6` |
 | `>=3.8`            | `>=20.27`  | `>=4.6` |
 
-## multipython versioning
+## Multipython versioning
 
 Starting from Jan 2025, this project uses [CalVer](https://calver.org) convention with [Date62](http://github.com/date62/date62-python) based dates.
 
