@@ -259,11 +259,12 @@ After running `py install` in custom image Dockerfile, `/root/.multipython/info.
 
 ### GitHub repository
 
-* `latest` – [tests/share/info/latest.json](https://github.com/makukha/multipython/blob/main/tests/share/info/latest.json)
-* `cpython` – [tests/share/info/cpython.json](https://github.com/makukha/multipython/blob/main/tests/share/info/cpython.json)
-* `supported` – [tests/share/info/supported.json](https://github.com/makukha/multipython/blob/main/tests/share/info/supported.json)
-* `unsafe` – [tests/share/info/unsafe.json](https://github.com/makukha/multipython/blob/main/tests/share/info/unsafe.json)
-* `base` – [tests/share/info/base.json](https://github.com/makukha/multipython/blob/main/tests/share/info/base.json)
+* `base` – [tests/share/info/base.json@v2517](https://raw.githubusercontent.com/makukha/multipython/refs/tags/v2517/tests/share/info/base.json)
+* `cpython` – [tests/share/info/cpython.json@v2517](https://raw.githubusercontent.com/makukha/multipython/refs/tags/v2517/tests/share/info/cpython.json)
+* `latest` – [tests/share/info/latest.json@v2517](https://raw.githubusercontent.com/makukha/multipython/refs/tags/v2517/tests/share/info/latest.json)
+* `supported` – [tests/share/info/supported.json@v2517](https://raw.githubusercontent.com/makukha/multipython/refs/tags/v2517/tests/share/info/supported.json)
+* `unsafe` – [tests/share/info/unsafe.json@v2517](https://raw.githubusercontent.com/makukha/multipython/refs/tags/v2517/tests/share/info/unsafe.json)
+* *(same for single version tags)*
 
 ### Image CLI `py info`
 
