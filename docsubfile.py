@@ -32,12 +32,9 @@ def image_digests():
     NS, REPO = IMG.split('/')
     stdout = sys.stdout
     for tag in track(tuple(tags), console=Console(file=sys.stderr)):
-        with (
-            urlopen(  # noqa: S310 = Audit URL open for permitted schemes
-                'https://hub.docker.com/v2/'
-                f'namespaces/{NS}/repositories/{REPO}/tags/{tag}'
-            ) as f
-        ):
+        with urlopen(  # noqa: S310 = Audit URL open for permitted schemes
+            f'https://hub.docker.com/v2/namespaces/{NS}/repositories/{REPO}/tags/{tag}'
+        ) as f:
             info = json.load(f)
             stdout.write(f'| `{tag}` | `{info["digest"]}` |\n')
 
@@ -68,13 +65,13 @@ def package_versions(group: Literal['base', 'derived', 'single'], /):
         assert_never(group)
 
     # header
-    out.write(f'| Image tag | {' | '.join(pkgs)} |\n')
-    out.write(f'|---|{'---|' * len(pkgs)}\n')
+    out.write(f'| Image tag | {" | ".join(pkgs)} |\n')
+    out.write(f'|---|{"---|" * len(pkgs)}\n')
 
     # body
     if group == 'base':
         info = get_info(targets[0])
-        cells = ' | '.join(f'{info[p]['version']} {LATEST}' for p in pkgs)
+        cells = ' | '.join(f'{info[p]["version"]} {LATEST}' for p in pkgs)
         out.write(f'| `{targets[0]}` | {cells} |\n')
         out.write(f'| *other images* | {cells} |\n')
     elif group == 'derived' or group == 'single':
