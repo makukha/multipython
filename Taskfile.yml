@@ -35,6 +35,10 @@ tasks:
     cmds:
       - hadolint Dockerfile
       - shellcheck bin/**/*.sh tests/share/*.sh .dev/*.sh
+      # docsubfile
+      - uvx mypy docsubfile.py
+      - uvx ruff check
+      - uvx ruff format --check
 
   build:
     desc: Build all docker images.
