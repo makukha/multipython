@@ -14,8 +14,10 @@ variable "BASE_VERSIONS" {
     UV_SHA256 = "1dbaeffc5cfac769f99700c0fc8c4ef4494a339720c6bf8b79367b1acd701b46"
   }
 }
-variable "PY_VERSIONS" {
+
+variable "SINGLE_VERSIONS" {
   default = {
+    # cpython
     py27 = "2.7.18"
     py35 = "3.5.10"
     py36 = "3.6.15"
@@ -27,110 +29,42 @@ variable "PY_VERSIONS" {
     py312 = "3.12.8"
     py313 = "3.13.1"
     py314 = "3.14.0a3"
-    # free threaded
+    # cpython, free threaded
     py313t = "3.13.1t"
     py314t = "3.14.0a3t"
   }
 }
 
-# subsets
+variable "DERIVED" {
+  default = [
+    "base",
+    "latest",
+    "supported",
+    "unsafe",
+    # latest implementations
+    "cpython",
+  ]
+}
 
-variable "SUBSET_ARGS" {
-  default = {
-    latest = {
-      SUBSET = "latest"
-      RELEASE_TAG = "${RELEASE}"
-    }
-    cpython = {
-      SUBSET = "cpython"
-      RELEASE_TAG = "cpython-${RELEASE}"
-    }
-    supported = {
-      SUBSET = "supported"
-      RELEASE_TAG = "supported-${RELEASE}"
-    }
-    unsafe = {
-      SUBSET = "unsafe"
-      RELEASE_TAG = "unsafe-${RELEASE}"
-    }
-  }
+function "release_tag" {
+  params = [subset, release]
+  result = replace("${subset}-${release}", "latest-", "")
 }
 
 
 # --- build
 
-group "default" {
-  targets = [
-    "base",
-    "py",
-    "latest",
-    "cpython",
-    "supported",
-    "unsafe",
-  ]
-}
-
-target "__build__" {
-  args = "${merge(BASE_VERSIONS, PY_VERSIONS)}"
+target "default" {
+  args = merge(BASE_VERSIONS, SINGLE_VERSIONS)
   platforms = ["linux/amd64"]
-}
-
-target "base" {
-  inherits = ["__build__"]
-  target = "base"
-  tags = [
-    "${IMG}:base",
-    "${IMG}:base-${RELEASE}",
-  ]
-}
-
-target "py" {
-  inherits = ["__build__"]
-  target = PY_TAG
-  tags = [
-    "${IMG}:${PY_TAG}",
-    "${IMG}:${PY_TAG}-${RELEASE}",
-  ]
+  target = SUBSET
   matrix = {
-    PY_TAG = keys(PY_VERSIONS)
+    SUBSET = concat(keys(SINGLE_VERSIONS), DERIVED)
   }
-  name = PY_TAG
-}
-
-target "latest" {
-  inherits = ["__build__"]
-  target = "latest"
+  name = SUBSET
   tags = [
-    "${IMG}",
-    "${IMG}:latest",
-    "${IMG}:${RELEASE}",
-  ]
-}
-
-target "cpython" {
-  inherits = ["__build__"]
-  target = "cpython"
-  tags = [
-    "${IMG}:cpython",
-    "${IMG}:cpython-${RELEASE}",
-  ]
-}
-
-target "supported" {
-  inherits = ["__build__"]
-  target = "supported"
-  tags = [
-    "${IMG}:supported",
-    "${IMG}:supported-${RELEASE}",
-  ]
-}
-
-target "unsafe" {
-  inherits = ["__build__"]
-  target = "unsafe"
-  tags = [
-    "${IMG}:unsafe",
-    "${IMG}:unsafe-${RELEASE}",
+    "${IMG}:${SUBSET}",
+    "${IMG}:${release_tag(SUBSET, RELEASE)}",
   ]
 }
 
@@ -140,7 +74,6 @@ target "unsafe" {
 group "test" {
   targets = [
     "checkupd",
-    "test_base",
     "test_subsets",
     "test_readme_basic",
     "test_readme_advanced_test",
@@ -159,29 +92,15 @@ target "checkupd" {
   EOF
 }
 
-target "test_base" {
-  inherits = ["__test__"]
-  dockerfile-inline = <<EOF
-    FROM ${IMG}:base-${RELEASE}
-    COPY tests/share /tmp/share
-    RUN bash /tmp/share/test_subset.sh base
-  EOF
-}
-
 target "test_subsets" {
   inherits = ["__test__"]
   dockerfile-inline = <<EOF
-    FROM ${IMG}:${SUBSET_ARGS[SUBSET]["RELEASE_TAG"]}
+    FROM ${IMG}:${release_tag(SUBSET, RELEASE)}
     COPY tests/share /tmp/share
     RUN bash /tmp/share/test_subset.sh "${SUBSET}"
   EOF
   matrix = {
-    SUBSET = [
-      "latest",
-      "cpython",
-      "supported",
-      "unsafe",
-    ]
+    SUBSET = concat(keys(SINGLE_VERSIONS), DERIVED)
   }
   name = "test_subset_${SUBSET}"
 }

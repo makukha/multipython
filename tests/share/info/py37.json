@@ -1,0 +1,72 @@
+{
+  "multipython": {
+    "version": "2517",
+    "subset": "py37",
+    "root": "/root/.multipython"
+  },
+  "pyenv": {
+    "version": "2.5.0",
+    "root": "/root/.pyenv",
+    "python_versions": "/root/.pyenv/versions"
+  },
+  "tox": {
+    "version": "4.8.0"
+  },
+  "uv": {
+    "version": "0.5.18",
+    "python_versions": "/root/.local/share/uv/python"
+  },
+  "virtualenv": {
+    "version": "20.26.6",
+    "config": "/root/.config/virtualenv/virtualenv.ini"
+  },
+  "system": {
+    "tag": "py37",
+    "root": "/root/.multipython/sys",
+    "command": "python",
+    "bin_dir": "/root/.multipython/sys/bin",
+    "binary_path": "/root/.multipython/sys/bin/python",
+    "packages": {
+      "cachetools": "5.5.0",
+      "chardet": "5.2.0",
+      "colorama": "0.4.6",
+      "distlib": "0.3.9",
+      "filelock": "3.12.2",
+      "importlib-metadata": "6.7.0",
+      "packaging": "24.0",
+      "pip": "24.0",
+      "platformdirs": "4.0.0",
+      "pluggy": "1.2.0",
+      "pyproject-api": "1.5.3",
+      "setuptools": "68.0.0",
+      "tomli": "2.0.1",
+      "tox": "4.8.0",
+      "typing_extensions": "4.7.1",
+      "virtualenv": "20.26.6",
+      "virtualenv-multipython": "0.3.1",
+      "wheel": "0.42.0",
+      "zipp": "3.15.0"
+    }
+  },
+  "base_image": {
+    "name": "debian",
+    "channel": "stable-slim",
+    "digest": "sha256:b5ace515e78743215a1b101a6f17e59ed74b17132139ca3af3c37e605205e973"
+  },
+  "python": [
+    {
+      "version": "3.7.17",
+      "source": "pyenv",
+      "tag": "py37",
+      "short": "3.7",
+      "command": "python3.7",
+      "bin_dir": "/root/.pyenv/versions/3.7.17/bin",
+      "binary_path": "/root/.pyenv/versions/3.7.17/bin/python",
+      "is_system": true,
+      "packages": {
+        "pip": "24.0",
+        "setuptools": "68.0.0"
+      }
+    }
+  ]
+}
