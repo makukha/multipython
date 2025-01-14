@@ -1,4 +1,4 @@
-| Distribution     | Note          | Tag      | Executable    | Source |
+| Distribution     | Note          | Tag      | Command       | Source |
 |------------------|---------------|----------|---------------|--------|
 | CPython 3.14.0a3 | free threaded | `py314t` | `python3.14t` | pyenv  |
 | CPython 3.13.1   | free threaded | `py313t` | `python3.13t` | pyenv  |

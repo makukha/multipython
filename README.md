@@ -12,13 +12,14 @@
 
 <!-- docsub: begin -->
 <!-- docsub: include docs/part/features.md -->
-* `makukha/multipython` — prerelease and [supported](https://devguide.python.org/versions) Python distributions
+* `makukha/multipython:latest` — prerelease and [supported](https://devguide.python.org/versions) Python distributions
 * `makukha/multipython:cpython` — latest bugfix CPython image
 * `makukha/multipython:supported` — [supported](https://devguide.python.org/versions) versions, not including prerelease
 * `makukha/multipython:unsafe` — all versions, including end-of-life
 * `makukha/multipython:{py314...}` — single version images
-* All images include [pip](https://pip.pypa.io), [pyenv](https://github.com/pyenv/pyenv), [tox](https://tox.wiki), [uv](https://docs.astral.sh/uv)
-* Tox env names match tag names, even non-standard `py313t`
+* All images except `base` have system Python in virtual environment
+* All images include [pip](https://pip.pypa.io), [pyenv](https://github.com/pyenv/pyenv), [setuptools](https://setuptools.pypa.io), [tox](https://tox.wiki), [uv](https://docs.astral.sh/uv), [virtualenv](https://virtualenv.pypa.io)
+* Tox and virtualenv understand multipython tag names, even non-standard `py313t`
 * [Build your own environment](https://github.com/makukha/multipython#build-your-own-environment) from single version images
 * Based on `debian:stable-slim`
 * Single platform `linux/amd64`
@@ -53,11 +54,11 @@ $ docker run --rm -v .:/src -w /src makukha/multipython:py310 tox run
 <!-- docsub: end #readme -->
 
 
-# Python versions
+## Python versions
 
 <!-- docsub: begin -->
 <!-- docsub: include docs/part/python-versions.md -->
-| Distribution     | Note          | Tag      | Executable    | Source |
+| Distribution     | Note          | Tag      | Command       | Source |
 |------------------|---------------|----------|---------------|--------|
 | CPython 3.14.0a3 | free threaded | `py314t` | `python3.14t` | pyenv  |
 | CPython 3.13.1   | free threaded | `py313t` | `python3.13t` | pyenv  |
@@ -80,19 +81,30 @@ $ docker run --rm -v .:/src -w /src makukha/multipython:py310 tox run
 <!-- docsub: end -->
 
 
-### Executables
+## Commands
 
-All executables are on `PATH` as symlinks to respective distributions. System ⚙️ Python, that is always the latest bugfix version, is also available as `python`.
+All commands are on `PATH` as symlinks to respective distributions. System ⚙️ Python, that is always the latest bugfix version, is available as `python` in virtual environment along with `pip`, `tox`, and `virtualenv`.
 
-### Distribution sources
+## Distribution sources
 
 The only used source used is [pyenv](https://github.com/pyenv/pyenv). However, it is planned to use [python-build-standalone](https://github.com/astral-sh/python-build-standalone) distributions for supported Python versions to speed up tests and image builds.
 
-### Versions
+## Versions
 
 * Check [Versions](#versions) section for [pyenv](https://github.com/pyenv/pyenv), [tox](https://tox.wiki), [uv](https://docs.astral.sh/uv), [pip](https://pip.pypa.io), [setuptools](https://setuptools.pypa.io) versions.
 
 * See [Status of Python versions](https://devguide.python.org/versions) for the list of end-of-life versions.
+
+## Tox and virtualenv
+
+All single version tags above, including `py313t` and `py314t`, can be used as tox environment names (see example above) or as virtualenv python requests:
+```shell
+$ virtualenv --python py314t /tmp/venv
+```
+
+This is possible because two custom plugins are pre-installed in system environment (tox-multipython is installed only for tox 3). When building custom image, they are automatically added by `py install`. Both plugins are part of this project, and use multipython image for self testing.
+* [virtualenv-multipython](https://github.com/makukha/virtualenv-multipython) — discovery plugin for virtualenv and tox 4
+* [tox-multipython](https://github.com/makukha/tox-multipython) — discovery plugin for tox 3
 
 
 # Advanced usage
@@ -278,7 +290,7 @@ docker run --rm makukha/multipython:latest py info -c
 ```json
 {
   "multipython": {
-    "version": "2517",
+    "version": "251E",
     "subset": "latest",
     "root": "/root/.multipython"
   },
@@ -348,7 +360,7 @@ docker run --rm makukha/multipython:latest py info -c
 
 # Versions
 
-Tools available in [Base image](#base-image) have exactly the same versions in all Python images. For Python package versions, `system` environment is used.
+Tools available in `base` image have (no surprise) the same versions in all other images. For Python package versions, `system` environment is used.
 
 ✨ latest versions will be updated in upcoming releases.
 
@@ -444,23 +456,23 @@ $ docker run --rm -v .:/src -w /src makukha/multipython@sha256:... tox run
 <!-- docsub: lines after 2 -->
 | Image tag | Image digest |
 |---|---|
-| `base-2517` | `sha256:24dcc37b3a4056948f8597f410294285d9fc36f5498ce128f549dae01dde01ab` |
-| `cpython-2517` | `sha256:35575dbed8aaba989771ee28948971d52355d586512dd09decceb72b1c180cf7` |
-| `py27-2517` | `sha256:fc94ecb658fe22690a26cbabdad01c5b18f8b1a819f1ea8020a318ff8e9bb664` |
-| `py310-2517` | `sha256:164286485adb7785e9eb813840aec82eb9d2216b37ac82de069e3794e6888191` |
-| `py311-2517` | `sha256:824fcead713fad77d4e7c5e5240ba526c86e83ce6341e7dd6a5f7969b9b23786` |
-| `py312-2517` | `sha256:5071b73e4f55af32ca25dcd161ce0dd5be76ec20a85709451a30449e22b87337` |
-| `py313-2517` | `sha256:12091f77b5548d42daabe30024a05b3c8ba9121197ac1edc4e94538ac3e27e9f` |
-| `py313t-2517` | `sha256:1f1e1f9b0289da360849fa49443f7306cf287ea274f147530765bf22a5f15705` |
-| `py314-2517` | `sha256:21b95ff22d207948e908442f41f1169b9bd49bdd6f7004959829fe10d87829eb` |
-| `py314t-2517` | `sha256:09c8b4b08cae9c91747c1aa7d958b6c9ffad9c80daad668f555a4c615ececce4` |
-| `py35-2517` | `sha256:aaf9506c3a9b6b9fba2606aa586646c3653507ccee5105a8b64bd9b1d92269bb` |
-| `py36-2517` | `sha256:b443be7588a65994a61910ee912f442110f68e724069509d38896a37420ba8fb` |
-| `py37-2517` | `sha256:a0231c32a7cd2f64f555c9500a9e4ed81a277269cfcda58dc768f8947f93405f` |
-| `py38-2517` | `sha256:2793e528d58cdff20cf7199669d153a09591870fb7fd77c12719523c3894ca4c` |
-| `py39-2517` | `sha256:d5addd34754f0bda92ffce443b6f1ac8a27491676680c67bd6729470d2e475ca` |
-| `supported-2517` | `sha256:a569d378b7c0a23110883bcaf227dd505da037435e24e29db3be338f44e76b3d` |
-| `unsafe-2517` | `sha256:8cdd2df01a12bb829a40283aaa6db1860bcd36bf01e4aa87a343f939ccf4d36c` |
+| `base-251E` | `sha256:0576dd4a6ae6c1f6b78bd03e50a61d1b52c825b9aea4dff668d5b8c95fe1094e` |
+| `cpython-251E` | `sha256:db00affc41d93becaebd2a4cc1382ddd254fdcf0768b769d30889af2da329eea` |
+| `py27-251E` | `sha256:b1300fb67a26f6622e1c5f6ae7bf2e21e81cc69e49c4e17808db452073f63829` |
+| `py310-251E` | `sha256:db520c2205fcc06dbc8e79e57cfbcaac76519a5df4f7a9ab91090fe07fda1b71` |
+| `py311-251E` | `sha256:c1ecdca49a3592350fee7d20919237374cb5184fc1b07e8a49f261fdae5512b1` |
+| `py312-251E` | `sha256:0a6804455d98a5cd474a504036dcc781d1c8f793c5f76aa60683e1fc7fba67ba` |
+| `py313-251E` | `sha256:33dbd5a64448807719f51712b736a50f14c4383a9372c24e0945227b15a2d654` |
+| `py313t-251E` | `sha256:7d149437e24f357e9b0409812e37e38593eae934c827aceb5e8073e72c6a20d9` |
+| `py314-251E` | `sha256:14a95f46ae0024d33caebd755ec9b3c4120f3ecb884eb24938784d5ac45ce1ec` |
+| `py314t-251E` | `sha256:59a0a9d29219a91108f4f11dfe605769ef28c5e06b5eb9f344155799fee56893` |
+| `py35-251E` | `sha256:50bb600a106edcf7d8c8913a8a0ffe94530d0d9c0cf30c8be519a4920a88b646` |
+| `py36-251E` | `sha256:4c13b44987d6dbe0b1225a90495c84a3c766f6a7b48801b1130ab596bcd589ca` |
+| `py37-251E` | `sha256:9bb0cb5e1743b866bfb524b07464c94f638994b328835f4d3e66e1cb4da758b1` |
+| `py38-251E` | `sha256:29d6fb9da0d4ca0d0a95669cdbd36c275153a3db666fe53edae7f03551ab9699` |
+| `py39-251E` | `sha256:381a89082ccdb2e08d4130ff3e39db6c46c75bcb00c85524fc76d6c01f2b7e0a` |
+| `supported-251E` | `sha256:b09762008d72150230c5f3c964d2680a615246eb13f39eb87a98a8e4d7be2830` |
+| `unsafe-251E` | `sha256:9dad116083a8b0c1482c4f755340ae07a4d024d9e51a1a504d77b009749ebc87` |
 <!-- docsub: end -->
 
 
