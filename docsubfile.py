@@ -6,9 +6,9 @@ import sys
 from typing import Literal, assert_never
 from urllib.request import urlopen
 
-from cyclopts import App
-from rich.console import Console
-from rich.progress import track
+from cyclopts import App  # type: ignore
+from rich.console import Console  # type: ignore
+from rich.progress import track  # type: ignore
 
 
 app = App()
@@ -29,11 +29,13 @@ def image_digests():
         for target in data['target'].values()
     )
     # get digests
-    BASE = 'https://hub.docker.com/v2'
     NS, REPO = IMG.split('/')
     stdout = sys.stdout
     for tag in track(tuple(tags), console=Console(file=sys.stderr)):
-        with urlopen(f'{BASE}/namespaces/{NS}/repositories/{REPO}/tags/{tag}') as f:
+        with urlopen(  # noqa: S310 = Audit URL open for permitted schemes
+            'https://hub.docker.com/v2/'
+            f'namespaces/{NS}/repositories/{REPO}/tags/{tag}'
+        ) as f:
             info = json.load(f)
             stdout.write(f'| `{tag}` | `{info["digest"]}` |\n')
 
@@ -54,6 +56,7 @@ def package_versions(group: Literal['base', 'derived', 'single'], /):
     out = sys.stdout
 
     # setup
+    pkgs: tuple[str, ...]
     if group == 'base':
         targets = ['base']
         pkgs = ('pyenv', 'uv')
@@ -79,9 +82,9 @@ def package_versions(group: Literal['base', 'derived', 'single'], /):
         cells = ' | '.join(f'{info[p]['version']} {LATEST}' for p in pkgs)
         out.write(f'| `{targets[0]}` | {cells} |\n')
         out.write(f'| *other images* | {cells} |\n')
-    elif group in ('derived', 'single'):
+    elif group == 'derived' or group == 'single':
         latest = get_info('latest', release)['system'][('packages')]
-        mark = lambda p, v: f' {LATEST}' if latest[p] == v else ''
+        mark = lambda p, v: f' {LATEST}' if latest[p] == v else ''  # noqa: E731 = lambda
         for target in track(tuple(targets), console=Console(file=sys.stderr)):
             info = get_info(target, release)
             versions = {p: info['system']['packages'][p] for p in pkgs}
