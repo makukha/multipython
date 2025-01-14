@@ -104,7 +104,33 @@ tasks:
           DOCKERHUB.md
           README.md
 
-  # release
+  #
+  #  PRE-RELEASE
+  # -------------
+  #
+  # > task checkupd
+  # > task lint
+  # > task clean build test
+  # > task docs
+  # > (make sure docs didn't change)
+  #
+  #  RELEASE
+  # ---------
+  #
+  # > task release:version
+  # > task release:changelog
+  # > (proofread changelog)
+  #
+  # > task checkupd
+  # > task lint
+  # > task clean build test
+  #
+  # > task release:push
+  # > task docs
+  # > (make sure image digests changed)
+  #
+  # > (manually update https://hub.docker.com/repository/docker/makukha/multipython/general)
+  #
 
   release:version:
     desc: Bump release version.
