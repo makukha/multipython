@@ -405,9 +405,9 @@ The minimal tox version v4.5.1.1 is dictated by [virtualenv support](https://vir
 | `<3.8`             | `<20.27`   | `>=4.6` |
 | `>=3.8`            | `>=20.27`  | `>=4.6` |
 
-## Multipython versioning
+# Project versioning
 
-Starting from Jan 2025, this project uses [CalVer](https://calver.org) convention with [Date62](http://github.com/date62/date62-python) based dates.
+Starting from Jan 2025, multipython uses [CalVer](https://calver.org) convention with [Date62](http://github.com/date62/date62-python) based dates.
 
 Release version format is `YYMD[.patch]`
 * `YY` is `25,26,...`
@@ -433,8 +433,6 @@ Security vulnerabilities can come from
 * multipython itself
 
 ## Image digests
-
-Use image digests for 100% reproducible results.
 
 ```shell
 $ docker run --rm -v .:/src -w /src makukha/multipython@sha256:... tox run
