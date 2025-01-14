@@ -4,6 +4,22 @@
     "subset": "unsafe",
     "root": "/root/.multipython"
   },
+  "pyenv": {
+    "version": "2.5.0",
+    "root": "/root/.pyenv",
+    "python_versions": "/root/.pyenv/versions"
+  },
+  "tox": {
+    "version": "4.5.1.1"
+  },
+  "uv": {
+    "version": "0.5.18",
+    "python_versions": "/root/.local/share/uv/python"
+  },
+  "virtualenv": {
+    "version": "20.21.1",
+    "config": "/root/.config/virtualenv/virtualenv.ini"
+  },
   "system": {
     "tag": "py313",
     "root": "/root/.multipython/sys",
@@ -26,22 +42,6 @@
       "virtualenv": "20.21.1",
       "virtualenv-multipython": "0.3.1"
     }
-  },
-  "pyenv": {
-    "version": "2.5.0",
-    "root": "/root/.pyenv",
-    "python_versions": "/root/.pyenv/versions"
-  },
-  "tox": {
-    "version": "4.5.1.1"
-  },
-  "uv": {
-    "version": "0.5.18",
-    "python_versions": "/root/.local/share/uv/python"
-  },
-  "virtualenv": {
-    "version": "20.21.1",
-    "config": "/root/.config/virtualenv/virtualenv.ini"
   },
   "base_image": {
     "name": "debian",

@@ -80,18 +80,6 @@ printf '    "version": "%s",\n' "$(cat "$MULTIPYTHON_VERSION")"
 printf '    "subset": "%s",\n' "$(cat "$MULTIPYTHON_SUBSET")"
 printf '    "root": "%s"\n' "$MULTIPYTHON_ROOT"
 printf '  },\n'
-if [ -e "$MULTIPYTHON_SYSTEM" ]; then
-  printf '  "system": {\n'
-  printf '    "tag": "%s",\n' "$(py sys)"
-  printf '    "root": "%s",\n' "$MULTIPYTHON_SYSTEM"
-  printf '    "command": "python",\n'
-  printf '    "bin_dir": "%s",\n' "$MULTIPYTHON_SYSTEM/bin"
-  printf '    "binary_path": "%s",\n' "$MULTIPYTHON_SYSTEM/bin/python"
-  printf '    "packages": {\n'
-  python_packages '      ' "$MULTIPYTHON_SYSTEM/bin/python"
-  printf '    }\n'
-  printf '  },\n'
-fi
 if [ -n "$PYENV_VER" ]; then
   printf '  "pyenv": {\n'
   printf '    "version": "%s",\n' "$PYENV_VER"
@@ -118,6 +106,18 @@ if [ -n "$VIRTUALENV_VER" ]; then
     printf '    "config": "%s"' "$VIRTUALENV_CONFIG"
   fi
   printf '\n  },\n'
+fi
+if [ -e "$MULTIPYTHON_SYSTEM" ]; then
+  printf '  "system": {\n'
+  printf '    "tag": "%s",\n' "$(py sys)"
+  printf '    "root": "%s",\n' "$MULTIPYTHON_SYSTEM"
+  printf '    "command": "python",\n'
+  printf '    "bin_dir": "%s",\n' "$MULTIPYTHON_SYSTEM/bin"
+  printf '    "binary_path": "%s",\n' "$MULTIPYTHON_SYSTEM/bin/python"
+  printf '    "packages": {\n'
+  python_packages '      ' "$MULTIPYTHON_SYSTEM/bin/python"
+  printf '    }\n'
+  printf '  },\n'
 fi
 printf '  "base_image": {\n'
 printf '    "name": "debian",\n'
