@@ -104,7 +104,33 @@ tasks:
           DOCKERHUB.md
           README.md
 
-  # release
+  #
+  #  PRE-RELEASE
+  # -------------
+  #
+  # > task checkupd
+  # > task lint
+  # > task clean build test
+  # > task docs
+  # > (make sure docs didn't change)
+  #
+  #  RELEASE
+  # ---------
+  #
+  # > task release:version
+  # > task release:changelog
+  # > (proofread changelog)
+  #
+  # > task checkupd
+  # > task lint
+  # > task build test
+  #
+  # > task release:push
+  # > task docs
+  # > (make sure image digests changed)
+  #
+  # > (manually update https://hub.docker.com/repository/docker/makukha/multipython/general)
+  #
 
   release:version:
     desc: Bump release version.
@@ -126,11 +152,16 @@ tasks:
       - towncrier build --yes --version "{{.VERSION}}"
 
   release:push:
-    desc: Push base images to Docker Registry.
+    desc: Push images to Docker Registry.
     prompt: Release all images. Continue?
     vars:
       TARGETS:
         sh: docker buildx bake --print 2>/dev/null | jq -r '.group.default.targets[]'
     cmds:
-      - cmd: docker buildx bake --push {{.ITEM}}; sleep 10
+      - cmd: docker buildx bake --push {{.ITEM}} ; sleep 60
         for: { var: TARGETS }
+
+  release:push:*:
+    desc: Push specific Bake target to Docker Registry.
+    cmds:
+      - docker buildx bake --push {{index .MATCH 0}}

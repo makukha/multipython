@@ -7,6 +7,39 @@ All notable changes to this project will be documented in this file. Changes for
 
 <!-- towncrier release notes start -->
 
+## [v251E](https://github.com/makukha/multipython/releases/tag/v251E) — 2025-01-14
+
+### Breaking 🔥
+
+- System Python is now provided through separate virtual environment, keeping respective original tag distribution untouched ([#76](https://github.com/makukha/multipython/issues/76))
+
+### Added 🌿
+
+- Helper utility command `py tag <executable>` ([#59](https://github.com/makukha/multipython/issues/59))
+- [tox-multipython](https://github.com/makukha/tox-multipython) plugin for interpreter discovery with tox 3 ([#70](https://github.com/makukha/multipython/issues/70))
+- New JSON metadata key `system`, containing information about system Python environment ([#76](https://github.com/makukha/multipython/issues/76))
+
+### Changed
+
+- Updated base Debian image ([#81](https://github.com/makukha/multipython/issues/81))
+- Updated uv to v0.5.18 ([#77](https://github.com/makukha/multipython/issues/77))
+- Updated virtualenv-multipython to v0.3.1 ([#72](https://github.com/makukha/multipython/issues/72))
+
+### Docs
+
+- It is now not necessary to have pulled Docker images to update docs ([#54](https://github.com/makukha/multipython/issues/54))
+- Updated image digests formatting ([#55](https://github.com/makukha/multipython/issues/55))
+
+### Misc
+
+- Added tests for single version images ([#53](https://github.com/makukha/multipython/issues/53))
+- Tests made more robust ([#71](https://github.com/makukha/multipython/issues/71))
+- Refactored `py` to use separate command modules under the hood ([#76](https://github.com/makukha/multipython/issues/76))
+- Improved Docker layer structure ([#76](https://github.com/makukha/multipython/issues/76))
+- Re-implemented Bash documentation scripts in Python ([#79](https://github.com/makukha/multipython/issues/79))
+- Started checking docsubfile.py with mypy and ruff ([#79](https://github.com/makukha/multipython/issues/79))
+
+
 ## [v2517](https://github.com/makukha/multipython/releases/tag/v2517) — 2025-01-07
 
 Prepare for multi-source (pyenv + uv) and multi-implementation (PyPy, RustPython, Jython, ...) releases.

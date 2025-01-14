@@ -30,27 +30,3 @@ $ task build:*
 $ task shell:* -- -v ...
 $ task run:* -- ...
 ```
-
-## Pre-release
-
-```shell
-$ task checkupd
-$ task lint clean build test
-$ task docs
-```
-
-## Release
-
-```shell
-$ task release:version
-$ task release:changelog
-$ task lint clean build test
-$ task release:push
-```
-
-Update image digests after pushing to registry:
-```shell
-$ task docs
-```
-
-Manually update [repository overview](https://hub.docker.com/repository/docker/makukha/multipython/general) from `DOCKERHUB.md`.
