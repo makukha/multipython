@@ -5,6 +5,7 @@
 # tox.ini
 [tox]
 env_list = py{27,35,36,37,38,39,310,311,312,313,314,313t,314t}
+skip_missing_interpreters = false
 [testenv]
 command = {env_python} --version
 ```
