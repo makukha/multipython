@@ -37,12 +37,14 @@ variable "SINGLE_VERSIONS" {
 
 variable "DERIVED" {
   default = [
-    "base",
-    "latest",
-    "supported",
-    "unsafe",
+    # NOTE: the order is important, lower tags will appear higher on Docker Hub
     # latest implementations
     "cpython",
+    # more general
+    "base",
+    "unsafe",
+    "latest",
+    "supported",
   ]
 }
 

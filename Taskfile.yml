@@ -132,5 +132,5 @@ tasks:
       TARGETS:
         sh: docker buildx bake --print 2>/dev/null | jq -r '.group.default.targets[]'
     cmds:
-      - cmd: docker buildx bake --push {{.ITEM}}; sleep 30
+      - cmd: docker buildx bake --push {{.ITEM}}; sleep 10
         for: { var: TARGETS }
