@@ -32,9 +32,9 @@
 * [`supported, supported-251E`](https://github.com/makukha/multipython/blob/v251E/Dockerfile) — *all supported CPython versions*
 * [`unsafe, unsafe-251E`](https://github.com/makukha/multipython/blob/v251E/Dockerfile) — *all CPython versions, including EOL*
 * [`base, base-251E`](https://github.com/makukha/multipython/blob/v251E/Dockerfile) — *pyenv, uv*
-* [`py314t, py314t-251E`](https://github.com/makukha/multipython/blob/v251E/Dockerfile) — *CPython 3.14.0a3 free-threaded*
+* [`py314t, py314t-251E`](https://github.com/makukha/multipython/blob/v251E/Dockerfile) — *CPython 3.14.0a4 free-threaded*
 * [`py313t, py313t-251E`](https://github.com/makukha/multipython/blob/v251E/Dockerfile) — *CPython 3.13.1 free-threaded*
-* [`py314, py314-251E`](https://github.com/makukha/multipython/blob/v251E/Dockerfile) — *CPython 3.14.0a3*
+* [`py314, py314-251E`](https://github.com/makukha/multipython/blob/v251E/Dockerfile) — *CPython 3.14.0a4*
 * [`py313, py313-251E`](https://github.com/makukha/multipython/blob/v251E/Dockerfile) — *CPython 3.13.1*
 * [`py312, py312-251E`](https://github.com/makukha/multipython/blob/v251E/Dockerfile) — *CPython 3.12.8*
 * [`py311, py311-251E`](https://github.com/makukha/multipython/blob/v251E/Dockerfile) — *CPython 3.11.11*
@@ -85,9 +85,9 @@ See [Documentation](https://github.com/makukha/multipython?tab=readme-ov-file) f
 <!-- docsub: include docs/part/python-versions.md -->
 | Distribution     | Note          | Tag      | Command       | Source |
 |------------------|---------------|----------|---------------|--------|
-| CPython 3.14.0a3 | free threaded | `py314t` | `python3.14t` | pyenv  |
+| CPython 3.14.0a4 | free threaded | `py314t` | `python3.14t` | pyenv  |
 | CPython 3.13.1   | free threaded | `py313t` | `python3.13t` | pyenv  |
-| CPython 3.14.0a3 |               | `py314`  | `python3.14`  | pyenv  |
+| CPython 3.14.0a4 |               | `py314`  | `python3.14`  | pyenv  |
 | CPython 3.13.1   | system ⚙️     | `py313`  | `python3.13`  | pyenv  |
 | CPython 3.12.8   |               | `py312`  | `python3.12`  | pyenv  |
 | CPython 3.11.11  |               | `py311`  | `python3.11`  | pyenv  |

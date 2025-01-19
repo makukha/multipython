@@ -1,6 +1,6 @@
-py314t python3.14t /root/.pyenv/versions/3.14.0a3t/bin/python
+py314t python3.14t /root/.pyenv/versions/3.14.0a4t/bin/python
 py313t python3.13t /root/.pyenv/versions/3.13.1t/bin/python
-py314 python3.14 /root/.pyenv/versions/3.14.0a3/bin/python
+py314 python3.14 /root/.pyenv/versions/3.14.0a4/bin/python
 py313 python3.13 /root/.pyenv/versions/3.13.1/bin/python
 py312 python3.12 /root/.pyenv/versions/3.12.8/bin/python
 py311 python3.11 /root/.pyenv/versions/3.11.11/bin/python
