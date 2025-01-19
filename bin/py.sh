@@ -20,17 +20,19 @@ usage () {
   echo "       py root"
   echo "       py sys"
   echo "       py tag <PYTHON>"
+  echo "       py uninstall"
   echo "       py --version"
   echo "       py --help"
   echo
   echo "commands:"
-  echo "  bin      Show Python executable command or path"
-  echo "  info     Extended details in JSON format"
-  echo "  install  Install sys environment, commands, and seed packages"
-  echo "  ls       List all distributions"
-  echo "  root     Show multipython root path"
-  echo "  sys      Show system python tag"
-  echo "  tag      Determine tag of executable"
+  echo "  bin        Show Python executable command or path"
+  echo "  info       Extended details in JSON format"
+  echo "  install    Install system environment, commands, seed packages"
+  echo "  ls         List all distributions"
+  echo "  root       Show multipython root path"
+  echo "  sys        Show system python tag"
+  echo "  tag        Determine tag of executable"
+  echo "  uninstall  Uninstall system environment"
   echo
   echo "binary info formats:"
   echo "  -c --cmd   Command name, expected to be on PATH"
@@ -58,6 +60,7 @@ else
     checkupd)  shift; bash "$SCRIPT_DIR/cmd/checkupd.sh" ;;  # internal, undocumented
     info)      shift; bash "$SCRIPT_DIR/cmd/info.sh" "$@" ;;
     install)   shift; bash "$SCRIPT_DIR/cmd/install.sh" "$@" ;;
+    uninstall)   shift; bash "$SCRIPT_DIR/cmd/uninstall.sh" "$@" ;;
     ls)        shift; bash "$SCRIPT_DIR/cmd/ls.sh" "$@" ;;
     root)      printf "$MULTIPYTHON_ROOT\n" ;;
     sys)       shift; bash "$SCRIPT_DIR/cmd/tag.sh" python ;;

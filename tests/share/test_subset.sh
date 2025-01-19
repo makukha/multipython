@@ -155,3 +155,12 @@ do
   virtualenv --python "$TAG" --no-seed "/tmp/$TAG"
   [ "$(py tag "/tmp/$TAG/bin/python")" = "$TAG" ]
 done
+
+
+# TEST: uninstall
+# (this goes in the very end)
+echo -e "\n>>> Testing: $SUBSET: uninstall..."
+py uninstall
+command -v python && false
+[ "$(py info -c | jq -c .system | xargs)" = "null" ]
+[ "$(py info -c | jq -c .multipython.subset)" = "custom" ]

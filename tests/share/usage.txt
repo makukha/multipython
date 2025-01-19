@@ -5,17 +5,19 @@ usage: py bin {--cmd|--dir|--path} [TAG]
        py root
        py sys
        py tag <PYTHON>
+       py uninstall
        py --version
        py --help
 
 commands:
-  bin      Show Python executable command or path
-  info     Extended details in JSON format
-  install  Install sys environment, commands, and seed packages
-  ls       List all distributions
-  root     Show multipython root path
-  sys      Show system python tag
-  tag      Determine tag of executable
+  bin        Show Python executable command or path
+  info       Extended details in JSON format
+  install    Install system environment, commands, seed packages
+  ls         List all distributions
+  root       Show multipython root path
+  sys        Show system python tag
+  tag        Determine tag of executable
+  uninstall  Uninstall system environment
 
 binary info formats:
   -c --cmd   Command name, expected to be on PATH
