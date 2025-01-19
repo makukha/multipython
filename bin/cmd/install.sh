@@ -10,20 +10,26 @@ MULTIPYTHON_ROOT="$(py root)"
 # shellcheck disable=SC1091
 source "$MULTIPYTHON_ROOT/bin/cmd/.env"
 
-DATA="$(py ls --all)"
-
 if [ -e "$MULTIPYTHON_SYSTEM" ]; then
   printf "Multipython system interpreter already installed\n" >&2
   exit 1
 fi
 
-if [ $# = 0 ]; then
-  SUBSET="custom"
-elif [ "$1" = "--as" ]; then
-  SUBSET="$2"
-  shift; shift
-fi
+SUBSET="custom"
+TAG=""
 
+while [[ $# -gt 0 ]]; do
+  case $1 in
+    --as) SUBSET="$2"; shift; shift ;;  # this option is for internal use
+    --tag) TAG="$2"; shift; shift ;;
+    *)
+      printf "Unknown option: %S" "$1" >&2
+      exit 1
+      ;;
+  esac
+done
+
+DATA="$(py ls --all)"
 
 propose_sys_tag () {
   LONG="$(awk '{print $3}' <<<"$DATA")"
@@ -75,7 +81,9 @@ virtualenv_spec () {
 }
 
 pip_install_system () {
-  TAG="$(propose_sys_tag)"
+  if [ -z "$TAG" ]; then
+    TAG="$(propose_sys_tag)"
+  fi
   BINDIR="$(py bin --dir "$TAG")"
 
   # install virtualenv in sys tag, create sys venv, remove virtualenv

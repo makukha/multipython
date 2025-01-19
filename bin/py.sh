@@ -15,7 +15,7 @@ source "$SCRIPT_DIR/cmd/.env"
 usage () {
   echo "usage: py bin {--cmd|--dir|--path} [TAG]"
   echo "       py info [--cached]"
-  echo "       py install"
+  echo "       py install [--sys TAG]"
   echo "       py ls {--tag|--short|--long|--all}"
   echo "       py root"
   echo "       py sys"
@@ -47,6 +47,7 @@ usage () {
   echo
   echo "other options:"
   echo "  -c --cached  Show cached results"
+  echo "  --sys        Preferred system executable"
   echo "  --version    Show multipython distribution version"
   echo "  --help       Show this help and exit"
 }

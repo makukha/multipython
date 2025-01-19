@@ -10,8 +10,6 @@ MULTIPYTHON_ROOT="$(py root)"
 # shellcheck disable=SC1091
 source "$MULTIPYTHON_ROOT/bin/cmd/.env"
 
-DATA="$(py ls --all)"
-
 if [ ! -e "$MULTIPYTHON_SYSTEM" ]; then
   printf "Multipython system interpreter not installed\n" >&2
   exit 1

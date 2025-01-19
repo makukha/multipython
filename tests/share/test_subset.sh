@@ -150,6 +150,7 @@ fi
 # TEST: virtualenv
 
 echo -e "\n>>> Testing: $SUBSET: virtualenv..."
+virtualenv --no-seed "/tmp/sys" && [ "/tmp/sys/bin/python" = "$(py sys)" ]
 for TAG in $(py ls --tag | xargs)
 do
   virtualenv --python "$TAG" --no-seed "/tmp/$TAG"
@@ -157,10 +158,25 @@ do
 done
 
 
+# TESTS BELOW THIS LINE MUST REMAIN IN THE END
+
+
 # TEST: uninstall
-# (this goes in the very end)
+
 echo -e "\n>>> Testing: $SUBSET: uninstall..."
 py uninstall
 command -v python && false
 [ "$(py info -c | jq -c .system | xargs)" = "null" ]
 [ "$(py info -c | jq -c .multipython.subset)" = "custom" ]
+
+
+# TEST: install --sys
+
+echo -e "\n>>> Testing: $SUBSET: install --tag TAG..."
+for TAG in $(py ls --tag | xargs)
+do
+  py install --sys "$TAG"
+  virtualenv --no-seed "/tmp/sys$TAG"
+  [ "$(py tag "/tmp/sys$TAG/bin/python")" = "$TAG" ]
+  py uninstall
+done

@@ -1,6 +1,6 @@
 usage: py bin {--cmd|--dir|--path} [TAG]
        py info [--cached]
-       py install
+       py install [--sys TAG]
        py ls {--tag|--short|--long|--all}
        py root
        py sys
@@ -32,5 +32,6 @@ version formats:
 
 other options:
   -c --cached  Show cached results
+  --sys        Preferred system executable
   --version    Show multipython distribution version
   --help       Show this help and exit

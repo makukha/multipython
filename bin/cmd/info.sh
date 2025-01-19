@@ -33,7 +33,7 @@ fi
 python_packages () {
   INDENT="$1"
   PYTHON="$2"
-  "$PYTHON" -m pip freeze --all 2>/dev/null | sed 's/^/'"$INDENT"'"/; s/==/": "/; s/$/"/; $! s/$/,/'
+  "$PYTHON" -m pip freeze --all 2>/dev/null | sed 's/^/'"$INDENT"'"/; s/\(==\| @ \)/": "/; s/$/"/; $! s/$/,/'
 }
 
 python_info () {
