@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 if [ $# = 1 ] && [ "$1" = "-VV" ]; then
   echo "Python X.Y.Z" >&2

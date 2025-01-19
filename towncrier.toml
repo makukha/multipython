@@ -1,6 +1,6 @@
 [tool.towncrier]
 
-directory = "news.d"
+directory = "NEWS.d"
 filename = "CHANGELOG.md"
 title_format = "## [v{version}](https://github.com/makukha/multipython/releases/tag/v{version}) — {project_date}"
 issue_format = "[#{issue}](https://github.com/makukha/multipython/issues/{issue})"
