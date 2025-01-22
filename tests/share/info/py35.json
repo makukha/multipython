@@ -13,7 +13,7 @@
     "version": "3.28.0"
   },
   "uv": {
-    "version": "0.5.21",
+    "version": "0.5.22",
     "python_versions": "/root/.local/share/uv/python"
   },
   "virtualenv": {
