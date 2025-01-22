@@ -300,7 +300,7 @@ docker run --rm makukha/multipython:latest py info -c
     "python_versions": "/root/.pyenv/versions"
   },
   "tox": {
-    "version": "4.23.2"
+    "version": "4.24.1"
   },
   "uv": {
     "version": "0.5.22",
@@ -317,18 +317,18 @@ docker run --rm makukha/multipython:latest py info -c
     "bin_dir": "/root/.multipython/sys/bin",
     "binary_path": "/root/.multipython/sys/bin/python",
     "packages": {
-      "cachetools": "5.5.0",
+      "cachetools": "5.5.1",
       "chardet": "5.2.0",
       "colorama": "0.4.6",
       "distlib": "0.3.9",
-      "filelock": "3.16.1",
+      "filelock": "3.17.0",
       "packaging": "24.2",
       "pip": "24.3.1",
       "platformdirs": "4.3.6",
       "pluggy": "1.5.0",
-      "pyproject-api": "1.8.0",
+      "pyproject-api": "1.9.0",
       "setuptools": "75.8.0",
-      "tox": "4.23.2",
+      "tox": "4.24.1",
       "virtualenv": "20.29.1",
       "virtualenv-multipython": "0.4.1"
     }
@@ -380,9 +380,9 @@ Tools available in `base` image have (no surprise) the same versions in all othe
 <!-- docsub: x package-versions derived -->
 | Image tag | pip | setuptools | tox | virtualenv |
 |---|---|---|---|------------|
-| `cpython` | 24.3.1 ✨ | 75.8.0 ✨ | 4.23.2 ✨ | 20.29.1 ✨  |
-| `latest` | 24.3.1 ✨ | 75.8.0 ✨ | 4.23.2 ✨ | 20.29.1 ✨  |
-| `supported` | 24.3.1 ✨ | 75.8.0 ✨ | 4.23.2 ✨ | 20.29.1 ✨  |
+| `cpython` | 24.3.1 ✨ | 75.8.0 ✨ | 4.24.1 ✨ | 20.29.1 ✨  |
+| `latest` | 24.3.1 ✨ | 75.8.0 ✨ | 4.24.1 ✨ | 20.29.1 ✨  |
+| `supported` | 24.3.1 ✨ | 75.8.0 ✨ | 4.24.1 ✨ | 20.29.1 ✨  |
 | `unsafe` | 24.3.1 ✨ | 75.8.0 ✨ | 4.5.1.1 | 20.21.1    |
 <!-- docsub: end -->
 
@@ -393,15 +393,15 @@ Tools available in `base` image have (no surprise) the same versions in all othe
 <!-- docsub: x package-versions single -->
 | Image tag | pip | setuptools | tox | virtualenv |
 |---|---|---|---|------------|
-| `py314t` | 24.3.1 ✨ | 75.8.0 ✨ | 4.23.2 ✨ | 20.29.1 ✨  |
-| `py313t` | 24.3.1 ✨ | 75.8.0 ✨ | 4.23.2 ✨ | 20.29.1 ✨  |
-| `py314` | 24.3.1 ✨ | 75.8.0 ✨ | 4.23.2 ✨ | 20.29.1 ✨  |
-| `py313` | 24.3.1 ✨ | 75.8.0 ✨ | 4.23.2 ✨ | 20.29.1 ✨  |
-| `py312` | 24.3.1 ✨ | 75.8.0 ✨ | 4.23.2 ✨ | 20.29.1 ✨  |
-| `py311` | 24.3.1 ✨ | 75.8.0 ✨ | 4.23.2 ✨ | 20.29.1 ✨  |
-| `py310` | 24.3.1 ✨ | 75.8.0 ✨ | 4.23.2 ✨ | 20.29.1 ✨  |
-| `py39` | 24.3.1 ✨ | 75.8.0 ✨ | 4.23.2 ✨ | 20.29.1 ✨  |
-| `py38` | 24.3.1 ✨ | 75.3.0 | 4.23.2 ✨ | 20.29.1 ✨  |
+| `py314t` | 24.3.1 ✨ | 75.8.0 ✨ | 4.24.1 ✨ | 20.29.1 ✨  |
+| `py313t` | 24.3.1 ✨ | 75.8.0 ✨ | 4.24.1 ✨ | 20.29.1 ✨  |
+| `py314` | 24.3.1 ✨ | 75.8.0 ✨ | 4.24.1 ✨ | 20.29.1 ✨  |
+| `py313` | 24.3.1 ✨ | 75.8.0 ✨ | 4.24.1 ✨ | 20.29.1 ✨  |
+| `py312` | 24.3.1 ✨ | 75.8.0 ✨ | 4.24.1 ✨ | 20.29.1 ✨  |
+| `py311` | 24.3.1 ✨ | 75.8.0 ✨ | 4.24.1 ✨ | 20.29.1 ✨  |
+| `py310` | 24.3.1 ✨ | 75.8.0 ✨ | 4.24.1 ✨ | 20.29.1 ✨  |
+| `py39` | 24.3.1 ✨ | 75.8.0 ✨ | 4.24.1 ✨ | 20.29.1 ✨  |
+| `py38` | 24.3.1 ✨ | 75.3.0 | 4.24.1 ✨ | 20.29.1 ✨  |
 | `py37` | 24.0 | 68.0.0 | 4.8.0 | 20.26.6    |
 | `py36` | 21.3.1 | 59.6.0 | 3.28.0 | 20.17.1    |
 | `py35` | 20.3.4 | 50.3.2 | 3.28.0 | 20.15.1    |

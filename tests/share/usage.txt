@@ -1,6 +1,6 @@
 usage: py bin {--cmd|--dir|--path} [TAG]
        py info [--cached]
-       py install [--sys TAG [--no-update-info]]
+       py install [--sys TAG] [--no-update-info]
        py ls {--tag|--short|--long|--all}
        py root
        py sys

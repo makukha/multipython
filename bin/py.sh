@@ -46,10 +46,11 @@ usage () {
   echo "  -a --all    Lines 'tag short long', e.g. 'py39 3.9 3.9.3'"
   echo
   echo "other options:"
-  echo "  -c --cached  Show cached results"
-  echo "  --sys        Preferred system executable"
-  echo "  --version    Show multipython distribution version"
-  echo "  --help       Show this help and exit"
+  echo "  -c --cached       Show cached results"
+  echo "  --no-update-info  Don't update local info.json (works faster)"
+  echo "  --sys             Preferred system executable"
+  echo "  --version         Show multipython distribution version"
+  echo "  --help            Show this help and exit"
 }
 
 

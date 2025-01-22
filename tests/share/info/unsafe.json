@@ -27,11 +27,11 @@
     "bin_dir": "/root/.multipython/sys/bin",
     "binary_path": "/root/.multipython/sys/bin/python",
     "packages": {
-      "cachetools": "5.5.0",
+      "cachetools": "5.5.1",
       "chardet": "5.2.0",
       "colorama": "0.4.6",
       "distlib": "0.3.9",
-      "filelock": "3.16.1",
+      "filelock": "3.17.0",
       "packaging": "24.2",
       "pip": "24.3.1",
       "platformdirs": "3.11.0",
