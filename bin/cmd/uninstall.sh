@@ -15,6 +15,18 @@ if [ ! -e "$MULTIPYTHON_SYSTEM" ]; then
   exit 1
 fi
 
+UPDATE_INFO=true
+
+while [[ $# -gt 0 ]]; do
+  case $1 in
+    --no-update-info) UPDATE_INFO=; shift ;;
+    *)
+      printf "Unknown option: %s" "$1" >&2
+      exit 1
+      ;;
+  esac
+done
+
 # remove symlinks
 paste -d' ' <(py bin --cmd) | awk '{system("rm /usr/local/bin/" $1)}'
 
@@ -24,7 +36,13 @@ rm -rf "$MULTIPYTHON_SYSTEM"
 # remove virtualenv configuration
 rm "$VIRTUALENV_CONFIG"
 
-# update json info
+# clear installed subset name
 SUBSET="custom"
+
+# update json info
 echo "$SUBSET" > "$MULTIPYTHON_SUBSET"
-py info | tee "$MULTIPYTHON_INFO" | jq
+if [ "$UPDATE_INFO" = "true" ]; then
+  py info | tee "$MULTIPYTHON_INFO" | jq
+else
+  touch "$MULTIPYTHON_INFO"
+fi

@@ -17,13 +17,15 @@ fi
 
 SUBSET="custom"
 TAG=""
+UPDATE_INFO=true
 
 while [[ $# -gt 0 ]]; do
   case $1 in
     --as) SUBSET="$2"; shift; shift ;;  # this option is for internal use
-    --tag) TAG="$2"; shift; shift ;;
+    --sys) TAG="$2"; shift; shift ;;
+    --no-update-info) UPDATE_INFO=; shift ;;
     *)
-      printf "Unknown option: %S" "$1" >&2
+      printf "Unknown option: %s" "$1" >&2
       exit 1
       ;;
   esac
@@ -134,4 +136,8 @@ fi
 echo "$SUBSET" > "$MULTIPYTHON_SUBSET"
 
 # generate and validate versions info
-py info | tee "$MULTIPYTHON_INFO" | jq
+if [ "$UPDATE_INFO" = "true" ]; then
+  py info | tee "$MULTIPYTHON_INFO" | jq
+else
+  touch "$MULTIPYTHON_INFO"
+fi

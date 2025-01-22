@@ -1,11 +1,11 @@
 usage: py bin {--cmd|--dir|--path} [TAG]
        py info [--cached]
-       py install [--sys TAG]
+       py install [--sys TAG [--no-update-info]]
        py ls {--tag|--short|--long|--all}
        py root
        py sys
        py tag <PYTHON>
-       py uninstall
+       py uninstall [--no-update-info]
        py --version
        py --help
 
@@ -31,7 +31,8 @@ version formats:
   -a --all    Lines 'tag short long', e.g. 'py39 3.9 3.9.3'
 
 other options:
-  -c --cached  Show cached results
-  --sys        Preferred system executable
-  --version    Show multipython distribution version
-  --help       Show this help and exit
+  -c --cached       Show cached results
+  --no-update-info  Don't update local info.json (works faster)
+  --sys             Preferred system executable
+  --version         Show multipython distribution version
+  --help            Show this help and exit

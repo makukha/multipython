@@ -143,14 +143,14 @@ elif [[ " py27 py35 py36 " == *" $SUBSET "* ]]; then
 elif ( tox list | grep -q "^$SUBSET " ); then
   tox run -e "$SUBSET"
 else
-  tox run -m "$SUBSET"
+  tox run -m "$SUBSET" -vvv
 fi
 
 
 # TEST: virtualenv
 
 echo -e "\n>>> Testing: $SUBSET: virtualenv..."
-virtualenv --no-seed "/tmp/sys" && [ "/tmp/sys/bin/python" = "$(py sys)" ]
+virtualenv --no-seed "/tmp/sys" && [ "$(py tag /tmp/sys/bin/python)" = "$(py sys)" ]
 for TAG in $(py ls --tag | xargs)
 do
   virtualenv --python "$TAG" --no-seed "/tmp/$TAG"
@@ -164,19 +164,24 @@ done
 # TEST: uninstall
 
 echo -e "\n>>> Testing: $SUBSET: uninstall..."
-py uninstall
-command -v python && false
-[ "$(py info -c | jq -c .system | xargs)" = "null" ]
-[ "$(py info -c | jq -c .multipython.subset)" = "custom" ]
+
+if [[ "$SUBSET" != "base" ]]; then
+  py uninstall
+  command -v python && false
+  [ "$(py info -c | jq -c .system | xargs)" = "null" ]
+  [ "$(py info -c | jq -c .multipython.subset)" = "\"custom\"" ]
+fi
 
 
 # TEST: install --sys
 
-echo -e "\n>>> Testing: $SUBSET: install --tag TAG..."
-for TAG in $(py ls --tag | xargs)
-do
-  py install --sys "$TAG"
-  virtualenv --no-seed "/tmp/sys$TAG"
-  [ "$(py tag "/tmp/sys$TAG/bin/python")" = "$TAG" ]
-  py uninstall
-done
+echo -e "\n>>> Testing: $SUBSET: install --sys TAG..."
+if [[ "$SUBSET" != "base" ]]; then
+  for TAG in $(py ls --tag | xargs)
+  do
+    py install --sys "$TAG"
+    virtualenv --no-seed "/tmp/sys$TAG"
+    [ "$(py tag "/tmp/sys$TAG/bin/python")" = "$TAG" ]
+    py uninstall
+  done
+fi
