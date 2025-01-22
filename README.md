@@ -330,7 +330,7 @@ docker run --rm makukha/multipython:latest py info -c
       "setuptools": "75.8.0",
       "tox": "4.23.2",
       "virtualenv": "20.29.1",
-      "virtualenv-multipython": "0.4.0"
+      "virtualenv-multipython": "0.4.1"
     }
   },
   "base_image": {

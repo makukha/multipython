@@ -40,7 +40,7 @@
       "setuptools": "75.8.0",
       "tox": "4.5.1.1",
       "virtualenv": "20.21.1",
-      "virtualenv-multipython": "0.4.0"
+      "virtualenv-multipython": "0.4.1"
     }
   },
   "base_image": {

@@ -41,9 +41,9 @@
       "six": "1.17.0",
       "toml": "0.10.2",
       "tox": "3.28.0",
-      "tox-multipython": "0.2.1",
+      "tox-multipython": "0.2.2",
       "virtualenv": "20.15.1",
-      "virtualenv-multipython": "0.4.0",
+      "virtualenv-multipython": "0.4.1",
       "wheel": "0.37.1",
       "zipp": "1.2.0"
     }
