@@ -1,6 +1,6 @@
 [tool.bumpversion]
 
-current_version = "251E"
+current_version = "251R"
 allow_dirty = true
 
 parse = """(?x)
@@ -17,6 +17,7 @@ serialize = ["{release}.{patch}", "{release}"]
 files = [
   {filename = "docker-bake.hcl"},
   {filename = "docs/part/image-tags.md"},
+  {filename = "README.md"},
   {glob = "tests/share/info/*.json"},
   {filename = "tests/test_readme_advanced/info.json"},
 ]

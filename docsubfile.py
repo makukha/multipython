@@ -3,7 +3,6 @@ import json
 from pathlib import Path
 from subprocess import DEVNULL, check_output
 import sys
-from typing import Literal, assert_never
 from urllib.request import urlopen
 
 import click  # type: ignore
@@ -42,7 +41,7 @@ def image_digests():
 
 
 @x.command
-@click.argument('group', type=click.Choice(['base', 'derived', 'single']), required=True)
+@click.argument('group', type=click.Choice(['base', 'derived', 'single']))
 def package_versions(group: str):
     def get_info(target: str) -> dict:
         return json.loads((INFO_DIR / f'{target}.json').read_text())
@@ -65,7 +64,7 @@ def package_versions(group: str):
         tags = [py['tag'] for py in get_info('unsafe')['python']]
         targets.sort(key=lambda x: tags.index(x))
     else:
-        assert_never(group)
+        raise ValueError(f'unknown group: {group}')
 
     # header
     out.write(f'| Image tag | {" | ".join(pkgs)} |\n')
@@ -86,4 +85,4 @@ def package_versions(group: str):
             cells = ' | '.join(f'{v}{mark(p, v)}' for p, v in versions.items())
             out.write(f'| `{target}` | {cells} |\n')
     else:
-        assert_never(group)
+        raise ValueError(f'unknown group: {group}')

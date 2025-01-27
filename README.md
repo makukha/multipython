@@ -133,7 +133,7 @@ All `makukha/multipython` images come with helper utility
 
 ```shell
 $ docker run --rm makukha/multipython py --version
-multipython 2517
+multipython 251R
 ```
 
 <table>
@@ -275,11 +275,11 @@ After running `py install` in custom image Dockerfile, `/root/.multipython/info.
 
 ### GitHub repository
 
-* `base` – [tests/share/info/base.json@v2517](https://raw.githubusercontent.com/makukha/multipython/refs/tags/v2517/tests/share/info/base.json)
-* `cpython` – [tests/share/info/cpython.json@v2517](https://raw.githubusercontent.com/makukha/multipython/refs/tags/v2517/tests/share/info/cpython.json)
-* `latest` – [tests/share/info/latest.json@v2517](https://raw.githubusercontent.com/makukha/multipython/refs/tags/v2517/tests/share/info/latest.json)
-* `supported` – [tests/share/info/supported.json@v2517](https://raw.githubusercontent.com/makukha/multipython/refs/tags/v2517/tests/share/info/supported.json)
-* `unsafe` – [tests/share/info/unsafe.json@v2517](https://raw.githubusercontent.com/makukha/multipython/refs/tags/v2517/tests/share/info/unsafe.json)
+* `base` – [tests/share/info/base.json@v251R](https://raw.githubusercontent.com/makukha/multipython/refs/tags/v251R/tests/share/info/base.json)
+* `cpython` – [tests/share/info/cpython.json@v251R](https://raw.githubusercontent.com/makukha/multipython/refs/tags/v251R/tests/share/info/cpython.json)
+* `latest` – [tests/share/info/latest.json@v251R](https://raw.githubusercontent.com/makukha/multipython/refs/tags/v251R/tests/share/info/latest.json)
+* `supported` – [tests/share/info/supported.json@v251R](https://raw.githubusercontent.com/makukha/multipython/refs/tags/v251R/tests/share/info/supported.json)
+* `unsafe` – [tests/share/info/unsafe.json@v251R](https://raw.githubusercontent.com/makukha/multipython/refs/tags/v251R/tests/share/info/unsafe.json)
 * *(same for single version tags)*
 
 ### Image CLI `py info`
@@ -294,7 +294,7 @@ docker run --rm makukha/multipython:latest py info -c
 ```json
 {
   "multipython": {
-    "version": "251E",
+    "version": "251R",
     "subset": "latest",
     "root": "/root/.multipython"
   },
@@ -463,23 +463,23 @@ $ docker run --rm -v .:/src -w /src makukha/multipython@sha256:... tox run
 <!-- docsub: lines after 2 -->
 | Image tag | Image digest |
 |---|---|
-| `base-251E` | `sha256:0576dd4a6ae6c1f6b78bd03e50a61d1b52c825b9aea4dff668d5b8c95fe1094e` |
-| `cpython-251E` | `sha256:db00affc41d93becaebd2a4cc1382ddd254fdcf0768b769d30889af2da329eea` |
-| `py27-251E` | `sha256:b1300fb67a26f6622e1c5f6ae7bf2e21e81cc69e49c4e17808db452073f63829` |
-| `py310-251E` | `sha256:db520c2205fcc06dbc8e79e57cfbcaac76519a5df4f7a9ab91090fe07fda1b71` |
-| `py311-251E` | `sha256:c1ecdca49a3592350fee7d20919237374cb5184fc1b07e8a49f261fdae5512b1` |
-| `py312-251E` | `sha256:0a6804455d98a5cd474a504036dcc781d1c8f793c5f76aa60683e1fc7fba67ba` |
-| `py313-251E` | `sha256:33dbd5a64448807719f51712b736a50f14c4383a9372c24e0945227b15a2d654` |
-| `py313t-251E` | `sha256:7d149437e24f357e9b0409812e37e38593eae934c827aceb5e8073e72c6a20d9` |
-| `py314-251E` | `sha256:14a95f46ae0024d33caebd755ec9b3c4120f3ecb884eb24938784d5ac45ce1ec` |
-| `py314t-251E` | `sha256:59a0a9d29219a91108f4f11dfe605769ef28c5e06b5eb9f344155799fee56893` |
-| `py35-251E` | `sha256:50bb600a106edcf7d8c8913a8a0ffe94530d0d9c0cf30c8be519a4920a88b646` |
-| `py36-251E` | `sha256:4c13b44987d6dbe0b1225a90495c84a3c766f6a7b48801b1130ab596bcd589ca` |
-| `py37-251E` | `sha256:9bb0cb5e1743b866bfb524b07464c94f638994b328835f4d3e66e1cb4da758b1` |
-| `py38-251E` | `sha256:29d6fb9da0d4ca0d0a95669cdbd36c275153a3db666fe53edae7f03551ab9699` |
-| `py39-251E` | `sha256:381a89082ccdb2e08d4130ff3e39db6c46c75bcb00c85524fc76d6c01f2b7e0a` |
-| `supported-251E` | `sha256:b09762008d72150230c5f3c964d2680a615246eb13f39eb87a98a8e4d7be2830` |
-| `unsafe-251E` | `sha256:9dad116083a8b0c1482c4f755340ae07a4d024d9e51a1a504d77b009749ebc87` |
+| `base-251R` | `sha256:4fef5a62db34d20306b7ab2b9a935a12313b7b0bbd392e79f5aece613701a633` |
+| `cpython-251R` | `sha256:ea93e20d391a2fe08b4efba5ce46f708a3f14a4859f3ced043c41a49a5ed666b` |
+| `py27-251R` | `sha256:30f5e0798dc3648f5bbb96680336e6a08e17dd4e31be02a4898926d3ca839dbf` |
+| `py310-251R` | `sha256:14ea838d352ece3d4734d89f080fa86d0412068d24d4ed7a1a3fba20d356f6cf` |
+| `py311-251R` | `sha256:54f988299f4892c05b4bac4c9572baa759936e76708f3901cc96ef6f294b41d8` |
+| `py312-251R` | `sha256:aed11c158a47755be10f0d12520ba1ee66978501debe379f2b163f7f5ecc38b1` |
+| `py313-251R` | `sha256:2c5d9d7c02e0759f73a2652528832b2e3be00825d21c3b5aebeab7cec53b4e5f` |
+| `py313t-251R` | `sha256:9b1d773e8d40abe54a263a03d1afb510edb24c6a9e72eb33c47d63d1957204e0` |
+| `py314-251R` | `sha256:826f5593d99b88c3e18e2711d60ed8eb84be3bee203e3d4c5413124eec1354ff` |
+| `py314t-251R` | `sha256:f14a14a5b3c5dad168d571187664c127eab171a9decd84b11493a7c5dd9f7a17` |
+| `py35-251R` | `sha256:5c02e87de6290aa284dd7aa0597c285f5658de04520a92b747bbc9fbf206a185` |
+| `py36-251R` | `sha256:f534694a007e6adc00c4a6050210e245111edc422b6742b025508a7c79a0bc80` |
+| `py37-251R` | `sha256:787683c81da61ff5d4d7d110d7c5604a8a13ac337b8b9fd24afc0f7f449f562a` |
+| `py38-251R` | `sha256:5cf9642417479e9f6a5def8c9a91cd828f3ea6d1bbb5509c53334905d4ee8bbc` |
+| `py39-251R` | `sha256:e75b2f2acb41be04f287c6d3a67e85bf5caab371b90417ba5d8dd33c0d7683cb` |
+| `supported-251R` | `sha256:2a850731db24fab65e003bc9ddf80da202f69f47efc3d1284e4c5353722ced88` |
+| `unsafe-251R` | `sha256:6f6beeea9609567aeb3439a69626741a0932b32a736493ff74614c3fe97c6387` |
 <!-- docsub: end -->
 
 
