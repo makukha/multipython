@@ -10,20 +10,28 @@ MULTIPYTHON_ROOT="$(py root)"
 # shellcheck disable=SC1091
 source "$MULTIPYTHON_ROOT/bin/cmd/.env"
 
-DATA="$(py ls --all)"
-
 if [ -e "$MULTIPYTHON_SYSTEM" ]; then
   printf "Multipython system interpreter already installed\n" >&2
   exit 1
 fi
 
-if [ $# = 0 ]; then
-  SUBSET="custom"
-elif [ "$1" = "--as" ]; then
-  SUBSET="$2"
-  shift; shift
-fi
+SUBSET="custom"
+TAG=""
+UPDATE_INFO=true
 
+while [[ $# -gt 0 ]]; do
+  case $1 in
+    --as) SUBSET="$2"; shift; shift ;;  # this option is for internal use
+    --sys) TAG="$2"; shift; shift ;;
+    --no-update-info) UPDATE_INFO=; shift ;;
+    *)
+      printf "Unknown option: %s" "$1" >&2
+      exit 1
+      ;;
+  esac
+done
+
+DATA="$(py ls --all)"
 
 propose_sys_tag () {
   LONG="$(awk '{print $3}' <<<"$DATA")"
@@ -58,7 +66,7 @@ pip_seed_bindir () {
   SEEDFLAG="$BINDIR/.multipython"
 
   if [ ! -e "$SEEDFLAG" ]; then
-    pip_install "$BINDIR/python" -U pip setuptools
+    pip_install "$BINDIR/python" -U pip setuptools wheel
     touch "$SEEDFLAG"
   fi
 }
@@ -75,7 +83,9 @@ virtualenv_spec () {
 }
 
 pip_install_system () {
-  TAG="$(propose_sys_tag)"
+  if [ -z "$TAG" ]; then
+    TAG="$(propose_sys_tag)"
+  fi
   BINDIR="$(py bin --dir "$TAG")"
 
   # install virtualenv in sys tag, create sys venv, remove virtualenv
@@ -91,10 +101,9 @@ pip_install_system () {
   PYTHON="$MULTIPYTHON_SYSTEM/bin/python"
 
   # install tox, virtualenv, and plugins
-  pip_install "$PYTHON" tox "$(virtualenv_spec)" "virtualenv-multipython==$MULTIPYTHON_PLUGIN_VIRTUALENV_VER"
-  if [ "$("$PYTHON" -m tox -q --version 2>/dev/null | cut -c1)" = "3" ]; then
-    pip_install "$PYTHON" "tox-multipython==$MULTIPYTHON_PLUGIN_TOX_VER"
-  fi
+  pip_install "$PYTHON" tox "$(virtualenv_spec)" \
+    "tox-multipython==$MULTIPYTHON_PLUGIN_TOX_VER" \
+    "virtualenv-multipython==$MULTIPYTHON_PLUGIN_VIRTUALENV_VER"
 
   # configure virtualenv
   mkdir -p "$(dirname "$VIRTUALENV_CONFIG")"
@@ -126,4 +135,8 @@ fi
 echo "$SUBSET" > "$MULTIPYTHON_SUBSET"
 
 # generate and validate versions info
-py info | tee "$MULTIPYTHON_INFO" | jq
+if [ "$UPDATE_INFO" = "true" ]; then
+  py info | tee "$MULTIPYTHON_INFO" | jq
+else
+  touch "$MULTIPYTHON_INFO"
+fi

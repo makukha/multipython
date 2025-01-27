@@ -1,8 +1,8 @@
 | Distribution     | Note          | Tag      | Command       | Source |
 |------------------|---------------|----------|---------------|--------|
-| CPython 3.14.0a3 | free threaded | `py314t` | `python3.14t` | pyenv  |
+| CPython 3.14.0a4 | free threaded | `py314t` | `python3.14t` | pyenv  |
 | CPython 3.13.1   | free threaded | `py313t` | `python3.13t` | pyenv  |
-| CPython 3.14.0a3 |               | `py314`  | `python3.14`  | pyenv  |
+| CPython 3.14.0a4 |               | `py314`  | `python3.14`  | pyenv  |
 | CPython 3.13.1   | system ⚙️     | `py313`  | `python3.13`  | pyenv  |
 | CPython 3.12.8   |               | `py312`  | `python3.12`  | pyenv  |
 | CPython 3.11.11  |               | `py311`  | `python3.11`  | pyenv  |

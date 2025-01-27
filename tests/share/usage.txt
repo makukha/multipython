@@ -1,21 +1,23 @@
 usage: py bin {--cmd|--dir|--path} [TAG]
        py info [--cached]
-       py install
+       py install [--sys TAG] [--no-update-info]
        py ls {--tag|--short|--long|--all}
        py root
        py sys
        py tag <PYTHON>
+       py uninstall [--no-update-info]
        py --version
        py --help
 
 commands:
-  bin      Show Python executable command or path
-  info     Extended details in JSON format
-  install  Install sys environment, commands, and seed packages
-  ls       List all distributions
-  root     Show multipython root path
-  sys      Show system python tag
-  tag      Determine tag of executable
+  bin        Show Python executable command or path
+  info       Extended details in JSON format
+  install    Install system environment, commands, seed packages
+  ls         List all distributions
+  root       Show multipython root path
+  sys        Show system python tag
+  tag        Determine tag of executable
+  uninstall  Uninstall system environment
 
 binary info formats:
   -c --cmd   Command name, expected to be on PATH
@@ -29,6 +31,8 @@ version formats:
   -a --all    Lines 'tag short long', e.g. 'py39 3.9 3.9.3'
 
 other options:
-  -c --cached  Show cached results
-  --version    Show multipython distribution version
-  --help       Show this help and exit
+  -c --cached       Show cached results
+  --no-update-info  Don't update local info.json (works faster)
+  --sys             Preferred system executable
+  --version         Show multipython distribution version
+  --help            Show this help and exit

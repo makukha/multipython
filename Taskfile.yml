@@ -67,11 +67,12 @@ tasks:
       - docker builder prune
 
   shell:*:
-    desc: Shell to image {base,tox,py*,latest}.
+    desc: Shell to image.
     vars:
       TAG: "{{index .MATCH 0}}"
     cmds:
-      - docker run --rm -it {{.CLI_ARGS}} -h {{.TAG}} {{.IMG}}:{{.TAG}} /bin/bash
+      - docker run --rm -it {{.CLI_ARGS}} -h {{.TAG}} -v ./tests/share:/tmp/share
+          {{.IMG}}:{{.TAG}} /bin/bash
 
   run:*:
     desc: Run command in image {base,py*,latest} container.
@@ -87,10 +88,14 @@ tasks:
 
   test:*:
     desc: Test specific subset.
+    vars:
+      SUBSET: '{{index .MATCH 0}}'
     env:
       BUILDKIT_PROGRESS: plain
     cmds:
-      - docker buildx bake --no-cache test_subset_{{index .MATCH 0}}
+      - docker buildx bake --no-cache
+          --set test_subset_{{.SUBSET}}.args.MULTIPYTHON_DEBUG=true
+          test_subset_{{.SUBSET}}
 
   # docs
 
@@ -150,6 +155,7 @@ tasks:
       VERSION: {sh: uvx bump-my-version show current_version 2>/dev/null}
     cmds:
       - towncrier build --yes --version "{{.VERSION}}"
+      - sed -e's/^### \(.*\)$/***\1***/; s/\([a-z]\)\*\*\*$/\1:***/' -i '' CHANGELOG.md
 
   release:push:
     desc: Push images to Docker Registry.

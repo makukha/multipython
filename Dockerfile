@@ -8,11 +8,10 @@ SHELL ["/bin/bash", "-o", "errexit", "-o", "errtrace", "-o", "nounset", "-o", "p
 # hadolint ignore=DL3008
 RUN <<EOT
     apt-get update
+    # python
     apt-get install -y --no-install-recommends \
         build-essential \
         ca-certificates \
-        curl \
-        jq \
         lcov \
         libbz2-dev \
         libffi-dev \
@@ -31,41 +30,63 @@ RUN <<EOT
         pkg-config \
         tk-dev \
         uuid-dev \
-        wget \
         xz-utils \
         zlib1g-dev
+    # user
+    apt-get install -y --no-install-recommends \
+        curl \
+        jq \
+        wget
+    # cleanup
     rm -rf /var/lib/apt/lists/*
+EOT
+
+ARG YQ_VERSION=4.45.1
+ARG YQ_SHA256=290b22a62d0bd3590741557eb6391707a519893d81be975637bc13443140e057
+WORKDIR /tmp
+RUN <<EOT
+    wget -q "https://github.com/mikefarah/yq/releases/download/v${YQ_VERSION}/yq_linux_amd64.tar.gz" -O yq.tar.gz
+    sha256sum --check --strict <<<"${YQ_SHA256} yq.tar.gz"
+    tar -xzf yq.tar.gz
+    mv yq_linux_amd64 /usr/bin/yq
+    rm -rf /tmp/*
 EOT
 
 ARG PYENV_VERSION
 ARG PYENV_SHA256
+WORKDIR /tmp
 # hadolint ignore=DL3003
 RUN <<EOT
-    wget -q "https://github.com/pyenv/pyenv/archive/refs/tags/v${PYENV_VERSION}.tar.gz" -O /tmp/pyenv.tar.gz
-    echo "${PYENV_SHA256} /tmp/pyenv.tar.gz" | sha256sum --check --strict
+    wget -q "https://github.com/pyenv/pyenv/archive/refs/tags/v${PYENV_VERSION}.tar.gz" -O pyenv.tar.gz
+    sha256sum --check --strict <<<"${PYENV_SHA256} pyenv.tar.gz"
     mkdir -p /root/.pyenv
-    tar -xzf /tmp/pyenv.tar.gz -C /root/.pyenv --strip-components=1
+    tar -xzf pyenv.tar.gz -C /root/.pyenv --strip-components=1
     cd /root/.pyenv && src/configure && make -C src
-    rm -rf /tmp/* /var/tmp/*
+    rm -rf /tmp/*
 EOT
 
 ARG UV_VERSION
 ARG UV_SHA256
+WORKDIR /tmp
 RUN <<EOT
-    wget -q "https://github.com/astral-sh/uv/releases/download/${UV_VERSION}/uv-x86_64-unknown-linux-gnu.tar.gz" -O /tmp/uv.tar.gz
-    echo "${UV_SHA256} /tmp/uv.tar.gz" | sha256sum --check --strict
-    tar -xzf /tmp/uv.tar.gz -C /usr/local/bin --strip-components=1
-    rm -rf /tmp/* /var/tmp/*
+    wget -q "https://github.com/astral-sh/uv/releases/download/${UV_VERSION}/uv-x86_64-unknown-linux-gnu.tar.gz" -O uv.tar.gz
+    sha256sum --check --strict <<<"${UV_SHA256} uv.tar.gz"
+    tar -xzf uv.tar.gz -C /usr/local/bin --strip-components=1
+    rm -rf /tmp/*
 EOT
 
 ARG DEBIAN_DIGEST
 ENV PATH="/root/.multipython/bin:/root/.multipython/sys/bin:/root/.pyenv/bin:$PATH"
-ENTRYPOINT []
-CMD ["/bin/bash"]
 RUN <<EOT
     mkdir -p /root/.multipython
     echo ${DEBIAN_DIGEST} > /root/.multipython/image
 EOT
+
+ENV PIP_DISABLE_PIP_VERSION_CHECK=1
+
+WORKDIR /
+ENTRYPOINT []
+CMD ["/bin/bash"]
 
 
 # base with helpers

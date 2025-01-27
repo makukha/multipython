@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # shellcheck disable=SC2266
 set -eEux -o pipefail
 
@@ -150,8 +150,38 @@ fi
 # TEST: virtualenv
 
 echo -e "\n>>> Testing: $SUBSET: virtualenv..."
+virtualenv --no-seed "/tmp/sys" && [ "$(py tag /tmp/sys/bin/python)" = "$(py sys)" ]
 for TAG in $(py ls --tag | xargs)
 do
   virtualenv --python "$TAG" --no-seed "/tmp/$TAG"
   [ "$(py tag "/tmp/$TAG/bin/python")" = "$TAG" ]
 done
+
+
+# TESTS BELOW THIS LINE MUST REMAIN IN THE END
+
+
+# TEST: uninstall
+
+echo -e "\n>>> Testing: $SUBSET: uninstall..."
+
+if [[ "$SUBSET" != "base" ]]; then
+  py uninstall
+  command -v python && false
+  [ "$(py info -c | jq -c .system | xargs)" = "null" ]
+  [ "$(py info -c | jq -c .multipython.subset)" = "\"custom\"" ]
+fi
+
+
+# TEST: install --sys
+
+echo -e "\n>>> Testing: $SUBSET: install --sys TAG..."
+if [[ "$SUBSET" != "base" ]]; then
+  for TAG in $(py ls --tag | xargs)
+  do
+    py install --sys "$TAG"
+    virtualenv --no-seed "/tmp/sys$TAG"
+    [ "$(py tag "/tmp/sys$TAG/bin/python")" = "$TAG" ]
+    py uninstall
+  done
+fi

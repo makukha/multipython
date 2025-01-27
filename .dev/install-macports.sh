@@ -1,10 +1,20 @@
 #!/usr/bin/env sh
 
-sudo port install go-task hadolint jq shellcheck uv yq
+cat <<EOF | xargs sudo port install
+  go-task
+  hadolint
+  jq
+  shellcheck
+  trivy
+  uv
+  yq
+EOF
 
-uv tool install -U git+https://github.com/makukha/bump-my-version@date62
-uv tool install -U caseutil
-uv tool install -U docsub
-uv tool install -U mypy
-uv tool install -U ruff
-uv tool install -U towncrier
+cat <<EOF | xargs -n1 uv tool install -U
+  git+https://github.com/makukha/bump-my-version@date62
+  caseutil
+  docsub
+  mypy
+  ruff
+  towncrier
+EOF
