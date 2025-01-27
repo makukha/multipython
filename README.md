@@ -217,22 +217,24 @@ py27
 $ py --help
 usage: py bin {--cmd|--dir|--path} [TAG]
        py info [--cached]
-       py install
+       py install [--sys TAG] [--no-update-info]
        py ls {--tag|--short|--long|--all}
        py root
        py sys
        py tag <PYTHON>
+       py uninstall [--no-update-info]
        py --version
        py --help
 
 commands:
-  bin      Show Python executable command or path
-  info     Extended details in JSON format
-  install  Install sys environment, commands, and seed packages
-  ls       List all distributions
-  root     Show multipython root path
-  sys      Show system python tag
-  tag      Determine tag of executable
+  bin        Show Python executable command or path
+  info       Extended details in JSON format
+  install    Install system environment, commands, seed packages
+  ls         List all distributions
+  root       Show multipython root path
+  sys        Show system python tag
+  tag        Determine tag of executable
+  uninstall  Uninstall system environment
 
 binary info formats:
   -c --cmd   Command name, expected to be on PATH
@@ -246,9 +248,11 @@ version formats:
   -a --all    Lines 'tag short long', e.g. 'py39 3.9 3.9.3'
 
 other options:
-  -c --cached  Show cached results
-  --version    Show multipython distribution version
-  --help       Show this help and exit
+  -c --cached       Show cached results
+  --no-update-info  Don't update local info.json (works faster)
+  --sys             Preferred system executable
+  --version         Show multipython distribution version
+  --help            Show this help and exit
 ```
 <!-- docsub: end -->
 
@@ -303,7 +307,7 @@ docker run --rm makukha/multipython:latest py info -c
     "version": "4.24.1"
   },
   "uv": {
-    "version": "0.5.22",
+    "version": "0.5.24",
     "python_versions": "/root/.local/share/uv/python"
   },
   "virtualenv": {
@@ -323,14 +327,16 @@ docker run --rm makukha/multipython:latest py info -c
       "distlib": "0.3.9",
       "filelock": "3.17.0",
       "packaging": "24.2",
-      "pip": "24.3.1",
+      "pip": "25.0",
       "platformdirs": "4.3.6",
       "pluggy": "1.5.0",
       "pyproject-api": "1.9.0",
       "setuptools": "75.8.0",
       "tox": "4.24.1",
+      "tox-multipython": "0.4.0",
       "virtualenv": "20.29.1",
-      "virtualenv-multipython": "0.4.1"
+      "virtualenv-multipython": "0.5.1",
+      "wheel": "0.45.1"
     }
   },
   "base_image": {
@@ -349,8 +355,9 @@ docker run --rm makukha/multipython:latest py info -c
       "binary_path": "/root/.pyenv/versions/3.14.0a4t/bin/python",
       "is_system": false,
       "packages": {
-        "pip": "24.3.1",
-        "setuptools": "75.8.0"
+        "pip": "25.0",
+        "setuptools": "75.8.0",
+        "wheel": "0.45.1"
       }
     },
 ...
@@ -368,22 +375,22 @@ Tools available in `base` image have (no surprise) the same versions in all othe
 
 <!-- docsub: begin -->
 <!-- docsub: x package-versions base -->
-| Image tag | pyenv   | uv       |
-|---|---------|----------|
-| `base` | 2.5.1 ✨ | 0.5.22 ✨ |
-| *other images* | 2.5.1 ✨ | 0.5.22 ✨ |
+| Image tag | pyenv | uv |
+|---|---|---|
+| `base` | 2.5.1 ✨ | 0.5.24 ✨ |
+| *other images* | 2.5.1 ✨ | 0.5.24 ✨ |
 <!-- docsub: end -->
 
 ## Derived images
 
 <!-- docsub: begin -->
 <!-- docsub: x package-versions derived -->
-| Image tag | pip | setuptools | tox | virtualenv |
-|---|---|---|---|------------|
-| `cpython` | 24.3.1 ✨ | 75.8.0 ✨ | 4.24.1 ✨ | 20.29.1 ✨  |
-| `latest` | 24.3.1 ✨ | 75.8.0 ✨ | 4.24.1 ✨ | 20.29.1 ✨  |
-| `supported` | 24.3.1 ✨ | 75.8.0 ✨ | 4.24.1 ✨ | 20.29.1 ✨  |
-| `unsafe` | 24.3.1 ✨ | 75.8.0 ✨ | 4.5.1.1 | 20.21.1    |
+| Image tag | pip | setuptools | tox | virtualenv | wheel |
+|---|---|---|---|---|---|
+| `cpython` | 25.0 ✨ | 75.8.0 ✨ | 4.24.1 ✨ | 20.29.1 ✨ | 0.45.1 ✨ |
+| `latest` | 25.0 ✨ | 75.8.0 ✨ | 4.24.1 ✨ | 20.29.1 ✨ | 0.45.1 ✨ |
+| `supported` | 25.0 ✨ | 75.8.0 ✨ | 4.24.1 ✨ | 20.29.1 ✨ | 0.45.1 ✨ |
+| `unsafe` | 25.0 ✨ | 75.8.0 ✨ | 4.5.1.1 | 20.21.1 | 0.45.1 ✨ |
 <!-- docsub: end -->
 
 
@@ -391,21 +398,21 @@ Tools available in `base` image have (no surprise) the same versions in all othe
 
 <!-- docsub: begin -->
 <!-- docsub: x package-versions single -->
-| Image tag | pip | setuptools | tox | virtualenv |
-|---|---|---|---|------------|
-| `py314t` | 24.3.1 ✨ | 75.8.0 ✨ | 4.24.1 ✨ | 20.29.1 ✨  |
-| `py313t` | 24.3.1 ✨ | 75.8.0 ✨ | 4.24.1 ✨ | 20.29.1 ✨  |
-| `py314` | 24.3.1 ✨ | 75.8.0 ✨ | 4.24.1 ✨ | 20.29.1 ✨  |
-| `py313` | 24.3.1 ✨ | 75.8.0 ✨ | 4.24.1 ✨ | 20.29.1 ✨  |
-| `py312` | 24.3.1 ✨ | 75.8.0 ✨ | 4.24.1 ✨ | 20.29.1 ✨  |
-| `py311` | 24.3.1 ✨ | 75.8.0 ✨ | 4.24.1 ✨ | 20.29.1 ✨  |
-| `py310` | 24.3.1 ✨ | 75.8.0 ✨ | 4.24.1 ✨ | 20.29.1 ✨  |
-| `py39` | 24.3.1 ✨ | 75.8.0 ✨ | 4.24.1 ✨ | 20.29.1 ✨  |
-| `py38` | 24.3.1 ✨ | 75.3.0 | 4.24.1 ✨ | 20.29.1 ✨  |
-| `py37` | 24.0 | 68.0.0 | 4.8.0 | 20.26.6    |
-| `py36` | 21.3.1 | 59.6.0 | 3.28.0 | 20.17.1    |
-| `py35` | 20.3.4 | 50.3.2 | 3.28.0 | 20.15.1    |
-| `py27` | 20.3.4 | 44.1.1 | 3.28.0 | 20.15.1    |
+| Image tag | pip | setuptools | tox | virtualenv | wheel |
+|---|---|---|---|---|---|
+| `py314t` | 25.0 ✨ | 75.8.0 ✨ | 4.24.1 ✨ | 20.29.1 ✨ | 0.45.1 ✨ |
+| `py313t` | 25.0 ✨ | 75.8.0 ✨ | 4.24.1 ✨ | 20.29.1 ✨ | 0.45.1 ✨ |
+| `py314` | 25.0 ✨ | 75.8.0 ✨ | 4.24.1 ✨ | 20.29.1 ✨ | 0.45.1 ✨ |
+| `py313` | 25.0 ✨ | 75.8.0 ✨ | 4.24.1 ✨ | 20.29.1 ✨ | 0.45.1 ✨ |
+| `py312` | 25.0 ✨ | 75.8.0 ✨ | 4.24.1 ✨ | 20.29.1 ✨ | 0.45.1 ✨ |
+| `py311` | 25.0 ✨ | 75.8.0 ✨ | 4.24.1 ✨ | 20.29.1 ✨ | 0.45.1 ✨ |
+| `py310` | 25.0 ✨ | 75.8.0 ✨ | 4.24.1 ✨ | 20.29.1 ✨ | 0.45.1 ✨ |
+| `py39` | 25.0 ✨ | 75.8.0 ✨ | 4.24.1 ✨ | 20.29.1 ✨ | 0.45.1 ✨ |
+| `py38` | 25.0 ✨ | 75.3.0 | 4.24.1 ✨ | 20.29.1 ✨ | 0.45.1 ✨ |
+| `py37` | 24.0 | 68.0.0 | 4.8.0 | 20.26.6 | 0.42.0 |
+| `py36` | 21.3.1 | 59.6.0 | 3.28.0 | 20.17.1 | 0.37.1 |
+| `py35` | 20.3.4 | 50.3.2 | 3.28.0 | 20.15.1 | 0.37.1 |
+| `py27` | 20.3.4 | 44.1.1 | 3.28.0 | 20.15.1 | 0.37.1 |
 <!-- docsub: end -->
 
 ## Tox version

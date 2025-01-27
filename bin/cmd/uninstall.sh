@@ -34,7 +34,7 @@ paste -d' ' <(py bin --cmd) | awk '{system("rm /usr/local/bin/" $1)}'
 rm -rf "$MULTIPYTHON_SYSTEM"
 
 # remove virtualenv configuration
-rm "$VIRTUALENV_CONFIG"
+rm -f "$VIRTUALENV_CONFIG"
 
 # clear installed subset name
 SUBSET="custom"

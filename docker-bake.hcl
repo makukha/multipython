@@ -10,8 +10,8 @@ variable "BASE_VERSIONS" {
     RELEASE = "${RELEASE}"
     PYENV_VERSION = "2.5.1"
     PYENV_SHA256 = "676b1309015b0e6e2157cd38c9fbc2a9723ae21f1c0b7dd77034ffadd5376350"
-    UV_VERSION = "0.5.22"
-    UV_SHA256 = "d15f8595f080817f55f207bf9a67cbce6423e5b1fbfeba58c7e67e86bcc7be41"
+    UV_VERSION = "0.5.24"
+    UV_SHA256 = "a0eb614f7fc38a6e14ef1c4819f1f187591db8e0d3c4218dae38b1bd663a00e2"
   }
 }
 
@@ -96,9 +96,14 @@ target "checkupd" {
 
 target "test_subsets" {
   inherits = ["__test__"]
+  args = {
+    MULTIPYTHON_DEBUG = "false"
+  }
   dockerfile-inline = <<EOF
     FROM ${IMG}:${release_tag(SUBSET, RELEASE)}
     COPY tests/share /tmp/share
+    ARG MULTIPYTHON_DEBUG
+    ENV MULTIPYTHON_DEBUG="$${MULTIPYTHON_DEBUG}"
     RUN bash /tmp/share/test_subset.sh "${SUBSET}"
   EOF
   matrix = {

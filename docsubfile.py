@@ -6,19 +6,21 @@ import sys
 from typing import Literal, assert_never
 from urllib.request import urlopen
 
-from cyclopts import App  # type: ignore
+import click  # type: ignore
 from rich.console import Console  # type: ignore
 from rich.progress import track  # type: ignore
 
-
-app = App()
 
 IMG = 'makukha/multipython'
 INFO_DIR = Path('tests/share/info')
 LATEST = '✨'
 
 
-@app.command
+@click.group()
+def x(): ...
+
+
+@x.command()
 def image_digests():
     # get release tags
     bake = check_output(['docker', 'buildx', 'bake', '--print'], stderr=DEVNULL)
@@ -39,8 +41,9 @@ def image_digests():
             stdout.write(f'| `{tag}` | `{info["digest"]}` |\n')
 
 
-@app.command
-def package_versions(group: Literal['base', 'derived', 'single'], /):
+@x.command
+@click.argument('group', type=click.Choice(['base', 'derived', 'single']), required=True)
+def package_versions(group: str):
     def get_info(target: str) -> dict:
         return json.loads((INFO_DIR / f'{target}.json').read_text())
 
@@ -54,10 +57,10 @@ def package_versions(group: Literal['base', 'derived', 'single'], /):
         targets = ['base']
         pkgs = ('pyenv', 'uv')
     elif group == 'derived':
-        pkgs = ('pip', 'setuptools', 'tox', 'virtualenv')
+        pkgs = ('pip', 'setuptools', 'tox', 'virtualenv', 'wheel')
         targets = [t for t in data['target'] if t != 'base' and not t.startswith('py')]
     elif group == 'single':
-        pkgs = ('pip', 'setuptools', 'tox', 'virtualenv')
+        pkgs = ('pip', 'setuptools', 'tox', 'virtualenv', 'wheel')
         targets = [t for t in data['target'] if t.startswith('py')]
         tags = [py['tag'] for py in get_info('unsafe')['python']]
         targets.sort(key=lambda x: tags.index(x))
@@ -84,7 +87,3 @@ def package_versions(group: Literal['base', 'derived', 'single'], /):
             out.write(f'| `{target}` | {cells} |\n')
     else:
         assert_never(group)
-
-
-if __name__ == '__main__':
-    app()

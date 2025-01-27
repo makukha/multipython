@@ -88,10 +88,14 @@ tasks:
 
   test:*:
     desc: Test specific subset.
+    vars:
+      SUBSET: '{{index .MATCH 0}}'
     env:
       BUILDKIT_PROGRESS: plain
     cmds:
-      - docker buildx bake --no-cache test_subset_{{index .MATCH 0}}
+      - docker buildx bake --no-cache
+          --set test_subset_{{.SUBSET}}.args.MULTIPYTHON_DEBUG=true
+          test_subset_{{.SUBSET}}
 
   # docs
 

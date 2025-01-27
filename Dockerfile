@@ -82,6 +82,8 @@ RUN <<EOT
     echo ${DEBIAN_DIGEST} > /root/.multipython/image
 EOT
 
+ENV PIP_DISABLE_PIP_VERSION_CHECK=1
+
 WORKDIR /
 ENTRYPOINT []
 CMD ["/bin/bash"]

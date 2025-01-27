@@ -66,7 +66,7 @@ pip_seed_bindir () {
   SEEDFLAG="$BINDIR/.multipython"
 
   if [ ! -e "$SEEDFLAG" ]; then
-    pip_install "$BINDIR/python" -U pip setuptools
+    pip_install "$BINDIR/python" -U pip setuptools wheel
     touch "$SEEDFLAG"
   fi
 }
@@ -101,10 +101,9 @@ pip_install_system () {
   PYTHON="$MULTIPYTHON_SYSTEM/bin/python"
 
   # install tox, virtualenv, and plugins
-  pip_install "$PYTHON" tox "$(virtualenv_spec)" "virtualenv-multipython==$MULTIPYTHON_PLUGIN_VIRTUALENV_VER"
-  if [ "$("$PYTHON" -m tox -q --version 2>/dev/null | cut -c1)" = "3" ]; then
-    pip_install "$PYTHON" "tox-multipython==$MULTIPYTHON_PLUGIN_TOX_VER"
-  fi
+  pip_install "$PYTHON" tox "$(virtualenv_spec)" \
+    "tox-multipython==$MULTIPYTHON_PLUGIN_TOX_VER" \
+    "virtualenv-multipython==$MULTIPYTHON_PLUGIN_VIRTUALENV_VER"
 
   # configure virtualenv
   mkdir -p "$(dirname "$VIRTUALENV_CONFIG")"

@@ -143,7 +143,7 @@ elif [[ " py27 py35 py36 " == *" $SUBSET "* ]]; then
 elif ( tox list | grep -q "^$SUBSET " ); then
   tox run -e "$SUBSET"
 else
-  tox run -m "$SUBSET" -vvv
+  tox run -m "$SUBSET"
 fi
 
 

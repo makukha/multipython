@@ -13,7 +13,7 @@
     "version": "3.28.0"
   },
   "uv": {
-    "version": "0.5.22",
+    "version": "0.5.24",
     "python_versions": "/root/.local/share/uv/python"
   },
   "virtualenv": {
@@ -41,9 +41,9 @@
       "six": "1.17.0",
       "toml": "0.10.2",
       "tox": "3.28.0",
-      "tox-multipython": "0.2.2",
+      "tox-multipython": "0.4.0",
       "virtualenv": "20.15.1",
-      "virtualenv-multipython": "0.4.1",
+      "virtualenv-multipython": "0.5.1",
       "wheel": "0.37.1",
       "zipp": "1.2.0"
     }
@@ -65,7 +65,8 @@
       "is_system": true,
       "packages": {
         "pip": "20.3.4",
-        "setuptools": "50.3.2"
+        "setuptools": "50.3.2",
+        "wheel": "0.37.1"
       }
     }
   ]

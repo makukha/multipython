@@ -20,5 +20,3 @@ files = [
   {glob = "tests/share/info/*.json"},
   {filename = "tests/test_readme_advanced/info.json"},
 ]
-
-
