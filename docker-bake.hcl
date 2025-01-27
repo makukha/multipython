@@ -2,7 +2,7 @@ variable "IMG" {
   default = "makukha/multipython"
 }
 variable "RELEASE" {
-  default = "251E"
+  default = "251R"
 }
 
 variable "BASE_VERSIONS" {
