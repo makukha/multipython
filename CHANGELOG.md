@@ -1,11 +1,29 @@
 # Changelog
 
-All notable changes to this project will be documented in this file. Changes for the *upcoming release* can be found in [News directory](https://github.com/makukha/multipython/tree/main/NEWS.d).
+All notable changes to this project will be documented in this file based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/). This project adheres to [Date62](http://github.com/date62/date62-python) based [Calendar Versioning](https://calver.org).
 
-* This project adheres to [Date62](http://github.com/date62/date62-python) based [Calendar Versioning](https://calver.org).
-* The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
+## Unreleased
+
+- See upcoming changes in [News directory](https://github.com/makukha/multipython/tree/main/NEWS.d)
+
 
 <!-- towncrier release notes start -->
+
+## [v2526](https://github.com/makukha/multipython/releases/tag/v2526) — 2025-02-06
+
+***Changed***
+
+- Updated versions ([#96](https://github.com/makukha/multipython/issues/96)):
+  * base image digest
+  * Python 3.13 — 3.13.2
+  * Python 3.12 — 3.12.9
+  * pyenv — 2.5.2
+  * uv — 0.5.29
+
+***Misc***
+
+- Started using just ([#96](https://github.com/makukha/multipython/issues/96))
+
 
 ## [v251R](https://github.com/makukha/multipython/releases/tag/v251R) — 2025-01-27
 

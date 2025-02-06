@@ -1,6 +1,6 @@
 {
   "multipython": {
-    "version": "251R",
+    "version": "2526",
     "subset": "cpython",
     "root": "/root/.multipython"
   },

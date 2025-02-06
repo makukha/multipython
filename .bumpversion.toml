@@ -1,6 +1,6 @@
 [tool.bumpversion]
 
-current_version = "251R"
+current_version = "2526"
 allow_dirty = true
 
 parse = """(?x)
