@@ -67,7 +67,7 @@ clean:
 # build docker images
 [group('dev')]
 build *target:
-    docker buildx bake *target
+    docker buildx bake {{target}}
 
 # run command in container
 [group('dev')]
@@ -112,6 +112,8 @@ pre-commit: lint docs
 #  Merge
 # --------
 #
+# just clean build
+# just test
 # just gh-pr
 #
 
@@ -137,7 +139,7 @@ gh-pr *title:
 # just changelog
 # (proofread changelog)
 #
-# just checkupd lint docs build test
+# just checkupd lint docs build; just test
 # (commit)
 #
 # just gh-pr
