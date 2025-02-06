@@ -147,7 +147,10 @@ gh-pr *title:
 # just gh-pr
 # (merge pull request)
 #
+# (switch to main branch)
 # just gh-release
+#
+# (manually update https://hub.docker.com/repository/docker/makukha/multipython/general)
 #
 
 # run pre-release
