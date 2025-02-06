@@ -5,7 +5,7 @@
     "root": "/root/.multipython"
   },
   "pyenv": {
-    "version": "2.5.1",
+    "version": "2.5.2",
     "root": "/root/.pyenv",
     "python_versions": "/root/.pyenv/versions"
   },
@@ -13,7 +13,7 @@
     "version": "4.24.1"
   },
   "uv": {
-    "version": "0.5.24",
+    "version": "0.5.29",
     "python_versions": "/root/.local/share/uv/python"
   },
   "virtualenv": {
@@ -48,7 +48,7 @@
   "base_image": {
     "name": "debian",
     "channel": "stable-slim",
-    "digest": "sha256:b5ace515e78743215a1b101a6f17e59ed74b17132139ca3af3c37e605205e973"
+    "digest": "sha256:5724d31208341cef9af6ae2be86be9cda6a87271f362a03481a522c9c19d401b"
   },
   "python": [
     {
@@ -67,13 +67,13 @@
       }
     },
     {
-      "version": "3.13.1t",
+      "version": "3.13.2t",
       "source": "pyenv",
       "tag": "py313t",
       "short": "3.13t",
       "command": "python3.13t",
-      "bin_dir": "/root/.pyenv/versions/3.13.1t/bin",
-      "binary_path": "/root/.pyenv/versions/3.13.1t/bin/python",
+      "bin_dir": "/root/.pyenv/versions/3.13.2t/bin",
+      "binary_path": "/root/.pyenv/versions/3.13.2t/bin/python",
       "is_system": false,
       "packages": {
         "pip": "25.0",
@@ -97,13 +97,13 @@
       }
     },
     {
-      "version": "3.13.1",
+      "version": "3.13.2",
       "source": "pyenv",
       "tag": "py313",
       "short": "3.13",
       "command": "python3.13",
-      "bin_dir": "/root/.pyenv/versions/3.13.1/bin",
-      "binary_path": "/root/.pyenv/versions/3.13.1/bin/python",
+      "bin_dir": "/root/.pyenv/versions/3.13.2/bin",
+      "binary_path": "/root/.pyenv/versions/3.13.2/bin/python",
       "is_system": true,
       "packages": {
         "pip": "25.0",
@@ -112,13 +112,13 @@
       }
     },
     {
-      "version": "3.12.8",
+      "version": "3.12.9",
       "source": "pyenv",
       "tag": "py312",
       "short": "3.12",
       "command": "python3.12",
-      "bin_dir": "/root/.pyenv/versions/3.12.8/bin",
-      "binary_path": "/root/.pyenv/versions/3.12.8/bin/python",
+      "bin_dir": "/root/.pyenv/versions/3.12.9/bin",
+      "binary_path": "/root/.pyenv/versions/3.12.9/bin/python",
       "is_system": false,
       "packages": {
         "pip": "25.0",
