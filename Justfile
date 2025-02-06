@@ -15,7 +15,7 @@ version := "$(uv run bump-my-version show current_version 2>/dev/null)"
 init:
     #!/usr/bin/env bash
     set -euo pipefail
-    sudo port install gh git hadolint jq shellcheck uv yq
+    sudo port install gh hadolint jq shellcheck uv yq
     cat <<EOF | xargs -n1 uv tool install -U
       git+https://github.com/makukha/bump-my-version@date62
       docsub
@@ -30,7 +30,6 @@ init:
 # check for version updates
 [group('dev')]
 checkupd:
-    docker buildx bake base
     docker run --rm -t {{img}}:base py checkupd
 
 # add news item of type

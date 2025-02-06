@@ -61,10 +61,10 @@ $ docker run --rm -v .:/src -w /src makukha/multipython:py310 tox run
 | Distribution     | Note          | Tag      | Command       | Source |
 |------------------|---------------|----------|---------------|--------|
 | CPython 3.14.0a4 | free threaded | `py314t` | `python3.14t` | pyenv  |
-| CPython 3.13.1   | free threaded | `py313t` | `python3.13t` | pyenv  |
+| CPython 3.13.2   | free threaded | `py313t` | `python3.13t` | pyenv  |
 | CPython 3.14.0a4 |               | `py314`  | `python3.14`  | pyenv  |
-| CPython 3.13.1   | system ⚙️     | `py313`  | `python3.13`  | pyenv  |
-| CPython 3.12.8   |               | `py312`  | `python3.12`  | pyenv  |
+| CPython 3.13.2   | system ⚙️     | `py313`  | `python3.13`  | pyenv  |
+| CPython 3.12.9   |               | `py312`  | `python3.12`  | pyenv  |
 | CPython 3.11.11  |               | `py311`  | `python3.11`  | pyenv  |
 | CPython 3.10.16  |               | `py310`  | `python3.10`  | pyenv  |
 | CPython 3.9.21   |               | `py39`   | `python3.9`   | pyenv  |
@@ -146,10 +146,10 @@ multipython 251R
 ```shell
 $ py ls -l
 3.14.0a4t
-3.13.1t
+3.13.2t
 3.14.0a4
-3.13.1
-3.12.8
+3.13.2
+3.12.9
 3.11.11
 3.10.16
 3.9.21

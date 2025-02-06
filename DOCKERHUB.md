@@ -28,15 +28,15 @@
 <!-- docsub: begin -->
 <!-- docsub: include docs/part/image-tags.md -->
 * [`latest, 251R`](https://github.com/makukha/multipython/blob/v251R/Dockerfile) — *all supported and prerelease CPython versions*
-* [`cpython, cpython-251R`](https://github.com/makukha/multipython/blob/v251R/Dockerfile) — *CPython 3.13.1 — latest version*
+* [`cpython, cpython-251R`](https://github.com/makukha/multipython/blob/v251R/Dockerfile) — *CPython 3.13.2 — latest version*
 * [`supported, supported-251R`](https://github.com/makukha/multipython/blob/v251R/Dockerfile) — *all supported CPython versions*
 * [`unsafe, unsafe-251R`](https://github.com/makukha/multipython/blob/v251R/Dockerfile) — *all CPython versions, including EOL*
 * [`base, base-251R`](https://github.com/makukha/multipython/blob/v251R/Dockerfile) — *pyenv, uv*
 * [`py314t, py314t-251R`](https://github.com/makukha/multipython/blob/v251R/Dockerfile) — *CPython 3.14.0a4 free-threaded*
-* [`py313t, py313t-251R`](https://github.com/makukha/multipython/blob/v251R/Dockerfile) — *CPython 3.13.1 free-threaded*
+* [`py313t, py313t-251R`](https://github.com/makukha/multipython/blob/v251R/Dockerfile) — *CPython 3.13.2 free-threaded*
 * [`py314, py314-251R`](https://github.com/makukha/multipython/blob/v251R/Dockerfile) — *CPython 3.14.0a4*
-* [`py313, py313-251R`](https://github.com/makukha/multipython/blob/v251R/Dockerfile) — *CPython 3.13.1*
-* [`py312, py312-251R`](https://github.com/makukha/multipython/blob/v251R/Dockerfile) — *CPython 3.12.8*
+* [`py313, py313-251R`](https://github.com/makukha/multipython/blob/v251R/Dockerfile) — *CPython 3.13.2*
+* [`py312, py312-251R`](https://github.com/makukha/multipython/blob/v251R/Dockerfile) — *CPython 3.12.9*
 * [`py311, py311-251R`](https://github.com/makukha/multipython/blob/v251R/Dockerfile) — *CPython 3.11.11*
 * [`py310, py310-251R`](https://github.com/makukha/multipython/blob/v251R/Dockerfile) — *CPython 3.10.16*
 * [`py39, py39-251R`](https://github.com/makukha/multipython/blob/v251R/Dockerfile) — *CPython 3.9.21*
@@ -86,10 +86,10 @@ See [Documentation](https://github.com/makukha/multipython?tab=readme-ov-file) f
 | Distribution     | Note          | Tag      | Command       | Source |
 |------------------|---------------|----------|---------------|--------|
 | CPython 3.14.0a4 | free threaded | `py314t` | `python3.14t` | pyenv  |
-| CPython 3.13.1   | free threaded | `py313t` | `python3.13t` | pyenv  |
+| CPython 3.13.2   | free threaded | `py313t` | `python3.13t` | pyenv  |
 | CPython 3.14.0a4 |               | `py314`  | `python3.14`  | pyenv  |
-| CPython 3.13.1   | system ⚙️     | `py313`  | `python3.13`  | pyenv  |
-| CPython 3.12.8   |               | `py312`  | `python3.12`  | pyenv  |
+| CPython 3.13.2   | system ⚙️     | `py313`  | `python3.13`  | pyenv  |
+| CPython 3.12.9   |               | `py312`  | `python3.12`  | pyenv  |
 | CPython 3.11.11  |               | `py311`  | `python3.11`  | pyenv  |
 | CPython 3.10.16  |               | `py310`  | `python3.10`  | pyenv  |
 | CPython 3.9.21   |               | `py39`   | `python3.9`   | pyenv  |

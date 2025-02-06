@@ -52,13 +52,13 @@
   },
   "python": [
     {
-      "version": "3.13.1t",
+      "version": "3.13.2t",
       "source": "pyenv",
       "tag": "py313t",
       "short": "3.13t",
       "command": "python3.13t",
-      "bin_dir": "/root/.pyenv/versions/3.13.1t/bin",
-      "binary_path": "/root/.pyenv/versions/3.13.1t/bin/python",
+      "bin_dir": "/root/.pyenv/versions/3.13.2t/bin",
+      "binary_path": "/root/.pyenv/versions/3.13.2t/bin/python",
       "is_system": true,
       "packages": {
         "pip": "25.0",

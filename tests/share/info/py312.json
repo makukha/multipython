@@ -52,13 +52,13 @@
   },
   "python": [
     {
-      "version": "3.12.8",
+      "version": "3.12.9",
       "source": "pyenv",
       "tag": "py312",
       "short": "3.12",
       "command": "python3.12",
-      "bin_dir": "/root/.pyenv/versions/3.12.8/bin",
-      "binary_path": "/root/.pyenv/versions/3.12.8/bin/python",
+      "bin_dir": "/root/.pyenv/versions/3.12.9/bin",
+      "binary_path": "/root/.pyenv/versions/3.12.9/bin/python",
       "is_system": true,
       "packages": {
         "pip": "25.0",
