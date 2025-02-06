@@ -137,15 +137,16 @@ gh-pr *title:
 #
 # just bump
 # just changelog
-# (proofread changelog)
+# (proofread changelog, manually lookup prev version)
 #
-# just checkupd lint docs build; just test
+# just checkupd lint build; just test
+# just docker-push
+# just docs
 # (commit)
 #
 # just gh-pr
 # (merge pull request)
 #
-# just docker-push
 # just gh-release
 #
 
@@ -193,5 +194,7 @@ docker-push *target:
     else
       targets="$(docker buildx bake --print 2>/dev/null | jq -r '.group.default.targets[]')"
       echo $targets
-      # for t in targets: just docker-push target
+      for t in $targets; do
+        just docker-push $t
+      done
     fi
