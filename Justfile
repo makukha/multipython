@@ -97,15 +97,8 @@ test *target:
 docs:
     docsub apply -i docs/part/basic-usage.md DOCKERHUB.md README.md
 
-#
-#  Commit
-# --------
-#
-# just pre-commit
-#
-
 # run pre-commit hook
-[group('commit')]
+[group('dev')]
 pre-commit: lint docs
 
 #

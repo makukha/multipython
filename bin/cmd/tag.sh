@@ -20,9 +20,9 @@ fi
 
 
 declare -rA PATTERN=(
-  ["py314t"]="Python 3.14.0a4 experimental free-threading build ("
+  ["py314t"]="Python 3.14.0a5 experimental free-threading build ("
   ["py313t"]="Python 3.13.2 experimental free-threading build ("
-  ["py314"]="Python 3.14.0a4 ("
+  ["py314"]="Python 3.14.0a5 ("
   ["py313"]="Python 3.13.2 ("
   ["py312"]="Python 3.12.9 ("
   ["py311"]="Python 3.11.11 ("

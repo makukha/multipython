@@ -5,7 +5,7 @@
     "root": "/root/.multipython"
   },
   "pyenv": {
-    "version": "2.5.2",
+    "version": "2.5.3",
     "root": "/root/.pyenv",
     "python_versions": "/root/.pyenv/versions"
   },
@@ -13,11 +13,11 @@
     "version": "4.24.1"
   },
   "uv": {
-    "version": "0.5.29",
+    "version": "0.5.31",
     "python_versions": "/root/.local/share/uv/python"
   },
   "virtualenv": {
-    "version": "20.29.1",
+    "version": "20.29.2",
     "config": "/root/.config/virtualenv/virtualenv.ini"
   },
   "system": {
@@ -33,7 +33,7 @@
       "distlib": "0.3.9",
       "filelock": "3.17.0",
       "packaging": "24.2",
-      "pip": "25.0",
+      "pip": "25.0.1",
       "platformdirs": "4.3.6",
       "pluggy": "1.5.0",
       "pyproject-api": "1.9.0",
@@ -42,7 +42,7 @@
       "tox": "4.24.1",
       "tox-multipython": "0.4.0",
       "typing_extensions": "4.12.2",
-      "virtualenv": "20.29.1",
+      "virtualenv": "20.29.2",
       "virtualenv-multipython": "0.5.1",
       "wheel": "0.45.1"
     }
@@ -63,7 +63,7 @@
       "binary_path": "/root/.pyenv/versions/3.10.16/bin/python",
       "is_system": true,
       "packages": {
-        "pip": "25.0",
+        "pip": "25.0.1",
         "setuptools": "75.8.0",
         "wheel": "0.45.1"
       }

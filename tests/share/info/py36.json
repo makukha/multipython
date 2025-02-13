@@ -5,7 +5,7 @@
     "root": "/root/.multipython"
   },
   "pyenv": {
-    "version": "2.5.2",
+    "version": "2.5.3",
     "root": "/root/.pyenv",
     "python_versions": "/root/.pyenv/versions"
   },
@@ -13,7 +13,7 @@
     "version": "3.28.0"
   },
   "uv": {
-    "version": "0.5.29",
+    "version": "0.5.31",
     "python_versions": "/root/.local/share/uv/python"
   },
   "virtualenv": {

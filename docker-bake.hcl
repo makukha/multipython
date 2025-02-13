@@ -8,10 +8,10 @@ variable "RELEASE" {
 variable "BASE_VERSIONS" {
   default = {
     RELEASE = "${RELEASE}"
-    PYENV_VERSION = "2.5.2"
-    PYENV_SHA256 = "9d377e6d654d56eded2dc0f6d0b867f0330f8d47bb345dbc5d3e4377441cb4e5"
-    UV_VERSION = "0.5.29"
-    UV_SHA256 = "46d3fcf04d64be42bded914d648657cd62d968172604e3aaf8386142c09d2317"
+    PYENV_VERSION = "2.5.3"
+    PYENV_SHA256 = "2068872d4f3174d697bcfd602ada3dc2b7764e84f73be7850c0de86fbf00f69e"
+    UV_VERSION = "0.5.31"
+    UV_SHA256 = "017ce7ed02c967f1b0489f09162e19ee3df4586a44e681211d16206e007fce62"
   }
 }
 
@@ -28,10 +28,10 @@ variable "SINGLE_VERSIONS" {
     py311 = "3.11.11"
     py312 = "3.12.9"
     py313 = "3.13.2"
-    py314 = "3.14.0a4"
+    py314 = "3.14.0a5"
     # cpython, free threaded
     py313t = "3.13.2t"
-    py314t = "3.14.0a4t"
+    py314t = "3.14.0a5t"
   }
 }
 

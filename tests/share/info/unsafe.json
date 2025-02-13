@@ -5,7 +5,7 @@
     "root": "/root/.multipython"
   },
   "pyenv": {
-    "version": "2.5.2",
+    "version": "2.5.3",
     "root": "/root/.pyenv",
     "python_versions": "/root/.pyenv/versions"
   },
@@ -13,7 +13,7 @@
     "version": "4.5.1.1"
   },
   "uv": {
-    "version": "0.5.29",
+    "version": "0.5.31",
     "python_versions": "/root/.local/share/uv/python"
   },
   "virtualenv": {
@@ -33,7 +33,7 @@
       "distlib": "0.3.9",
       "filelock": "3.17.0",
       "packaging": "24.2",
-      "pip": "25.0",
+      "pip": "25.0.1",
       "platformdirs": "3.11.0",
       "pluggy": "1.5.0",
       "pyproject-api": "1.5.4",
@@ -52,16 +52,16 @@
   },
   "python": [
     {
-      "version": "3.14.0a4t",
+      "version": "3.14.0a5t",
       "source": "pyenv",
       "tag": "py314t",
       "short": "3.14t",
       "command": "python3.14t",
-      "bin_dir": "/root/.pyenv/versions/3.14.0a4t/bin",
-      "binary_path": "/root/.pyenv/versions/3.14.0a4t/bin/python",
+      "bin_dir": "/root/.pyenv/versions/3.14.0a5t/bin",
+      "binary_path": "/root/.pyenv/versions/3.14.0a5t/bin/python",
       "is_system": false,
       "packages": {
-        "pip": "25.0",
+        "pip": "25.0.1",
         "setuptools": "75.8.0",
         "wheel": "0.45.1"
       }
@@ -76,22 +76,22 @@
       "binary_path": "/root/.pyenv/versions/3.13.2t/bin/python",
       "is_system": false,
       "packages": {
-        "pip": "25.0",
+        "pip": "25.0.1",
         "setuptools": "75.8.0",
         "wheel": "0.45.1"
       }
     },
     {
-      "version": "3.14.0a4",
+      "version": "3.14.0a5",
       "source": "pyenv",
       "tag": "py314",
       "short": "3.14",
       "command": "python3.14",
-      "bin_dir": "/root/.pyenv/versions/3.14.0a4/bin",
-      "binary_path": "/root/.pyenv/versions/3.14.0a4/bin/python",
+      "bin_dir": "/root/.pyenv/versions/3.14.0a5/bin",
+      "binary_path": "/root/.pyenv/versions/3.14.0a5/bin/python",
       "is_system": false,
       "packages": {
-        "pip": "25.0",
+        "pip": "25.0.1",
         "setuptools": "75.8.0",
         "wheel": "0.45.1"
       }
@@ -106,7 +106,7 @@
       "binary_path": "/root/.pyenv/versions/3.13.2/bin/python",
       "is_system": true,
       "packages": {
-        "pip": "25.0",
+        "pip": "25.0.1",
         "setuptools": "75.8.0",
         "wheel": "0.45.1"
       }
@@ -121,7 +121,7 @@
       "binary_path": "/root/.pyenv/versions/3.12.9/bin/python",
       "is_system": false,
       "packages": {
-        "pip": "25.0",
+        "pip": "25.0.1",
         "setuptools": "75.8.0",
         "wheel": "0.45.1"
       }
@@ -136,7 +136,7 @@
       "binary_path": "/root/.pyenv/versions/3.11.11/bin/python",
       "is_system": false,
       "packages": {
-        "pip": "25.0",
+        "pip": "25.0.1",
         "setuptools": "75.8.0",
         "wheel": "0.45.1"
       }
@@ -151,7 +151,7 @@
       "binary_path": "/root/.pyenv/versions/3.10.16/bin/python",
       "is_system": false,
       "packages": {
-        "pip": "25.0",
+        "pip": "25.0.1",
         "setuptools": "75.8.0",
         "wheel": "0.45.1"
       }
@@ -166,7 +166,7 @@
       "binary_path": "/root/.pyenv/versions/3.9.21/bin/python",
       "is_system": false,
       "packages": {
-        "pip": "25.0",
+        "pip": "25.0.1",
         "setuptools": "75.8.0",
         "wheel": "0.45.1"
       }
@@ -181,7 +181,7 @@
       "binary_path": "/root/.pyenv/versions/3.8.20/bin/python",
       "is_system": false,
       "packages": {
-        "pip": "25.0",
+        "pip": "25.0.1",
         "setuptools": "75.3.0",
         "wheel": "0.45.1"
       }
