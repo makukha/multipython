@@ -33,7 +33,7 @@
       "distlib": "0.3.9",
       "filelock": "3.17.0",
       "packaging": "24.2",
-      "pip": "25.0",
+      "pip": "25.0.1",
       "platformdirs": "3.11.0",
       "pluggy": "1.5.0",
       "pyproject-api": "1.5.4",
@@ -61,7 +61,7 @@
       "binary_path": "/root/.pyenv/versions/3.14.0a5t/bin/python",
       "is_system": false,
       "packages": {
-        "pip": "25.0",
+        "pip": "25.0.1",
         "setuptools": "75.8.0",
         "wheel": "0.45.1"
       }
@@ -76,7 +76,7 @@
       "binary_path": "/root/.pyenv/versions/3.13.2t/bin/python",
       "is_system": false,
       "packages": {
-        "pip": "25.0",
+        "pip": "25.0.1",
         "setuptools": "75.8.0",
         "wheel": "0.45.1"
       }
@@ -91,7 +91,7 @@
       "binary_path": "/root/.pyenv/versions/3.14.0a5/bin/python",
       "is_system": false,
       "packages": {
-        "pip": "25.0",
+        "pip": "25.0.1",
         "setuptools": "75.8.0",
         "wheel": "0.45.1"
       }
@@ -106,7 +106,7 @@
       "binary_path": "/root/.pyenv/versions/3.13.2/bin/python",
       "is_system": true,
       "packages": {
-        "pip": "25.0",
+        "pip": "25.0.1",
         "setuptools": "75.8.0",
         "wheel": "0.45.1"
       }
@@ -121,7 +121,7 @@
       "binary_path": "/root/.pyenv/versions/3.12.9/bin/python",
       "is_system": false,
       "packages": {
-        "pip": "25.0",
+        "pip": "25.0.1",
         "setuptools": "75.8.0",
         "wheel": "0.45.1"
       }
@@ -136,7 +136,7 @@
       "binary_path": "/root/.pyenv/versions/3.11.11/bin/python",
       "is_system": false,
       "packages": {
-        "pip": "25.0",
+        "pip": "25.0.1",
         "setuptools": "75.8.0",
         "wheel": "0.45.1"
       }
@@ -151,7 +151,7 @@
       "binary_path": "/root/.pyenv/versions/3.10.16/bin/python",
       "is_system": false,
       "packages": {
-        "pip": "25.0",
+        "pip": "25.0.1",
         "setuptools": "75.8.0",
         "wheel": "0.45.1"
       }
@@ -166,7 +166,7 @@
       "binary_path": "/root/.pyenv/versions/3.9.21/bin/python",
       "is_system": false,
       "packages": {
-        "pip": "25.0",
+        "pip": "25.0.1",
         "setuptools": "75.8.0",
         "wheel": "0.45.1"
       }
@@ -181,7 +181,7 @@
       "binary_path": "/root/.pyenv/versions/3.8.20/bin/python",
       "is_system": false,
       "packages": {
-        "pip": "25.0",
+        "pip": "25.0.1",
         "setuptools": "75.3.0",
         "wheel": "0.45.1"
       }
