@@ -52,13 +52,13 @@
   },
   "python": [
     {
-      "version": "3.14.0a4t",
+      "version": "3.14.0a5t",
       "source": "pyenv",
       "tag": "py314t",
       "short": "3.14t",
       "command": "python3.14t",
-      "bin_dir": "/root/.pyenv/versions/3.14.0a4t/bin",
-      "binary_path": "/root/.pyenv/versions/3.14.0a4t/bin/python",
+      "bin_dir": "/root/.pyenv/versions/3.14.0a5t/bin",
+      "binary_path": "/root/.pyenv/versions/3.14.0a5t/bin/python",
       "is_system": false,
       "packages": {
         "pip": "25.0",
@@ -82,13 +82,13 @@
       }
     },
     {
-      "version": "3.14.0a4",
+      "version": "3.14.0a5",
       "source": "pyenv",
       "tag": "py314",
       "short": "3.14",
       "command": "python3.14",
-      "bin_dir": "/root/.pyenv/versions/3.14.0a4/bin",
-      "binary_path": "/root/.pyenv/versions/3.14.0a4/bin/python",
+      "bin_dir": "/root/.pyenv/versions/3.14.0a5/bin",
+      "binary_path": "/root/.pyenv/versions/3.14.0a5/bin/python",
       "is_system": false,
       "packages": {
         "pip": "25.0",

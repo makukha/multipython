@@ -52,13 +52,13 @@
   },
   "python": [
     {
-      "version": "3.14.0a4",
+      "version": "3.14.0a5",
       "source": "pyenv",
       "tag": "py314",
       "short": "3.14",
       "command": "python3.14",
-      "bin_dir": "/root/.pyenv/versions/3.14.0a4/bin",
-      "binary_path": "/root/.pyenv/versions/3.14.0a4/bin/python",
+      "bin_dir": "/root/.pyenv/versions/3.14.0a5/bin",
+      "binary_path": "/root/.pyenv/versions/3.14.0a5/bin/python",
       "is_system": true,
       "packages": {
         "pip": "25.0",

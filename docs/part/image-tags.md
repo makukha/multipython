@@ -3,9 +3,9 @@
 * [`supported, supported-2526`](https://github.com/makukha/multipython/blob/v2526/Dockerfile) — *all supported CPython versions*
 * [`unsafe, unsafe-2526`](https://github.com/makukha/multipython/blob/v2526/Dockerfile) — *all CPython versions, including EOL*
 * [`base, base-2526`](https://github.com/makukha/multipython/blob/v2526/Dockerfile) — *pyenv, uv*
-* [`py314t, py314t-2526`](https://github.com/makukha/multipython/blob/v2526/Dockerfile) — *CPython 3.14.0a4 free-threaded*
+* [`py314t, py314t-2526`](https://github.com/makukha/multipython/blob/v2526/Dockerfile) — *CPython 3.14.0a5 free-threaded*
 * [`py313t, py313t-2526`](https://github.com/makukha/multipython/blob/v2526/Dockerfile) — *CPython 3.13.2 free-threaded*
-* [`py314, py314-2526`](https://github.com/makukha/multipython/blob/v2526/Dockerfile) — *CPython 3.14.0a4*
+* [`py314, py314-2526`](https://github.com/makukha/multipython/blob/v2526/Dockerfile) — *CPython 3.14.0a5*
 * [`py313, py313-2526`](https://github.com/makukha/multipython/blob/v2526/Dockerfile) — *CPython 3.13.2*
 * [`py312, py312-2526`](https://github.com/makukha/multipython/blob/v2526/Dockerfile) — *CPython 3.12.9*
 * [`py311, py311-2526`](https://github.com/makukha/multipython/blob/v2526/Dockerfile) — *CPython 3.11.11*

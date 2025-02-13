@@ -28,10 +28,10 @@ variable "SINGLE_VERSIONS" {
     py311 = "3.11.11"
     py312 = "3.12.9"
     py313 = "3.13.2"
-    py314 = "3.14.0a4"
+    py314 = "3.14.0a5"
     # cpython, free threaded
     py313t = "3.13.2t"
-    py314t = "3.14.0a4t"
+    py314t = "3.14.0a5t"
   }
 }
 

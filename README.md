@@ -60,9 +60,9 @@ $ docker run --rm -v .:/src -w /src makukha/multipython:py310 tox run
 <!-- docsub: include docs/part/python-versions.md -->
 | Distribution     | Note          | Tag      | Command       | Source |
 |------------------|---------------|----------|---------------|--------|
-| CPython 3.14.0a4 | free threaded | `py314t` | `python3.14t` | pyenv  |
+| CPython 3.14.0a5 | free threaded | `py314t` | `python3.14t` | pyenv  |
 | CPython 3.13.2   | free threaded | `py313t` | `python3.13t` | pyenv  |
-| CPython 3.14.0a4 |               | `py314`  | `python3.14`  | pyenv  |
+| CPython 3.14.0a5 |               | `py314`  | `python3.14`  | pyenv  |
 | CPython 3.13.2   | system ⚙️     | `py313`  | `python3.13`  | pyenv  |
 | CPython 3.12.9   |               | `py312`  | `python3.12`  | pyenv  |
 | CPython 3.11.11  |               | `py311`  | `python3.11`  | pyenv  |
@@ -145,9 +145,9 @@ multipython 2526
 <!-- docsub: lines after 2 upto -1 -->
 ```shell
 $ py ls -l
-3.14.0a4t
+3.14.0a5t
 3.13.2t
-3.14.0a4
+3.14.0a5
 3.13.2
 3.12.9
 3.11.11
@@ -346,13 +346,13 @@ docker run --rm makukha/multipython:latest py info -c
   },
   "python": [
     {
-      "version": "3.14.0a4t",
+      "version": "3.14.0a5t",
       "source": "pyenv",
       "tag": "py314t",
       "short": "3.14t",
       "command": "python3.14t",
-      "bin_dir": "/root/.pyenv/versions/3.14.0a4t/bin",
-      "binary_path": "/root/.pyenv/versions/3.14.0a4t/bin/python",
+      "bin_dir": "/root/.pyenv/versions/3.14.0a5t/bin",
+      "binary_path": "/root/.pyenv/versions/3.14.0a5t/bin/python",
       "is_system": false,
       "packages": {
         "pip": "25.0",
