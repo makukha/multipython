@@ -299,7 +299,7 @@ docker run --rm makukha/multipython:latest py info -c
     "root": "/root/.multipython"
   },
   "pyenv": {
-    "version": "2.5.2",
+    "version": "2.5.3",
     "root": "/root/.pyenv",
     "python_versions": "/root/.pyenv/versions"
   },
@@ -377,8 +377,8 @@ Tools available in `base` image have (no surprise) the same versions in all othe
 <!-- docsub: x package-versions base -->
 | Image tag | pyenv | uv |
 |---|---|---|
-| `base` | 2.5.2 ✨ | 0.5.29 ✨ |
-| *other images* | 2.5.2 ✨ | 0.5.29 ✨ |
+| `base` | 2.5.3 ✨ | 0.5.29 ✨ |
+| *other images* | 2.5.3 ✨ | 0.5.29 ✨ |
 <!-- docsub: end -->
 
 ## Derived images

@@ -5,7 +5,7 @@
     "root": "/root/.multipython"
   },
   "pyenv": {
-    "version": "2.5.2",
+    "version": "2.5.3",
     "root": "/root/.pyenv",
     "python_versions": "/root/.pyenv/versions"
   },
