@@ -6,8 +6,19 @@ All notable changes to this project will be documented in this file based on [Ke
 
 - See upcoming changes in [News directory](https://github.com/makukha/multipython/tree/main/NEWS.d)
 
-
 <!-- towncrier release notes start -->
+
+## [v252D](https://github.com/makukha/multipython/releases/tag/v252D) — 2025-02-13
+
+***Changed***
+
+- Updated versions ([#100](https://github.com/makukha/multipython/issues/100)):
+    * Python 3.14 — 3.14.0a5
+    * pip — 25.0.1
+    * pyenv — 2.5.3
+    * uv — 0.5.31
+    * virtualenv — 20.29.2
+
 
 ## [v2526](https://github.com/makukha/multipython/releases/tag/v2526) — 2025-02-06
 
